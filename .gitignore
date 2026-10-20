@@ -1,0 +1,53 @@
+# Python Virtual Environment
+/.venv/
+/venv/
+/env/
+/ENV/
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ROS 2 Build, Install, and Log artifacts
+build/
+install/
+log/
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Upstream clones in ROS 2 src (managed via upstream.repos)
+ros2_ws/src/turtlebot3/
+ros2_ws/src/turtlebot3_simulations/
+ros2_ws/src/turtlebot3_msgs/
+ros2_ws/src/DynamixelSDK/
+ros2_ws/src/upstream/
+
+# Experiment Runs, Checkpoints, and Model Weights
+runs/
+checkpoints/
+*.pt
+*.pth
+*.zip
+*.onnx
+
+# Data files, bags, and evaluation recordings
+*.bag
+*.db3
+*.mcap
+*.tar.gz
+
+# Secrets and environment files
+.env
+*.pem
+*.key
+*.token
+
+# OS and IDE files
+.DS_Store
+.vscode/
+.idea/
