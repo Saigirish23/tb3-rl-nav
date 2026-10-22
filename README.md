@@ -67,4 +67,5 @@ sim-real-rl/
 * **Robot**: TurtleBot3 Burger (LDS-01 or LDS-02)
 * **Python**: Python 3.10 in `.venv` created with `--system-site-packages` (so `rclpy` is accessible), pinned to CPU-only PyTorch to minimize disk footprint.
 
-For step-by-step setup and operational records, see [`docs/setup_log.md`](docs/setup_log.md) and [`docs/decisions.md`](docs/decisions.md).
+For step-by-step setup, teammate onboarding, and operational records, see [`docs/handover.md`](docs/handover.md), [`docs/setup_log.md`](docs/setup_log.md), and [`docs/decisions.md`](docs/decisions.md).
+
