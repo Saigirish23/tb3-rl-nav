@@ -69,3 +69,27 @@ All environment setup, dependency installations, and workspace builds are record
 4. `.gitignore` created to exclude `.venv/`, ROS build/install/log, runs/, checkpoints, model weights, and upstream source clones.
 5. `README.md`, `docs/setup_log.md`, and `docs/decisions.md` created.
 6. Git repository initialized with `git init`.
+
+---
+
+## Stage 3: Dependencies, Workspace Build, Python Environment
+* **Date**: 2026-10-22
+* **Objective**: Setup virtual environment with ROS compatibility, install CPU-only PyTorch and RL libraries, identify missing Gazebo Classic APT packages.
+
+### Actions Executed
+1. Python virtual environment created:
+   `python3 -m venv --system-site-packages /home/saigirish/sim-real-rl/.venv`
+   * Verified `import rclpy` succeeds from `/opt/ros/humble/local/lib/python3.10/dist-packages/rclpy`.
+2. Installed CPU-only PyTorch and RL stack:
+   * `torch==2.14.1+cpu` and `torchvision==0.29.1+cpu` from `https://download.pytorch.org/whl/cpu`.
+   * `stable-baselines3==2.7.1`
+   * `gymnasium==1.2.3`
+   * `numpy==1.26.4` (pinned `<2.0`)
+   * `pytest==8.4.2`
+   * `pyyaml==5.4.1`
+3. Verified full import suite: `rclpy`, `torch`, `gymnasium`, `stable_baselines3`, `numpy`, `yaml`, `pytest` all load without error.
+4. Generated `docs/environment.md` with complete pinned stack and activation workflow.
+5. Identified missing Gazebo Classic packages:
+   * `gazebo` (11.10.2) and `ros-humble-gazebo-ros-pkgs` (3.9.0) need to be installed via `apt`.
+   * Packaging conflict documented: `gz-tools2` conflicts with `gazebo (>= 11.0.0)` and must be replaced by Gazebo Classic 11.
+
