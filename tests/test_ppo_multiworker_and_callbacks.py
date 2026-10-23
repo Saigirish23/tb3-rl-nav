@@ -165,3 +165,50 @@ def test_gazebo_execution_path_randomizers():
     # This confirms mass and friction are strictly inactive at runtime
 
     env.close()
+
+
+def test_checkpoint_diagnostics_json_persistence():
+    """Verify that CheckpointDiagnosticsCallback creates per-checkpoint and cumulative JSON files."""
+    import json
+    from rl.train.train_ppo import CheckpointDiagnosticsCallback
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        run_path = Path(tmpdir)
+        env = DummyVecEnv([lambda: SimpleBoxEnv()])
+
+        save_freq = 32
+        diag_cb = CheckpointDiagnosticsCallback(
+            save_freq=save_freq,
+            run_path=run_path,
+            n_workers=1,
+        )
+
+        model = PPO("MlpPolicy", env, n_steps=32, batch_size=32, verbose=0)
+        model.learn(total_timesteps=64, callback=diag_cb)
+
+        checkpoints_dir = run_path / "checkpoints"
+        assert checkpoints_dir.exists()
+
+        # Checkpoint files must exist for 32 and 64 steps
+        ckpt32_json = checkpoints_dir / "checkpoint_32_steps_metrics.json"
+        ckpt64_json = checkpoints_dir / "checkpoint_64_steps_metrics.json"
+        history_json = checkpoints_dir / "checkpoint_history.json"
+        latest_json = run_path / "latest_checkpoint_metrics.json"
+
+        assert ckpt32_json.exists(), f"Missing {ckpt32_json}"
+        assert ckpt64_json.exists(), f"Missing {ckpt64_json}"
+        assert history_json.exists(), f"Missing {history_json}"
+        assert latest_json.exists(), f"Missing {latest_json}"
+
+        with open(ckpt32_json, 'r') as f:
+            data32 = json.load(f)
+        assert data32["timesteps"] == 32
+        assert "episodes" in data32
+        assert "training_losses" in data32
+        assert "throughput_steps_per_sec" in data32
+
+        with open(history_json, 'r') as f:
+            history_data = json.load(f)
+        assert len(history_data) == 2
+        assert history_data[0]["timesteps"] == 32
+        assert history_data[1]["timesteps"] == 64

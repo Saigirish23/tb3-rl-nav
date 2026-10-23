@@ -21,7 +21,7 @@ import hashlib
 import subprocess
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 
 import numpy as np
 import torch
@@ -180,7 +180,120 @@ class RewardComponentLogger(BaseCallback):
                                    self._episode_successes / self._n_episodes)
 
         return True
+class CheckpointDiagnosticsCallback(BaseCallback):
+    """Callback to record and persist training metrics to JSON whenever a checkpoint is saved."""
 
+    def __init__(self, save_freq: int, run_path: Path, n_workers: int = 1, verbose: int = 0):
+        super().__init__(verbose)
+        self.save_freq = save_freq
+        self.run_path = run_path
+        self.n_workers = n_workers
+        self.diagnostics_dir = run_path / "checkpoints"
+        self.metrics_history: List[Dict[str, Any]] = []
+
+        self._ep_rewards: List[float] = []
+        self._ep_lengths: List[int] = []
+        self._ep_successes: int = 0
+        self._ep_collisions: int = 0
+        self._n_episodes: int = 0
+        self._last_save_time = time.time()
+        self._last_save_steps = 0
+
+    def _on_step(self) -> bool:
+        # Collect episode-level statistics
+        for info in self.locals.get('infos', []):
+            if 'episode' in info:
+                self._n_episodes += 1
+                self._ep_rewards.append(float(info['episode']['r']))
+                self._ep_lengths.append(int(info['episode']['l']))
+            if info.get('is_success', False):
+                self._ep_successes += 1
+            if info.get('is_collision', False):
+                self._ep_collisions += 1
+
+        # Trigger on the checkpoint frequency
+        if self.n_calls % self.save_freq == 0:
+            self._save_checkpoint_metrics()
+
+        return True
+
+    def _save_checkpoint_metrics(self) -> None:
+        """Extract current training losses and episode performance, then write to JSON."""
+        current_steps = self.model.num_timesteps
+        now = time.time()
+        elapsed_since_last = max(0.001, now - self._last_save_time)
+        steps_delta = current_steps - self._last_save_steps
+        current_sps = steps_delta / elapsed_since_last
+
+        # Retrieve latest training metrics recorded by SB3 logger
+        logger_name_to_value = {}
+        if hasattr(self.model, 'logger') and hasattr(self.model.logger, 'name_to_value'):
+            logger_name_to_value = {
+                k: float(v) for k, v in self.model.logger.name_to_value.items()
+                if isinstance(v, (int, float, np.floating, np.integer))
+            }
+
+        # Calculate recent episode statistics (last 50 episodes)
+        recent_rewards = self._ep_rewards[-50:] if self._ep_rewards else []
+        recent_lengths = self._ep_lengths[-50:] if self._ep_lengths else []
+        mean_reward = float(np.mean(recent_rewards)) if recent_rewards else None
+        std_reward = float(np.std(recent_rewards)) if recent_rewards else None
+        min_reward = float(np.min(recent_rewards)) if recent_rewards else None
+        max_reward = float(np.max(recent_rewards)) if recent_rewards else None
+        mean_length = float(np.mean(recent_lengths)) if recent_lengths else None
+        success_rate = (self._ep_successes / max(1, self._n_episodes)) if self._n_episodes > 0 else 0.0
+        collision_rate = (self._ep_collisions / max(1, self._n_episodes)) if self._n_episodes > 0 else 0.0
+
+        checkpoint_name = f"checkpoint_{current_steps}_steps"
+        entry: Dict[str, Any] = {
+            "checkpoint_name": checkpoint_name,
+            "timesteps": current_steps,
+            "timestamp": datetime.now().isoformat(),
+            "throughput_steps_per_sec": round(current_sps, 2),
+            "episodes": {
+                "total_completed": self._n_episodes,
+                "total_successes": self._ep_successes,
+                "total_collisions": self._ep_collisions,
+                "overall_success_rate": round(success_rate, 4),
+                "overall_collision_rate": round(collision_rate, 4),
+                "recent_50ep_mean_reward": round(mean_reward, 3) if mean_reward is not None else None,
+                "recent_50ep_std_reward": round(std_reward, 3) if std_reward is not None else None,
+                "recent_50ep_min_reward": round(min_reward, 3) if min_reward is not None else None,
+                "recent_50ep_max_reward": round(max_reward, 3) if max_reward is not None else None,
+                "recent_50ep_mean_length": round(mean_length, 2) if mean_length is not None else None,
+            },
+            "training_losses": {
+                "policy_loss": logger_name_to_value.get("train/policy_gradient_loss"),
+                "value_loss": logger_name_to_value.get("train/value_loss"),
+                "entropy_loss": logger_name_to_value.get("train/entropy_loss"),
+                "approx_kl": logger_name_to_value.get("train/approx_kl"),
+                "clip_fraction": logger_name_to_value.get("train/clip_fraction"),
+                "explained_variance": logger_name_to_value.get("train/explained_variance"),
+                "learning_rate": logger_name_to_value.get("train/learning_rate"),
+            },
+            "sb3_logger_raw": logger_name_to_value,
+        }
+
+        self.metrics_history.append(entry)
+
+        # 1. Save specific checkpoint metrics file: checkpoint_XXXX_steps_metrics.json
+        self.diagnostics_dir.mkdir(parents=True, exist_ok=True)
+        ckpt_metrics_file = self.diagnostics_dir / f"{checkpoint_name}_metrics.json"
+        with open(ckpt_metrics_file, 'w', encoding='utf-8') as f:
+            json.dump(entry, f, indent=2)
+
+        # 2. Update cumulative checkpoints log: checkpoints/checkpoint_history.json
+        history_file = self.diagnostics_dir / "checkpoint_history.json"
+        with open(history_file, 'w', encoding='utf-8') as f:
+            json.dump(self.metrics_history, f, indent=2)
+
+        # 3. Update top-level latest review metrics file: latest_checkpoint_metrics.json
+        latest_file = self.run_path / "latest_checkpoint_metrics.json"
+        with open(latest_file, 'w', encoding='utf-8') as f:
+            json.dump(entry, f, indent=2)
+
+        self._last_save_time = now
+        self._last_save_steps = current_steps
 
 def train_ppo(
     policy_name: str = "P1",
@@ -370,7 +483,12 @@ def train_ppo(
         )
 
         reward_logger = RewardComponentLogger()
-        callbacks = CallbackList([checkpoint_callback, eval_callback, reward_logger])
+        checkpoint_diagnostics = CheckpointDiagnosticsCallback(
+            save_freq=cb_checkpoint_freq,
+            run_path=run_path,
+            n_workers=n_workers,
+        )
+        callbacks = CallbackList([checkpoint_callback, eval_callback, reward_logger, checkpoint_diagnostics])
 
         # Train with exact remaining timesteps
         total_timesteps = config.get('total_timesteps', 1_000_000)
