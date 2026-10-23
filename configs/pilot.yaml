@@ -1,0 +1,60 @@
+# Short Gazebo PPO Pilot Training Configuration (10,000 Transitions)
+# Used to validate the complete Gazebo PPO training loop end-to-end without launching full 1M runs.
+# STATUS: PROVISIONAL PILOT SPECIFICATION (DO NOT LAUNCH WITHOUT CO-OWNER SIGNOFF)
+
+algorithm: PPO
+policy: MlpPolicy
+
+# Network architecture (frozen)
+policy_kwargs:
+  net_arch:
+    pi: [128, 128]
+    vf: [128, 128]
+  activation_fn: tanh
+  log_std_init: -0.5
+
+# PPO hyperparameters (tuned for 10k transition validation)
+learning_rate: 0.0003
+n_steps: 512              # 512 per env; with 4 envs = 2,048 transitions per policy rollout
+batch_size: 128           # Minibatch size
+n_epochs: 10
+gamma: 0.99
+gae_lambda: 0.95
+clip_range: 0.2
+ent_coef: 0.0
+vf_coef: 0.5
+max_grad_norm: 0.5
+
+# Compute
+device: cpu
+torch_threads: 2
+
+# Observation/Reward scaling (frozen)
+normalize_observations: false
+normalize_rewards: true
+
+# Pilot budget & checkpointing
+total_timesteps: 10_000     # 10k steps pilot
+checkpoint_interval: 5_000  # Saves at 5k transitions and final model
+eval_interval: 5_000        # Evaluates at 5k transitions and final model
+eval_episodes: 5
+
+# Multi-worker isolation
+n_workers: 4                # Configurable: 1 or 4
+gazebo_port_base: 11345     # Worker i: 11345 + i
+ros_domain_id_base: 30      # Worker i: 30 + i
+
+# Logging & Watchdog
+tensorboard_log: "./runs/tensorboard"
+log_interval: 1
+verbose: 1
+watchdog_timeout_sec: 2.0
+
+# Randomization Scope Audit (Option A / Gazebo Classic):
+# ACTIVE in Gazebo Classic:
+#   - Dynamics: v_command_gain, omega_command_gain, actuator_lag_tau, control_delay_s, linear_acc_limit, angular_acc_limit
+#   - Sensor: range_noise (a + b*r), beam_dropout, block_dropout, scan_delivery_latency, odometry scale/bias/noise
+# INACTIVE in Gazebo Classic (Runtime link property alteration unsupported without SDF respawn):
+#   - Dynamics: mass_multiplier, friction_multiplier
+#   - Sensor: mounting_yaw_offset, mounting_x_offset, mounting_y_offset
+
