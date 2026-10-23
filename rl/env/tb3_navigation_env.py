@@ -34,6 +34,8 @@ from rl.env.observation import (
     OMEGA_MAX,
     wrap_to_pi,
 )
+from rl.train.watchdog import load_watchdog_timeout, MissingScanTimeoutError, WatchdogRecoveryError
+
 
 
 class Obstacle:
@@ -149,11 +151,22 @@ class TurtleBot3NavigationEnv(gym.Env):
         control_rate: float = 5.0,  # Hz (0.2s period)
         robot_radius: float = 0.105,  # meters (TurtleBot3 Burger footprint)
         enable_motion_distortion: bool = True,
+        randomizer: Optional[Any] = None,
         seed: Optional[int] = None,
+        watchdog: Optional[Any] = None,
+        watchdog_timeout_sec: Optional[float] = None,
     ):
         super().__init__()
 
         self.use_gazebo = use_gazebo
+        self.randomizer = randomizer
+        self.watchdog = watchdog
+        self.watchdog_timeout_sec = (
+            float(watchdog_timeout_sec)
+            if watchdog_timeout_sec is not None
+            else load_watchdog_timeout()
+        )
+        self._last_scan_monotonic = 0.0
         self.arena_size = float(arena_size)
         self.arena_half = self.arena_size / 2.0
         self.goal_tolerance = float(goal_tolerance)
@@ -224,6 +237,9 @@ class TurtleBot3NavigationEnv(gym.Env):
 
         # ROS 2 / Gazebo interface (lazily initialized if use_gazebo is True)
         self.ros_node = None
+        self._latest_scan = None
+        self._latest_odom = None
+        self._latest_models = None
         if self.use_gazebo:
             self._init_gazebo_interface()
 
@@ -238,6 +254,7 @@ class TurtleBot3NavigationEnv(gym.Env):
             from geometry_msgs.msg import Twist
             from gazebo_msgs.msg import ModelStates
             from gazebo_msgs.srv import SetEntityState
+            from std_srvs.srv import Empty
 
             if not rclpy.ok():
                 rclpy.init()
@@ -272,12 +289,22 @@ class TurtleBot3NavigationEnv(gym.Env):
             self.cli_set_state = self.ros_node.create_client(
                 SetEntityState, '/gazebo/set_entity_state'
             )
+            self.cli_pause = self.ros_node.create_client(
+                Empty, '/pause_physics'
+            )
+            self.cli_unpause = self.ros_node.create_client(
+                Empty, '/unpause_physics'
+            )
         except Exception as e:
             self.use_gazebo = False
             self.ros_node = None
 
     def _scan_cb(self, msg):
         self._latest_scan = msg
+        self._last_scan_monotonic = time.monotonic()
+        if self.watchdog is not None:
+            stamp = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
+            self.watchdog.record_scan_received(stamp)
 
     def _odom_cb(self, msg):
         self._latest_odom = msg
@@ -307,6 +334,11 @@ class TurtleBot3NavigationEnv(gym.Env):
 
         self.step_count = 0
         self.prev_action = np.zeros(2, dtype=np.float32)
+
+        # 0. Sample per-episode domain randomization parameters if active (and not pinned)
+        if self.randomizer is not None and hasattr(self.randomizer, 'sample_episode'):
+            if not getattr(self.randomizer, '_is_pinned_corner', False):
+                self.randomizer.sample_episode()
 
         # 1. Sample robot start pose (cleared from boundary walls >= 0.40m)
         spawn_bound = self.arena_half - 0.40 - self.robot_radius
@@ -382,7 +414,24 @@ class TurtleBot3NavigationEnv(gym.Env):
 
         # 4. Teleport via Gazebo services if active
         if self.use_gazebo and self.ros_node is not None:
+            import rclpy
+            prev_stamp = None
+            if self._latest_scan is not None:
+                prev_stamp = self._latest_scan.header.stamp.sec + self._latest_scan.header.stamp.nanosec * 1e-9
+
             self._teleport_gazebo_entities()
+
+            # Wait for fresh scan post-teleport (up to watchdog_timeout_sec)
+            t_wait = time.monotonic()
+            while (time.monotonic() - t_wait) < self.watchdog_timeout_sec:
+                rclpy.spin_once(self.ros_node, timeout_sec=0.02)
+                if self._latest_scan is not None:
+                    curr_stamp = self._latest_scan.header.stamp.sec + self._latest_scan.header.stamp.nanosec * 1e-9
+                    if prev_stamp is None or curr_stamp > prev_stamp:
+                        self._last_scan_monotonic = time.monotonic()
+                        if self.watchdog is not None:
+                            self.watchdog.record_scan_received(curr_stamp)
+                        break
 
         # 5. Reset observation preprocessor and estimated pose
         self.preprocessor.reset(
@@ -393,10 +442,19 @@ class TurtleBot3NavigationEnv(gym.Env):
 
         # 6. Generate initial observation
         raw_ranges = self._get_lidar_ranges()
+        v_meas = self.robot_v
+        omega_meas = self.robot_omega
+        if self.randomizer is not None:
+            sens_rand = getattr(self.randomizer, 'sensor', self.randomizer)
+            if hasattr(sens_rand, 'perturb_scan'):
+                raw_ranges = sens_rand.perturb_scan(raw_ranges)
+            if hasattr(sens_rand, 'perturb_odometry'):
+                v_meas, omega_meas = sens_rand.perturb_odometry(v_meas, omega_meas)
+
         obs = self.preprocessor.step(
             ranges=raw_ranges,
-            v_meas=self.robot_v,
-            omega_meas=self.robot_omega,
+            v_meas=v_meas,
+            omega_meas=omega_meas,
             goal_x=self.goal_x,
             goal_y=self.goal_y,
             last_action=self.prev_action,
@@ -430,11 +488,22 @@ class TurtleBot3NavigationEnv(gym.Env):
         cmd_v = float(0.075 * (u[0] + 1.0))
         cmd_omega = float(0.60 * u[1])
 
+        # If dynamics randomizer active, perturb commanded action (lag, delay, gain, limits)
+        eff_v = cmd_v
+        eff_omega = cmd_omega
+        if self.randomizer is not None:
+            dyn_rand = getattr(self.randomizer, 'dynamics', self.randomizer)
+            if hasattr(dyn_rand, 'perturb_action') and hasattr(dyn_rand, 'params'):
+                prev_u = self.prev_action
+                prev_v = float(0.075 * (prev_u[0] + 1.0))
+                prev_omega = float(0.60 * prev_u[1])
+                eff_v, eff_omega = dyn_rand.perturb_action(cmd_v, cmd_omega, prev_v, prev_omega, dt=self.dt)
+
         # 2. Advance physics
         if self.use_gazebo and self.ros_node is not None:
-            self._step_gazebo(cmd_v, cmd_omega)
+            self._step_gazebo(eff_v, eff_omega)
         else:
-            self._step_internal_kinematics(cmd_v, cmd_omega)
+            self._step_internal_kinematics(eff_v, eff_omega)
 
         # 3. Ground-truth evaluation
         current_goal_dist = math.hypot(self.goal_x - self.robot_x, self.goal_y - self.robot_y)
@@ -473,6 +542,14 @@ class TurtleBot3NavigationEnv(gym.Env):
         # Measured velocities (nominal measurement model under P1)
         v_meas = self.robot_v
         omega_meas = self.robot_omega
+
+        # If sensor randomizer active, perturb ranges and odometry measurements
+        if self.randomizer is not None:
+            sens_rand = getattr(self.randomizer, 'sensor', self.randomizer)
+            if hasattr(sens_rand, 'perturb_scan'):
+                effective_ranges = sens_rand.perturb_scan(effective_ranges)
+            if hasattr(sens_rand, 'perturb_odometry'):
+                v_meas, omega_meas = sens_rand.perturb_odometry(v_meas, omega_meas)
 
         obs = self.preprocessor.step(
             ranges=effective_ranges,
@@ -586,68 +663,124 @@ class TurtleBot3NavigationEnv(gym.Env):
         return ranges
 
     def _teleport_gazebo_entities(self):
-        """Teleport robot and obstacles via Gazebo SetEntityState service."""
+        """Teleport robot and obstacles via Gazebo SetEntityState service.
+
+        To prevent ODE penetration repulsion impulses:
+        1. Pause Gazebo physics.
+        2. Teleport all obstacles to their target (or out-of-bounds) positions first.
+        3. Teleport robot to (x, y, z=0.012) with explicitly zeroed linear & angular velocities.
+        4. Unpause Gazebo physics and allow a brief settle time.
+        """
         try:
             import rclpy
             from gazebo_msgs.srv import SetEntityState
-            from geometry_msgs.msg import Pose, Point, Quaternion
+            from std_srvs.srv import Empty
+            from geometry_msgs.msg import Pose, Point, Quaternion, Twist, Vector3
 
             if not self.cli_set_state.wait_for_service(timeout_sec=1.0):
                 return
 
-            # Teleport robot
-            req = SetEntityState.Request()
-            req.state.name = 'burger'
-            req.state.pose.position = Point(x=self.robot_x, y=self.robot_y, z=0.01)
-            half_th = self.robot_theta * 0.5
-            req.state.pose.orientation = Quaternion(
-                x=0.0, y=0.0, z=math.sin(half_th), w=math.cos(half_th)
-            )
-            future = self.cli_set_state.call_async(req)
-            rclpy.spin_until_future_complete(self.ros_node, future, timeout_sec=1.0)
+            # 1. Zero out any active velocity command
+            stop_msg = Twist()
+            self.pub_cmd.publish(stop_msg)
 
-            # Teleport obstacles
+            # 2. Pause physics
+            if hasattr(self, 'cli_pause') and self.cli_pause.wait_for_service(timeout_sec=0.2):
+                fut_pause = self.cli_pause.call_async(Empty.Request())
+                rclpy.spin_until_future_complete(self.ros_node, fut_pause, timeout_sec=0.2)
+
+            # 3. Teleport obstacles FIRST so previous obstacles are cleared from robot's new spot
             for obs in self.obstacle_pool:
                 req_obs = SetEntityState.Request()
                 req_obs.state.name = obs.name
                 req_obs.state.pose.position = Point(x=obs.x, y=obs.y, z=0.25)
                 req_obs.state.pose.orientation = Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
+                req_obs.state.twist.linear = Vector3(x=0.0, y=0.0, z=0.0)
+                req_obs.state.twist.angular = Vector3(x=0.0, y=0.0, z=0.0)
+                req_obs.state.reference_frame = 'world'
                 fut_obs = self.cli_set_state.call_async(req_obs)
-                rclpy.spin_until_future_complete(self.ros_node, fut_obs, timeout_sec=0.2)
-        except Exception:
-            pass
+                rclpy.spin_until_future_complete(self.ros_node, fut_obs, timeout_sec=0.1)
+
+            # 4. Teleport robot with explicitly zeroed linear & angular velocity
+            req = SetEntityState.Request()
+            req.state.name = 'burger'
+            req.state.pose.position = Point(x=self.robot_x, y=self.robot_y, z=0.012)
+            half_th = self.robot_theta * 0.5
+            req.state.pose.orientation = Quaternion(
+                x=0.0, y=0.0, z=math.sin(half_th), w=math.cos(half_th)
+            )
+            req.state.twist.linear = Vector3(x=0.0, y=0.0, z=0.0)
+            req.state.twist.angular = Vector3(x=0.0, y=0.0, z=0.0)
+            req.state.reference_frame = 'world'
+
+            future = self.cli_set_state.call_async(req)
+            rclpy.spin_until_future_complete(self.ros_node, future, timeout_sec=0.5)
+
+            # 5. Unpause physics
+            if hasattr(self, 'cli_unpause') and self.cli_unpause.wait_for_service(timeout_sec=0.2):
+                fut_unpause = self.cli_unpause.call_async(Empty.Request())
+                rclpy.spin_until_future_complete(self.ros_node, fut_unpause, timeout_sec=0.2)
+
+            # 6. Settle physics and update internal state
+            self.robot_v = 0.0
+            self.robot_omega = 0.0
+            rclpy.spin_once(self.ros_node, timeout_sec=0.05)
+        except Exception as e:
+            print(f"DEBUG: _teleport_gazebo_entities exception: {type(e).__name__}: {e}")
 
     def _step_gazebo(self, cmd_v: float, cmd_omega: float):
         """Send cmd_vel and wait for next scan in Gazebo."""
-        try:
-            import rclpy
-            from geometry_msgs.msg import Twist
+        import rclpy
+        from geometry_msgs.msg import Twist
 
-            msg = Twist()
-            msg.linear.x = cmd_v
-            msg.angular.z = cmd_omega
-            self.pub_cmd.publish(msg)
+        msg = Twist()
+        msg.linear.x = cmd_v
+        msg.angular.z = cmd_omega
+        self.pub_cmd.publish(msg)
 
-            # Spin to process scan and odom callbacks
-            start_t = time.perf_counter()
-            while (time.perf_counter() - start_t) < self.dt:
-                rclpy.spin_once(self.ros_node, timeout_sec=0.02)
+        prev_stamp = None
+        if self._latest_scan is not None:
+            prev_stamp = self._latest_scan.header.stamp.sec + self._latest_scan.header.stamp.nanosec * 1e-9
 
-            if self._latest_odom is not None:
-                self.robot_v = self._latest_odom.twist.twist.linear.x
-                self.robot_omega = self._latest_odom.twist.twist.angular.z
+        # Spin to process callbacks until fresh scan arrives within configured watchdog timeout
+        start_t = time.monotonic()
+        scan_received = False
+        while (time.monotonic() - start_t) < self.watchdog_timeout_sec:
+            rclpy.spin_once(self.ros_node, timeout_sec=0.01)
+            if self._latest_scan is not None:
+                curr_stamp = self._latest_scan.header.stamp.sec + self._latest_scan.header.stamp.nanosec * 1e-9
+                if prev_stamp is None or curr_stamp > prev_stamp:
+                    scan_received = True
+                    self._last_scan_monotonic = time.monotonic()
+                    if self.watchdog is not None:
+                        self.watchdog.record_scan_received(curr_stamp)
+                    break
 
-            if self._latest_models is not None and 'burger' in self._latest_models.name:
-                idx = self._latest_models.name.index('burger')
-                pose = self._latest_models.pose[idx]
-                self.robot_x = pose.position.x
-                self.robot_y = pose.position.y
-                q = pose.orientation
-                siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
-                cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
-                self.robot_theta = math.atan2(siny_cosp, cosy_cosp)
-        except Exception:
-            self._step_internal_kinematics(cmd_v, cmd_omega)
+        if not scan_received:
+            if self.watchdog is not None:
+                self.watchdog.handle_missing_scan(
+                    self,
+                    current_step=self.step_count,
+                    current_episode=getattr(self, 'episode_count', 0),
+                )
+            else:
+                raise MissingScanTimeoutError(
+                    f"No fresh LiDAR scan received within watchdog timeout {self.watchdog_timeout_sec:.2f}s"
+                )
+
+        if self._latest_odom is not None:
+            self.robot_v = self._latest_odom.twist.twist.linear.x
+            self.robot_omega = self._latest_odom.twist.twist.angular.z
+
+        if self._latest_models is not None and 'burger' in self._latest_models.name:
+            idx = self._latest_models.name.index('burger')
+            pose = self._latest_models.pose[idx]
+            self.robot_x = pose.position.x
+            self.robot_y = pose.position.y
+            q = pose.orientation
+            siny_cosp = 2.0 * (q.w * q.z + q.x * q.y)
+            cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z)
+            self.robot_theta = math.atan2(siny_cosp, cosy_cosp)
 
     def close(self):
         """Clean up resources."""

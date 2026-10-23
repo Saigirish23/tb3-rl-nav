@@ -222,3 +222,58 @@ Per Section 10 of [`docs/Sim2Real_LiDAR_Navigation_Pipeline.pdf`](Sim2Real_LiDAR
    * Execute Checks 1–10 of Section 9 (1,000-reset soak test, timing verification, reward audit, controller comparison).
 4. **ROS 2 Hardware Deployment Node** ([`deploy/`](../deploy/)):
    * Create deployment node importing [`rl/env/observation.py`](../rl/env/observation.py) directly for zero sim-to-real code divergence.
+
+---
+
+## 9. Gate G2 Status, Gazebo Benchmarks & Training Hold
+
+**STATUS: Gate G2 Verification Incomplete / Pending: Continuous 100k-Step Gazebo Soak and Primary Backend Decision Pending Co-Owner Approval.**  
+**P1 TRAINING IS STRICTLY ON HOLD. Do not launch training until the backend decision and reward review are formally approved by both co-owners.**
+
+### Updated Gate G2 Backend Verification Matrix
+
+| Check # | Description | Kinematic Backend Status | Gazebo Backend Status | Notes / Limitations |
+| :--- | :--- | :--- | :--- | :--- |
+| **Check 1** | SB3 & Gymnasium `check_env` | **Passed** | **Passed** | Verified API compliance on both backends. |
+| **Check 2** | Scenario Generator Determinism | **Passed** | **Passed** | Deterministic JSON layouts; corridor, 0.5m gap, dead-end stress scenarios added. Disjoint seeds verified. |
+| **Check 3** | 1,000-Reset Soak | **Passed** (0.5s, 0 failures) | **Passed** (203.7s, 4.9 resets/s, 0 failures) | Full physics settle and 5 Hz scan arrival verified. Zero contact penetration impulses, position error $\le 2$ cm, yaw $\le 1^\circ$, velocity $\le 0.05$ m/s, zero overlap. |
+| **Check 4** | Timing & Scan Monotonicity | **Passed** | **Passed** | 50 consecutive steps verified strictly monotonic scan timestamps ($t_i - t_{i-1} \in [0.10, 0.45]\,\text{s}$). Physical scan publication synchronized per step. |
+| **Check 5** | Preprocessing Parity | **Passed** | **Passed** | Pure NumPy zero-ROS module identical across Gymnasium and hardware deployment (`deploy/`). |
+| **Check 6** | Termination Semantics | **Passed** | **Passed** | Scripted wall collision (`is_collision=True, r <= -90`), goal reach (`is_success=True, r >= +90`), and timeout (`truncated=True`) verified in live Gazebo. |
+| **Check 7** | Reward Audit | **Passed** | **Passed** | Traces in `results/reward_audit_traces.json` match frozen Section 5 math. Every episode return verified equal to sum of components ($< 10^{-12}$): Hand-Coded (+101.86 mean = +90.00 goal bonus + 17.73 progress - 5.87 step penalty), Spin (-17.50), Stationary (-17.50), Random (-107.65). Historical figures (+62.3, -34.1, -38.2, -39.8) are **strictly unverified** from repository artifacts. Siddhi's review pending. |
+| **Check 8** | Reactive Controller ($\ge 90\%$) | **Passed (Kinematic)** | **Not run** | Evaluated on kinematic backend: 92.0% nominal (92/100, Wilson 95% CI: [85.0%, 95.9%]). Corner draws on real env interfaces reconciled: 25-ep Combined sign=+1 (22/25 = 88.0%), sign=-1 (21/25 = 84.0%); 50-ep runs on seeds 1,000,000..1,000,049 are a nested overlapping extension (first 25 identical bit-for-bit; second 25 are 24/25 = 96.0% and 21/25 = 84.0%), yielding 46/50 (92.0%) and 42/50 (84.0%), aggregate 88/100 (88.0%); separate runs on seeds 1,000..1,049 yield 40/50 (80.0%) and 40/50 (80.0%). All exceed 73.6% non-collapse threshold. Samples are nested/separate and must NOT be combined as 75 episodes. |
+| **Check 9** | Soak & Memory | **Passed** (100k steps, +0.01% RSS) | **Passed** | 100,000 continuous live Gazebo steps completed across 4 isolated workers (`results/gazebo_soak_checkpoint.json`): 5,215.3 s elapsed (86.9 mins, 19.77 sps aggregate), 1,018 episodes, gzserver RSS 1,264.3 MB $\to$ 1,213.2 MB (-51.15 MB, -4.05% growth, passes $<5\%$ requirement), Python RSS 61.4 MB $\to$ 63.4 MB, 0 NaNs/Infs, 0 crashes. Baseline 1k checkpoint archived in `results/gazebo_soak_checkpoint_1k_baseline.json`. |
+| **Check 10** | PPO Smoke & Checkpoint Parity | **Passed** (20k steps on kinematic) | **Passed (Watchdog & Checkpoint Verified)** | `tests/test_checkpoint_resume.py` verified exact SB3 parameter and action parity (`atol=1e-6`) across save/reload without training. 2-second monotonic clock missing-scan watchdog supervisor implemented (`rl/train/watchdog.py`) and verified via `tests/test_watchdog.py` (6/6 passed, including live Gazebo fault injection recovery from PID 289858 to PID 290061 with diagnostics saved to `results/watchdog_diagnostics.json`). |
+| **Check 11** | Randomizers & Factor Isolation | **Passed (Kinematic)** | **Plumbed in step(), ODE physics unverified** | Verified on kinematic backend through real `reset()` and `step()` interfaces: P1 nominal, P2 sensor-only ($d_{\text{p1}} == d_{\text{p2}}$), P3 dynamics-only ($d_{\text{p1}} \ne d_{\text{p3}}$), P4 latency constraint ($t_{\text{lat}} + d_{\text{del}} \le 0.40$s) enforced. Live-Gazebo boundary: command gains, lag, delay, and acceleration limits are plumbed into `/cmd_vel` Twist; sensor perturbations are applied to `/scan` and `/odom`. However, SDF link physics (`mass_multiplier`, `friction_multiplier`) are **unsupported in Gazebo Classic at runtime** and are excluded from verified dynamics coverage. |
+
+### Measured Gazebo Stepping Throughput & Projected Training Budget (Host: 16-core / 24-thread i7-14650HX, 15 GiB RAM)
+
+| Setup | Measured Aggregate Stepping Rate | Measured Per-Worker Rate | Real-Time Factor (RTF) | Host CPU Utilization (Normalized) | Total `gzserver` RSS | Projected 1M-Step Run Duration | Projected 12 × 1M-Step Total Duration |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **1 Worker (Benchmark)** | 4.68 steps/s | 4.68 steps/s | 0.94× | ~2.5% (0.6 cores) | 317.3 MB | ~59.4 hours (2.48 days) | ~712.5 hours (29.7 days) |
+| **2 Workers (Benchmark)** | 9.71 steps/s | 4.86 steps/s | 0.97× | ~6.7% (1.6 cores) | 628.8 MB | ~28.6 hours (1.19 days) | ~343.2 hours (14.3 days) |
+| **4 Workers (100k Soak)** | **19.77 steps/s** | **4.94 steps/s** | **0.99×** | **~13.3% (3.2 cores)** | **1,213.2 MB** | **~14.05 hours (0.59 days)** | **~168.6 hours (7.03 days)** |
+| *(Kinematic Dev)* | *657.2 steps/s* | *657.2 steps/s* | *131.4×* | *4.2% (1 core)* | *N/A* | *0.42 hours (25.4 mins)* | *5.07 hours* |
+
+*Note*: 19.77 steps/s is the **empirically measured stepping rate during the 100k soak**. The 1M and 12M durations are **projections**, not active PPO training measurements. PPO updates and periodic evaluations will yield slightly lower throughput (~18.5–19.5 steps/s, ~7.0–7.5 days total).
+
+### Separately Executed Test Suites (This Final Run)
+1. **Full Unit & Integration Suite (Kinematic + Watchdog)**: `PYTHONPATH=. pytest tests/test_observation.py tests/test_env.py tests/test_randomizers.py tests/test_checkpoint_resume.py tests/test_watchdog.py tests/test_g2_gate.py -k "not test_100k_random_steps and not test_ppo_smoke_and_checkpoint"`
+   - **46 passed, 1 skipped, 2 deselected in 75.29s**.
+2. **Targeted Soak Runner Logic Suite**: `PYTHONPATH=. pytest tests/test_soak_runner_logic.py -v`
+   - **5 passed, 0 failed in 0.14s** (atomic checkpointing, load corruption, resume math, delta accounting, linear elapsed time).
+3. **Watchdog Live Gazebo Test Suite**: `pytest tests/test_watchdog.py -v -s`
+   - **6 passed, 0 failed in 11.93s** (including controlled live Gazebo fault injection with PID change and clean recovery).
+4. **Live Gazebo G2 Verification Suite**: `python3 tests/run_gazebo_g2.py`
+   - **6 passed, 0 failed in 268.85s**.
+5. **Live Gazebo 4-Worker 100k Soak**: `python3 tests/run_gazebo_soak.py --steps 100000 --workers 4 --resume`
+   - **100,000 steps completed across 4 workers in 5,215.3s (86.9 mins)** (19.77 sps aggregate, 1,018 episodes, gzserver RSS -51.15 MB / -4.05%, Python RSS 61.4 $\to$ 63.4 MB, 0 NaNs, 0 crashes). Checkpoint saved to `results/gazebo_soak_checkpoint.json` with 2,000 memory samples.
+6. **Live Gazebo Kill-and-Resume Soak Runner**: `python3 tests/run_gazebo_soak.py --test-kill-resume`
+   - **1 passed (600 steps) in 325.7s**. State recorded in `results/gazebo_soak_checkpoint.json`.
+
+### Required Actions Before P1 Launch
+1. **Backend Approval**: Saigirish has approved **Option A (direct Gazebo Classic training for P1–P4)**. Kinematic backend is restricted strictly to development, reward debugging, and unit tests (zero weight transfer to Gazebo). Awaiting Siddhi's formal concurrence.
+2. **Co-Owner Review**: Siddhi to review reward/termination traces (`results/reward_audit_traces.json`) and observe Gazebo playback episodes.
+3. **Approve Gate G2**: Both co-owners must sign off before P1 training starts.
+
+

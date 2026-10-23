@@ -1,0 +1,46 @@
+# P2 Sensor Randomization Configuration
+# Specification: docs/Sim2Real_LiDAR_Navigation_Pipeline.pdf (Section 6)
+# Pinned per authoritative specification.
+
+lidar_range_noise:
+  a_min: 0.003  # meters
+  a_max: 0.015  # meters
+  b_min: 0.000
+  b_max: 0.010
+
+random_beam_dropout:
+  p_min: 0.00
+  p_max: 0.05
+
+block_dropout:
+  prob_min: 0.00
+  prob_max: 0.30
+  blocks_min: 1
+  blocks_max: 2
+  beams_per_block_min: 3
+  beams_per_block_max: 10
+
+sensor_delivery_latency:
+  extra_scans_choices: [0, 1]  # 0 or 0.20s extra delay
+
+lidar_mounting_offset:
+  yaw_deg_min: -3.0
+  yaw_deg_max: 3.0
+  x_offset_min: -0.02  # meters
+  x_offset_max: 0.02
+  y_offset_min: -0.02  # meters
+  y_offset_max: 0.02
+
+odometry_scale_error:
+  v_scale_min: 0.95
+  v_scale_max: 1.05
+
+odometry_yaw_rate_bias:
+  bias_min: -0.005  # rad/s
+  bias_max: 0.005   # rad/s
+
+velocity_measurement_noise:
+  sigma_v_min: 0.000
+  sigma_v_max: 0.005  # m/s
+  sigma_omega_min: 0.000
+  sigma_omega_max: 0.020  # rad/s

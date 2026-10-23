@@ -1,0 +1,723 @@
+[
+  {
+    "goal_x": -0.18400705615640767,
+    "goal_y": 0.7251648403450192,
+    "num_active_obstacles": 7,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": 1.170762030813921,
+        "y": -1.5278504898429448
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 1.1639976175502413,
+        "y": 0.13288425792555802
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -0.6560909567764471,
+        "y": -0.2532562474705571
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": -1.5754122983741539,
+        "y": -1.2548938564914565
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": 0.580123009958343,
+        "y": 0.5004443393524505
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_2",
+        "size": [
+          0.12
+        ],
+        "x": 1.72034637783067,
+        "y": 1.663690272165756
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": -1.240671882923802,
+        "y": 0.7530603566598777
+      }
+    ],
+    "robot_theta": -2.8841484100105235,
+    "robot_x": 0.40951544509114846,
+    "robot_y": -0.6883377258460278,
+    "scenario_id": 0,
+    "seed": 0,
+    "start_goal_distance": 1.5330552710570582
+  },
+  {
+    "goal_x": 1.2726748354088073,
+    "goal_y": -0.9128196710453707,
+    "num_active_obstacles": 6,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": -1.0082521817010914,
+        "y": -0.8081346424977117
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 1.479622963999761,
+        "y": 0.7204574368376329
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": 0.13796347096321204,
+        "y": -0.7466216737511859
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -1.1116144080657462,
+        "y": 1.53935156109748
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": 0.05366907572991497,
+        "y": -1.2830088543476272
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": -1.5653842193417105,
+        "y": 0.09720349508407367
+      }
+    ],
+    "robot_theta": -2.2358110930610913,
+    "robot_x": 0.03534665785376756,
+    "robot_y": 1.3468864520145467,
+    "scenario_id": 1,
+    "seed": 1,
+    "start_goal_distance": 2.5762866264385567
+  },
+  {
+    "goal_x": 0.6488434822811283,
+    "goal_y": 0.38808029816135836,
+    "num_active_obstacles": 8,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_2",
+        "size": [
+          0.12
+        ],
+        "x": 0.21543919322028082,
+        "y": -1.210784568963537
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": -0.2290553112637237,
+        "y": 0.575610815153369
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 1.4981440319815333,
+        "y": 0.586727378469321
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": -0.6073903539446497,
+        "y": 1.4168844343327927
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -1.286685133245934,
+        "y": -1.2954108749005353
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": 0.6113589690475845,
+        "y": 1.1874035002890775
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": 0.4833482633581614,
+        "y": -0.3127508764219833
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": 1.1862028945275491,
+        "y": -0.20248579656322496
+      }
+    ],
+    "robot_theta": 1.9743385564396059,
+    "robot_x": -0.712779718594544,
+    "robot_y": -0.6025114811917713,
+    "scenario_id": 2,
+    "seed": 2,
+    "start_goal_distance": 1.6838318842701938
+  },
+  {
+    "goal_x": 1.1068767582899297,
+    "goal_y": -1.0974951930226684,
+    "num_active_obstacles": 5,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": -0.23586473059179558,
+        "y": 0.29511514288967855
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": 0.8086484767933446,
+        "y": 1.5513086664427354
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -0.7069000018382346,
+        "y": 0.4866014237238727
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_2",
+        "size": [
+          0.12
+        ],
+        "x": 0.678907348478738,
+        "y": -0.7171862084167946
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -1.6329868455535212,
+        "y": 1.5509308340898613
+      }
+    ],
+    "robot_theta": 1.8929632932132208,
+    "robot_x": -1.2389089902405632,
+    "robot_y": -0.786936585277662,
+    "scenario_id": 3,
+    "seed": 3,
+    "start_goal_distance": 2.3662538804729474
+  },
+  {
+    "goal_x": 0.04518978445361799,
+    "goal_y": 1.3686966079423182,
+    "num_active_obstacles": 5,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": 1.5361002493812044,
+        "y": 1.4053771538739137
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -1.0557939777400271,
+        "y": 0.35656915247648646
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": 0.6855689331821044,
+        "y": 1.4818188706546254
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 0.5309362047500557,
+        "y": -1.17497586169642
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": -0.007250164129726899,
+        "y": -0.021692564549209425
+      }
+    ],
+    "robot_theta": 2.9923274543394056,
+    "robot_x": 1.3247377556613795,
+    "robot_y": 0.03386938291494124,
+    "scenario_id": 4,
+    "seed": 4,
+    "start_goal_distance": 1.849055632288057
+  },
+  {
+    "goal_x": -1.041843071723585,
+    "goal_y": 0.23212371334880422,
+    "num_active_obstacles": 5,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": 0.5180549793991585,
+        "y": -0.9026653143225987
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -0.21309464059434302,
+        "y": 1.5533087513800523
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -0.3524539070775681,
+        "y": -0.02285474823235467
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": 0.591281482353343,
+        "y": -1.469750272082146
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": 1.2680349189386402,
+        "y": -1.4555237793772822
+      }
+    ],
+    "robot_theta": 0.0962933399642707,
+    "robot_x": 0.9119587419986868,
+    "robot_y": 0.9207429613121163,
+    "scenario_id": 5,
+    "seed": 5,
+    "start_goal_distance": 2.071602760176283
+  },
+  {
+    "goal_x": 1.0347745263060513,
+    "goal_y": 1.485264157243598,
+    "num_active_obstacles": 6,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 0.9141083271216957,
+        "y": -1.4484038364811036
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -0.9583517077698173,
+        "y": 1.1460674189013629
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": -0.22546732907219713,
+        "y": 0.42574289856826675
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": -1.2842398440427232,
+        "y": -1.0664565164953799
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": -0.009142784142898819,
+        "y": 0.868291046261473
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": 0.13551449477108268,
+        "y": -1.3366077328652557
+      }
+    ],
+    "robot_theta": -0.8226747951461473,
+    "robot_x": 0.1141114109011101,
+    "robot_y": -0.4686200992581182,
+    "scenario_id": 6,
+    "seed": 6,
+    "start_goal_distance": 2.159926910770917
+  },
+  {
+    "goal_x": 0.9786843595600778,
+    "goal_y": -0.6666543163395904,
+    "num_active_obstacles": 5,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_4",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": -0.7258191838946577,
+        "y": -0.8029824995728452
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": -0.1760318266434704,
+        "y": 0.014577284818194425
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": 0.9774908101739352,
+        "y": 0.40807862633348324
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_1",
+        "size": [
+          0.15
+        ],
+        "x": 1.662464502118409,
+        "y": -0.9679504259989636
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": -1.1370822872136235,
+        "y": 0.3766077771434584
+      }
+    ],
+    "robot_theta": 1.7321842783482628,
+    "robot_x": 0.37403544514795417,
+    "robot_y": 1.1876692648990308,
+    "scenario_id": 7,
+    "seed": 7,
+    "start_goal_distance": 1.9504143799811837
+  },
+  {
+    "goal_x": 1.5931863256603709,
+    "goal_y": 0.5886707413108736,
+    "num_active_obstacles": 5,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_3",
+        "size": [
+          0.18
+        ],
+        "x": -1.0529966001730544,
+        "y": -1.0224924066596022
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 1.0058256079901646,
+        "y": -0.24683762189109926
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_2",
+        "size": [
+          0.12
+        ],
+        "x": -0.8445150521525379,
+        "y": 0.31452386710832414
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": 0.34156850683659123,
+        "y": 0.48106811603913346
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": 1.3765821646097867,
+        "y": -1.1705665706160668
+      }
+    ],
+    "robot_theta": -1.1390733959787083,
+    "robot_x": -0.5173528929493735,
+    "robot_y": 1.4569577615803975,
+    "scenario_id": 8,
+    "seed": 8,
+    "start_goal_distance": 2.2821696130783877
+  },
+  {
+    "goal_x": -0.5222447736317006,
+    "goal_y": -0.6950351606726661,
+    "num_active_obstacles": 4,
+    "obstacles": [
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_1",
+        "size": [
+          0.3,
+          0.3
+        ],
+        "x": 0.9256932151959454,
+        "y": 1.597709889755846
+      },
+      {
+        "active": true,
+        "kind": "cylinder",
+        "name": "obstacle_cyl_4",
+        "size": [
+          0.15
+        ],
+        "x": 1.653211067552811,
+        "y": 1.3017327277886976
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_3",
+        "size": [
+          0.35,
+          0.35
+        ],
+        "x": 1.3230666407296319,
+        "y": 0.6673084175851436
+      },
+      {
+        "active": true,
+        "kind": "box",
+        "name": "obstacle_box_2",
+        "size": [
+          0.25,
+          0.25
+        ],
+        "x": 0.18237089014172314,
+        "y": 1.416344066367968
+      }
+    ],
+    "robot_theta": 0.6480989408667286,
+    "robot_x": 1.1070451198705533,
+    "robot_y": -0.6374165448282095,
+    "scenario_id": 9,
+    "seed": 9,
+    "start_goal_distance": 1.630308394740215
+  }
+]

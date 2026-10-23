@@ -1,0 +1,71 @@
+# PPO Training Configuration
+# Specification: docs/Sim2Real_LiDAR_Navigation_Pipeline.pdf (Section 7)
+# STATUS: PROVISIONAL pending P1 pilot to establish clearance (r_clear) and smoothness (r_smooth) decisions at Gate G3.
+# All values frozen per specification unless documented in decisions.md.
+
+algorithm: PPO
+policy: MlpPolicy
+
+# Network architecture (frozen)
+policy_kwargs:
+  net_arch:
+    pi: [128, 128]  # Actor network: 2 hidden layers of 128 units
+    vf: [128, 128]  # Critic network: 2 hidden layers of 128 units
+  activation_fn: tanh
+  log_std_init: -0.5  # Initial log standard deviation
+
+# PPO hyperparameters (frozen)
+learning_rate: 0.0003    # 3e-4, constant
+n_steps: 2048           # Rollout length per env
+batch_size: 256          # Minibatch size
+n_epochs: 10             # PPO epochs per update
+gamma: 0.99              # Discount factor
+gae_lambda: 0.95         # GAE lambda
+clip_range: 0.2          # PPO clip range
+ent_coef: 0.0            # Entropy coefficient
+vf_coef: 0.5             # Value function coefficient
+max_grad_norm: 0.5       # Max gradient norm
+
+# Compute (frozen)
+device: cpu
+torch_threads: 2         # Limit torch threads to ~2
+
+# Observation/Reward scaling
+normalize_observations: false  # Fixed manual scaling in observation module
+normalize_rewards: true        # VecNormalize(norm_obs=False, norm_reward=True)
+
+# Training budget
+total_timesteps: 1_000_000  # Provisional 1M per run
+checkpoint_interval: 50_000  # Save every 50k steps
+eval_interval: 100_000       # Evaluate 20 validation scenarios every 100k steps
+eval_episodes: 20
+
+# Seed-major queue order: P1s0, P2s0, P3s0, P4s0, then seed 1, then seed 2
+seeds: [0, 1, 2]
+
+# Policies
+policies:
+  P1:
+    name: "Nominal"
+    sensor_randomization: false
+    dynamics_randomization: false
+  P2:
+    name: "Sensor"
+    sensor_randomization: true
+    dynamics_randomization: false
+  P3:
+    name: "Dynamics"
+    sensor_randomization: false
+    dynamics_randomization: true
+  P4:
+    name: "Combined"
+    sensor_randomization: true
+    dynamics_randomization: true
+
+# Logging
+tensorboard_log: "./runs/tensorboard"
+log_interval: 10  # Log every 10 rollouts
+verbose: 1
+
+# Recovery
+watchdog_timeout_sec: 2.0  # Restart gzserver if no scan for 2s

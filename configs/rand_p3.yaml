@@ -1,0 +1,30 @@
+# P3 Dynamics Randomization Configuration
+# Specification: docs/Sim2Real_LiDAR_Navigation_Pipeline.pdf (Section 6)
+# Pinned per authoritative specification.
+# Note: Wheel radius is excluded by design (captured by odometry scale error in P2).
+
+command_gain:
+  v_gain_min: 0.85
+  v_gain_max: 1.15
+  omega_gain_min: 0.85
+  omega_gain_max: 1.15
+
+actuator_lag:
+  tau_min: 0.00  # seconds
+  tau_max: 0.30  # seconds
+
+control_delay:
+  delay_min: 0.00  # seconds
+  delay_max: 0.20  # seconds
+
+acceleration_limits:
+  linear_acc_min: 0.20   # m/s^2
+  linear_acc_max: 0.60   # m/s^2
+  angular_acc_min: 1.00  # rad/s^2
+  angular_acc_max: 3.00  # rad/s^2
+
+friction_and_mass:
+  friction_multiplier_min: 0.70
+  friction_multiplier_max: 1.30
+  mass_multiplier_min: 0.90
+  mass_multiplier_max: 1.20
