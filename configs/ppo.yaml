@@ -26,8 +26,8 @@ ent_coef: 0.0            # Entropy coefficient
 vf_coef: 0.5             # Value function coefficient
 max_grad_norm: 0.5       # Max gradient norm
 
-# Compute (frozen)
-device: cpu
+# Compute (auto-detects CUDA GPU with CPU fallback)
+device: auto
 torch_threads: 2         # Limit torch threads to ~2
 
 # Observation/Reward scaling

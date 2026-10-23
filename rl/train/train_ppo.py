@@ -207,6 +207,17 @@ def train_ppo(
     """
     config = load_config(config_path)
 
+    # Device resolution: check if requested device or auto-detected GPU is available
+    req_device = config.get('device', 'auto')
+    if req_device in ['cuda', 'gpu', 'auto']:
+        if torch.cuda.is_available():
+            device = 'cuda'
+        else:
+            device = 'cpu'
+    else:
+        device = req_device
+    config['device'] = device
+
     # Worker count resolution
     if n_workers is None:
         n_workers = int(config.get('n_workers', 1))
