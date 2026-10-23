@@ -68,6 +68,7 @@ def audit_policies(n_episodes: int = 20):
             col_pen = 0.0
             steps = 0
             done = False
+            step_records = []
 
             while not done:
                 if pol_name == "hand_coded":
@@ -104,6 +105,46 @@ def audit_policies(n_episodes: int = 20):
 
                 total_r += r
 
+                if info.get("is_success", False):
+                    step_reason = "success"
+                elif info.get("is_collision", False):
+                    step_reason = "collision"
+                elif trunc:
+                    step_reason = "timeout"
+                else:
+                    step_reason = "running"
+
+                components = info.get("reward_components", {})
+
+                step_records.append({
+                    "step": steps,
+                    "action": np.asarray(action).tolist(),
+                    "previous_goal_distance": float(prev_dist),
+                    "goal_distance": float(curr_dist),
+                    "reward_components": {
+                        "progress": float(components.get(
+                            "progress", step_progress
+                        )),
+                        "step_penalty": float(components.get(
+                            "step_penalty", -env.c_step
+                        )),
+                        "goal": float(components.get(
+                            "goal", env.r_goal if info.get(
+                                "is_success", False
+                            ) else 0.0
+                        )),
+                        "collision": float(components.get(
+                            "collision", -env.r_col if info.get(
+                                "is_collision", False
+                            ) else 0.0
+                        )),
+                    },
+                    "reward": float(r),
+                    "terminated": bool(term),
+                    "truncated": bool(trunc),
+                    "termination_reason": step_reason,
+                })
+
             ep_rewards.append(total_r)
             ep_lengths.append(steps)
             if info.get("is_success", False):
@@ -131,6 +172,7 @@ def audit_policies(n_episodes: int = 20):
                 "goal_reward": float(goal_r),
                 "collision_penalty": float(col_pen),
                 "outcome": term_reason,
+                "step_traces": step_records,
             })
 
         summary[pol_name] = {
