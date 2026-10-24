@@ -42,6 +42,7 @@ def audit_policies(n_episodes: int = 20):
 
     summary = {}
     detailed_traces = {}
+    all_step_traces = []
 
     for pol_name in policies.keys():
         ep_rewards = []
@@ -54,6 +55,7 @@ def audit_policies(n_episodes: int = 20):
             "collision_penalty": [],
         }
         episode_records = []
+        step_traces = []
 
         for ep_idx in range(n_episodes):
             seed = 1_000_000 + ep_idx
@@ -88,21 +90,50 @@ def audit_policies(n_episodes: int = 20):
                 steps += 1
                 done = term or trunc
 
-                # Breakdown
-                curr_dist = info.get("goal_distance", 0.0)
-                # progress = 10 * (prev_dist - curr_dist)
-                # step_cost = -0.05
-                # goal = +100 if is_success else 0
-                # col = -100 if is_collision else 0
-                step_progress = env.k_progress * (prev_dist - curr_dist)
-                prog_r += step_progress
-                step_pen += -env.c_step
-                if info.get("is_success", False):
-                    goal_r += env.r_goal
-                if info.get("is_collision", False):
-                    col_pen += -env.r_col
+                # Record the authoritative reward components from the environment.
+                components = info.get("reward_components")
+                if not isinstance(components, dict):
+                    raise RuntimeError("Missing info['reward_components']")
 
-                total_r += r
+                progress = float(components["progress"])
+                step_penalty = float(components["step_penalty"])
+                goal_reward = float(components["goal"])
+                collision_penalty = float(components["collision"])
+
+                component_sum = (
+                    progress + step_penalty + goal_reward + collision_penalty
+                )
+                reward_error = float(r) - component_sum
+
+                if not np.isclose(float(r), component_sum, rtol=1e-7, atol=1e-6):
+                    raise AssertionError(
+                        f"Reward mismatch: policy={pol_name}, episode={ep_idx}, "
+                        f"step={steps}, reward={r}, component_sum={component_sum}"
+                    )
+
+                prog_r += progress
+                step_pen += step_penalty
+                goal_r += goal_reward
+                col_pen += collision_penalty
+                total_r += float(r)
+
+                step_traces.append({
+                    "policy": pol_name,
+                    "episode": ep_idx,
+                    "seed": seed,
+                    "step": steps,
+                    "reward": float(r),
+                    "progress_reward": progress,
+                    "step_penalty": step_penalty,
+                    "goal_reward": goal_reward,
+                    "collision_penalty": collision_penalty,
+                    "component_sum": float(component_sum),
+                    "reward_error": reward_error,
+                    "is_success": bool(info.get("is_success", False)),
+                    "is_collision": bool(info.get("is_collision", False)),
+                    "terminated": bool(term),
+                    "truncated": bool(trunc),
+                })
 
             ep_rewards.append(total_r)
             ep_lengths.append(steps)
@@ -151,6 +182,7 @@ def audit_policies(n_episodes: int = 20):
             }
         }
         detailed_traces[pol_name] = episode_records
+        all_step_traces.extend(step_traces)
 
     env.close()
 
@@ -165,6 +197,7 @@ def audit_policies(n_episodes: int = 20):
             "max_episode_steps": 350,
         },
         "traces": detailed_traces,
+        "step_traces": all_step_traces,
     }
 
     out_file = results_dir / "reward_audit_traces.json"
