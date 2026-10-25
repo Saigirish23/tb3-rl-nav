@@ -1,0 +1,136 @@
+{
+  "audit_metadata": {
+    "date": "2026-10-25T20:36:00+05:30",
+    "repository": "https://github.com/Saigirish23/tb3-rl-nav.git",
+    "environment": "ROS 2 Humble + Gazebo Classic 11 + SB3 PPO",
+    "scope": "simulation-only"
+  },
+  "training_runs": {
+    "P1": {
+      "policy_name": "P1",
+      "seed": 0,
+      "n_workers": 4,
+      "total_timesteps": 852816,
+      "elapsed_seconds": 40496.33,
+      "steps_per_second": 19.75,
+      "final_model_path": "runs/main_p1_s0/final_model",
+      "end_time": "2026-10-25T04:13:18.328017"
+    },
+    "P4": {
+      "policy_name": "P4",
+      "seed": 0,
+      "n_workers": 4,
+      "total_timesteps": 704512,
+      "steps_per_second": 19.79,
+      "final_model_path": "runs/main_p4_s0/final_model.zip"
+    }
+  },
+  "held_out_evaluation": {
+    "source_file": "runs/eval/p1_vs_p4_comparison.json",
+    "split": "test",
+    "scenario_file": "scenarios/test/scenarios.json",
+    "scenario_count": 50,
+    "P1": {
+      "successes": 47,
+      "collisions": 1,
+      "timeouts": 2,
+      "success_rate": 0.94,
+      "wilson_95_ci": [
+        0.8378265662912299,
+        0.9793854036353695
+      ],
+      "mean_reward": 103.75372462001613,
+      "std_reward": 37.71496092831864,
+      "mean_steps_success": 106.17021276595744,
+      "mean_path_length_success": 2.2510232106192,
+      "mean_min_clearance": 0.2817703260809851
+    },
+    "P4": {
+      "successes": 49,
+      "collisions": 1,
+      "timeouts": 0,
+      "success_rate": 0.98,
+      "wilson_95_ci": [
+        0.8950431352816304,
+        0.9964608319110235
+      ],
+      "mean_reward": 109.02981229675035,
+      "std_reward": 30.947856133691467,
+      "mean_steps_success": 101.48979591836735,
+      "mean_path_length_success": 2.067286540834728,
+      "mean_min_clearance": 0.2917436383442037
+    },
+    "paired_comparison": {
+      "sample_size": 50,
+      "both_succeeded": 46,
+      "p1_succeeded_p4_failed": 1,
+      "p1_failed_p4_succeeded": 3,
+      "both_failed": 0,
+      "paired_difference": 0.04,
+      "exact_mcnemar_p_value": 0.625,
+      "statistically_significant": false,
+      "significance_threshold": 0.05,
+      "statistical_note": "The 4.0% difference (49 vs 47 successes out of 50) is not statistically significant (p = 0.6250). A sample of N >= 250 would be required to power a test at this effect size."
+    }
+  },
+  "gazebo_simulation_demo": {
+    "source_file": "runs/demo_run_20261025_182130/demo_summary.json",
+    "policy": "P4",
+    "model_path": "/home/saigirish/sim-real-rl/runs/main_p4_s0/final_model.zip",
+    "port": 11345,
+    "ros_domain_id": 30,
+    "goal_tolerance": 0.2,
+    "total_trials": 3,
+    "successful_trials": 3,
+    "trials": [
+      {
+        "trial": 1,
+        "label": "Straight Forward (East)",
+        "goal": [
+          1.2,
+          0.0
+        ],
+        "outcome": "SUCCESS",
+        "success": true,
+        "steps": 57,
+        "duration_sec": 14.29,
+        "final_distance_m": 0.198,
+        "displacement_m": 1.011,
+        "min_clearance_m": 1.034,
+        "trial_log_file": "runs/demo_run_20261025_182130/inference_trial_1792932702.json"
+      },
+      {
+        "trial": 2,
+        "label": "Diagonal Positive (North-East)",
+        "goal": [
+          1.0,
+          1.0
+        ],
+        "outcome": "SUCCESS",
+        "success": true,
+        "steps": 61,
+        "duration_sec": 15.16,
+        "final_distance_m": 0.198,
+        "displacement_m": 0.879,
+        "min_clearance_m": 0.897,
+        "trial_log_file": "runs/demo_run_20261025_182130/inference_trial_1792932717.json"
+      },
+      {
+        "trial": 3,
+        "label": "Left Quadrant (North-West)",
+        "goal": [
+          -1.0,
+          1.0
+        ],
+        "outcome": "SUCCESS",
+        "success": true,
+        "steps": 88,
+        "duration_sec": 20.33,
+        "final_distance_m": 0.191,
+        "displacement_m": 1.69,
+        "min_clearance_m": 1.077,
+        "trial_log_file": "runs/demo_run_20261025_182130/inference_trial_1792932731.json"
+      }
+    ]
+  }
+}
