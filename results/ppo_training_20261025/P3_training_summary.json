@@ -1,0 +1,10 @@
+{
+  "policy_name": "P3",
+  "seed": 0,
+  "n_workers": 1,
+  "total_timesteps": 60416,
+  "elapsed_seconds": 12269.44,
+  "steps_per_second": 4.89,
+  "final_model_path": "runs/seq_20261025_020007_P3_seed0_60k/final_model",
+  "end_time": "2026-10-25T12:13:03.825713"
+}

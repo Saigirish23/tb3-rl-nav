@@ -1,0 +1,10 @@
+{
+  "policy_name": "P4",
+  "seed": 0,
+  "n_workers": 1,
+  "total_timesteps": 60416,
+  "elapsed_seconds": 12248.66,
+  "steps_per_second": 4.9,
+  "final_model_path": "runs/seq_20261025_020007_P4_seed0_60k/final_model",
+  "end_time": "2026-10-25T15:37:20.134065"
+}
