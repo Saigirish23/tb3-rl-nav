@@ -1,0 +1,295 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{microtype}
+
+\begin{document}
+
+\title{Sim-to-Real Reinforcement Learning for Robust LiDAR-Based Autonomous Navigation: Mid-Term Progress Report}
+
+\author{
+\IEEEauthorblockN{Saigirish S}
+\IEEEauthorblockA{\textit{Department of Mechanical Engineering} \\
+\textit{Indian Institute of Technology Jodhpur}\\
+Roll No: B24ME1066 \\
+Email: b24me1066@iitj.ac.in}
+\and
+\IEEEauthorblockN{Siddhi Vinayak}
+\IEEEauthorblockA{\textit{Department of Bioscience and Bioengineering} \\
+\textit{Indian Institute of Technology Jodhpur}\\
+Roll No: B24BB1036 \\
+Email: b24bb1036@iitj.ac.in}
+}
+
+\maketitle
+
+\begin{abstract}
+Mapless navigation in dynamic or unstructured environments is a foundational challenge in mobile robotics. While deep reinforcement learning (DRL) provides an end-to-end framework directly mapping onboard sensor observations to continuous velocity commands, standard policies trained in idealized physics engines frequently suffer catastrophic failure when deployed to real hardware due to the reality gap. In this mid-term progress report, we investigate a domain-randomization-enhanced Proximal Policy Optimization (PPO) pipeline for a differential-drive TurtleBot3 mobile robot using a 2D planar LiDAR. We detail the system architecture, comprising a 43-dimensional observation vector with forward-centered sector min-pooling and dead-reckoning pose tracking, safe action scaling, and a multi-component reward formulation. We present preliminary empirical results on a held-out test suite of $N=50$ identical scenarios comparing a nominal policy ($\text{P1}$, 852k steps) against a combined sensor-and-dynamics randomized policy ($\text{P4}$, 704k steps). On nominal evaluation, $\text{P1}$ achieves a 94.0\% success rate while $\text{P4}$ achieves 98.0\%. A paired McNemar exact test yields $p = 0.6250$, indicating that the observed 4\% difference is not statistically significant at $N=50$ and highlighting critical sample-size requirements. We conclude with a discussion of experimental limitations, unequal training budgets, and an explicit roadmap toward completing intermediate ablations ($\text{P2}$, $\text{P3}$) and real-robot deployment.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Reinforcement Learning, Mobile Robot Navigation, Sim-to-Real Transfer, Domain Randomization, Proximal Policy Optimization, TurtleBot3, ROS 2, Gazebo.
+\end{IEEEkeywords}
+
+\section{Introduction and Motivation}
+Autonomous ground vehicles operating in GPS-denied indoor environments typically rely on the classical navigation stack consisting of simultaneous localization and mapping (SLAM), global path planning (e.g., A* or Dijkstra), and local trajectory optimization (e.g., Dynamic Window Approach or Timed Elastic Bands) \cite{macenski2022robot}. While effective in static structured spaces, classical pipelines require substantial computational overhead for real-time dense map maintenance and are notoriously sensitive to localization drift, dynamic obstacle occlusion, and sensor noise.
+
+To overcome these constraints, mapless navigation via Deep Reinforcement Learning (DRL) has emerged as a promising alternative \cite{tai2017virtual}. By training neural network policies to directly map raw range findings and relative goal coordinates to low-level motor velocity commands, the system avoids explicit global mapping. However, training policies directly on physical robotic platforms is prohibitively expensive, wear-intensive, and dangerous during early exploration. High-fidelity simulators such as Gazebo \cite{koenig2004design} provide safe, accelerated experience collection, but policies trained in nominal simulation often experience dramatic performance degradation when transferred to physical hardware---a phenomenon known as the \textit{sim-to-real gap} or reality gap \cite{tobin2017domain, peng2018sim}.
+
+Domain Randomization (DR) bridges this gap by exposing the agent during training to a broad distribution of simulated sensor distortions and unmodeled dynamic variations, compelling the policy to learn robust feedback strategies that generalize to real-world physics \cite{tobin2017domain, peng2018sim}. This project systematically investigates the quantitative impact of isolated and combined domain randomization on policy robustness, sample efficiency, and hardware transferability for TurtleBot3 LiDAR navigation.
+
+\section{Problem Statement and Objectives}
+
+\subsection{Problem Statement}
+We consider a differential-drive ground robot navigating from an arbitrary starting pose $\mathbf{p}_0 = (x_0, y_0, \theta_0)$ to a static Euclidean target $\mathbf{g} = (x_g, y_g)$ in an obstacle-cluttered $4\,\text{m} \times 4\,\text{m}$ bounded workspace. The robot lacks access to a prior global floorplan, external motion capture, or GPS. Navigation must proceed maplessly, relying solely on an onboard 2D laser scanner (LDS-01) and wheel odometry.
+
+\subsection{Research Objectives}
+\begin{enumerate}
+    \item \textbf{Mapless PPO Navigation Architecture:} Design an end-to-end continuous actor-critic navigation framework operating at 5.0\,Hz that enforces obstacle clearance and smooth kinematic control.
+    \item \textbf{$2 \times 2$ Domain Randomization Factorial Design:} Implement modular sensor perturbations (range noise, beam dropouts, delivery latency, odometry bias) and dynamics perturbations (command gains, actuator lag, control delay, acceleration limits) to isolate their individual and combined effects across four policy regimes:
+    \begin{itemize}
+        \item $\text{P1}$: Nominal baseline (no randomization).
+        \item $\text{P2}$: Sensor randomization only.
+        \item $\text{P3}$: Dynamics randomization only.
+        \item $\text{P4}$: Combined sensor and dynamics randomization.
+    \end{itemize}
+    \item \textbf{Rigorous Empirical Benchmarking:} Evaluate trained policies across identical held-out scenarios using paired statistical hypothesis testing and confidence intervals.
+    \item \textbf{Physical Sim-to-Real Transfer:} Validate the trained policy without fine-tuning on physical TurtleBot3 hardware in a laboratory environment.
+\end{enumerate}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/system_architecture.pdf}
+\caption{System architecture of the mapless PPO navigation framework. Raw 360-beam LiDAR scans are sector min-pooled into 36 forward-centered range bins $[0, 1]$, combined with dead-reckoning goal features from the internal \texttt{EstimatedPose} tracker, velocity feedback, and previous actions into a 43-D observation vector feeding a multi-layer perceptron policy network.}
+\label{fig:arch}
+\end{figure*}
+
+\section{Proposed System Architecture}
+
+\subsection{Observation Space Formulation}
+A central failure mode in reinforcement learning is observation distribution shift. To ensure complete parity between simulation and physical deployment, observation preprocessing is implemented as a pure NumPy module (\texttt{ObservationPreprocessor}) with zero ROS dependencies. 
+
+The observation vector $\mathbf{s}_t \in \mathbb{R}^{43}$ is constructed as follows:
+\begin{enumerate}
+    \item \textbf{LiDAR Sector Min-Pooling ($\mathbf{d}_{0:35} \in [0, 1]^{36}$):} Raw 360-ray range arrays from the LDS-01 sensor ($r_{\min} = 0.12\,\text{m}, r_{\max} = 3.50\,\text{m}$) are pooled into 36 angular sectors of width $10^\circ$. Bin 0 is centered directly forward along the robot's heading ($[-5^\circ, +5^\circ)$). Within each sector, the minimum range is extracted to guarantee conservative obstacle detection, invalid beams ($\le 0$, $\text{NaN}$, $\infty$) are mapped to $r_{\max}$, and values are normalized by $r_{\max}$.
+    \item \textbf{Normalized Goal Distance ($d_g \in [0, 1]$):} Relative Euclidean distance to target, normalized by the arena diagonal $D_{\text{arena}} = \sqrt{4^2 + 4^2} \approx 5.657\,\text{m}$.
+    \item \textbf{Goal Bearing Representation ($[\sin\phi_g, \cos\phi_g] \in [-1, 1]^2$):} The angular heading error $\phi_g = \text{wrap}(\theta_g - \theta_t) \in [-\pi, \pi]$ is decomposed into its sine and cosine components to eliminate the angular wrap-around discontinuity at $\pm \pi$.
+    \item \textbf{Measured Velocity Feedback ($[v_{\text{norm}}, \omega_{\text{norm}}] \in [-1, 1]^2$):} Current measured linear velocity normalized by $v_{\max} = 0.15\,\text{m/s}$ and angular velocity normalized by $\omega_{\max} = 0.60\,\text{rad/s}$.
+    \item \textbf{Previous Action Buffer ($\mathbf{u}_{t-1} \in [-1, 1]^2$):} The normalized control vector executed at step $t-1$, providing implicit recurrence and facilitating smooth rate transitions.
+\end{enumerate}
+
+\subsection{Dead-Reckoning Estimated Pose Module}
+Unlike naive simulations that feed ground-truth simulator poses into the policy, our framework implements an internal \texttt{EstimatedPose} dead-reckoning tracker. At episode reset, the estimated frame is aligned with the initial robot pose. During navigation, measured velocities $(v_{\text{meas}}, \omega_{\text{meas}})$ are integrated over $dt = 0.20\,\text{s}$ using midpoint circular arc kinematics:
+\begin{equation}
+\theta_{t+1} = \text{wrap}(\theta_t + \omega_{\text{meas}} dt)
+\end{equation}
+\begin{equation}
+x_{t+1} = x_t + v_{\text{meas}} dt \cos\left(\theta_t + \frac{1}{2}\omega_{\text{meas}} dt\right)
+\end{equation}
+\begin{equation}
+y_{t+1} = y_t + v_{\text{meas}} dt \sin\left(\theta_t + \frac{1}{2}\omega_{\text{meas}} dt\right)
+\end{equation}
+Goal features are computed strictly relative to this estimated frame, faithfully capturing accumulating odometry drift.
+
+\subsection{Action Space and Velocity Scaling}
+The policy outputs a continuous action $\mathbf{u}_t = [u_0, u_1]^T \in [-1, 1]^2$. To prevent violent dynamic wear on the physical robot, the active environment implements an asymmetric linear and symmetric angular velocity mapping:
+\begin{equation}
+v_t = 0.075 \cdot (u_0 + 1.0) \in [0.0, 0.15]\,\text{m/s}
+\end{equation}
+\begin{equation}
+\omega_t = 0.60 \cdot u_1 \in [-0.60, 0.60]\,\text{rad/s}
+\end{equation}
+This formulation constrains the robot to purely forward motion ($v \ge 0$), preventing backward blind-spot collisions since the LDS-01 sensor possesses structural blind shadows on the rear chassis.
+
+\subsection{Reward Design and Episode Termination}
+The step reward function $R_t$ is formulated to provide dense shaping while maintaining high terminal incentives:
+\begin{equation}
+R_t = r_{\text{progress}} + r_{\text{step}} + r_{\text{goal}} + r_{\text{collision}}
+\end{equation}
+\begin{itemize}
+    \item \textbf{Progress Reward:} $r_{\text{progress}} = 10.0 \cdot (d_{t-1} - d_t)$, providing continuous potential-based gradient toward the goal.
+    \item \textbf{Per-Step Penalty:} $r_{\text{step}} = -0.05$, incentivizing time-optimal trajectory completion.
+    \item \textbf{Goal Bonus:} $r_{\text{goal}} = +100.0$ when the Euclidean distance to target satisfies $d_t \le 0.20\,\text{m}$ (absorbing terminal state).
+    \item \textbf{Collision Penalty:} $r_{\text{collision}} = -100.0$ if the minimum range satisfies $d_{\min} \le 0.16\,\text{m}$ or an obstacle bounding-box intersection occurs.
+\end{itemize}
+In accordance with standard Gymnasium semantics \cite{towers2023gymnasium}, reaching the goal or colliding triggers \texttt{terminated=True}. If the episode reaches the maximum horizon of $T_{\max} = 350$ steps (70.0\,s) without goal arrival or collision, \texttt{truncated=True} is triggered, ensuring correct value function bootstrapping without treating truncation as an absorbing failure state.
+
+\begin{table}[t]
+\caption{PPO Training and Network Hyperparameters}
+\centering
+\begin{tabular}{llr}
+\toprule
+\textbf{Category} & \textbf{Hyperparameter} & \textbf{Value} \\
+\midrule
+Network Arch. & Policy MLP ($\pi$) & $[128, 128]$ \\
+              & Value MLP ($vf$) & $[128, 128]$ \\
+              & Activation Function & Tanh \\
+              & Initial $\log \sigma$ & $-0.5$ \\
+\midrule
+Optimization  & Algorithm & PPO \cite{schulman2017proximal} \\
+              & Learning Rate ($\alpha$) & $3 \times 10^{-4}$ (constant) \\
+              & Rollout Length ($n_{\text{steps}}$) & 2048 per worker \\
+              & Parallel Workers & 4 \\
+              & Minibatch Size & 256 \\
+              & Optimization Epochs ($n_{\text{epochs}}$) & 10 \\
+              & Discount Factor ($\gamma$) & 0.99 \\
+              & GAE Parameter ($\lambda$) & 0.95 \\
+              & PPO Clip Fraction ($\epsilon$) & 0.20 \\
+              & Entropy Coef. ($c_{\text{ent}}$) & 0.0 \\
+              & Value Function Coef. ($c_{\text{vf}}$) & 0.50 \\
+              & Gradient Clipping & 0.50 \\
+\midrule
+Scaling       & Observation Normalization & Fixed Manual ($[0, 1]$) \\
+              & Reward Normalization & \texttt{VecNormalize} (returns) \\
+\bottomrule
+\end{tabular}
+\label{tab:hyperparams}
+\end{table}
+
+\section{Domain Randomization Methodology}
+To enforce sim-to-real transferability, we implemented randomized perturbation modules sampled independently at the beginning of each training episode.
+
+\subsection{Sensor Domain Randomization ($\text{P2}$ / $\text{P4}$)}
+The sensor randomizer perturbs raw sensor feedback to replicate real-world LDS-01 non-idealities:
+\begin{itemize}
+    \item \textbf{Range Noise:} Distance-dependent Gaussian noise $\sigma(r) = a + b \cdot r$, with intercept $a \sim \mathcal{U}(0.003, 0.015)\,\text{m}$ and slope $b \sim \mathcal{U}(0.0, 0.010)$.
+    \item \textbf{Beam Dropout:} Independent beam dropout with probability $p \sim \mathcal{U}(0.0, 0.05)$, mapping ranges to $\infty$.
+    \item \textbf{Block Dropout:} Contiguous obstacle occlusions (1--2 blocks of 3--10 beams) activated with probability $p_{\text{block}} \sim \mathcal{U}(0.0, 0.30)$.
+    \item \textbf{Sensor Delivery Latency:} Discrete 0 or 1 scan buffer delay ($0.0\,\text{s}$ or $0.20\,\text{s}$).
+    \item \textbf{Odometry Perturbations:} Velocity scale error $k_v \sim \mathcal{U}(0.95, 1.05)$, yaw-rate bias $b_\omega \sim \mathcal{U}(-0.005, 0.005)\,\text{rad/s}$, and additive white noise.
+\end{itemize}
+
+\subsection{Dynamics Domain Randomization ($\text{P3}$ / $\text{P4}$)}
+The dynamics randomizer perturbs physical command execution:
+\begin{itemize}
+    \item \textbf{Actuator Lag:} First-order command filter $\dot{v} = (v_{\text{target}} - v) / \tau$ with time constant $\tau \sim \mathcal{U}(0.0, 0.30)\,\text{s}$.
+    \item \textbf{Control Delay:} Transport latency $d \sim \mathcal{U}(0.0, 0.20)\,\text{s}$ holding the previous action during step initiation.
+    \item \textbf{Command Gain:} Execution multipliers $k_v, k_\omega \sim \mathcal{U}(0.85, 1.15)$.
+    \item \textbf{Acceleration Limits:} Linear limit $a_v \sim \mathcal{U}(0.20, 0.60)\,\text{m/s}^2$ and angular limit $a_\omega \sim \mathcal{U}(1.0, 3.0)\,\text{rad/s}^2$.
+\end{itemize}
+
+\subsection{Joint Rejection Constraint in $\text{P4}$}
+Unconstrained sampling of maximum sensor latency ($0.20\,\text{s}$) and maximum control delay ($0.20\,\text{s}$) can yield a combined transport lag of $0.40\,\text{s}$ (two full control cycles), which approaches instability for high-rate obstacle avoidance. In the combined policy $\text{P4}$, a joint rejection constraint enforces:
+\begin{equation}
+\Delta t_{\text{sensor}} + \Delta t_{\text{control}} \le 0.40\,\text{s}
+\end{equation}
+guaranteeing dynamically traversable training instances.
+
+\section{Implementation and Completed Work}
+The full project implementation was carried out in Ubuntu 22.04 LTS using ROS 2 Humble, Gazebo Classic 11.10.2, Python 3.10.12, PyTorch 2.11.0, and Stable-Baselines3 2.7.1 \cite{raffin2021stable}.
+
+\subsection{Completed Milestones}
+\begin{itemize}
+    \item \textbf{Simulation Testbed:} Configured Gazebo Classic multi-instance simulation running 4 concurrent headless workers with automated ROS Domain ID isolation and watchdog process recovery.
+    \item \textbf{Policy Training Executions:}
+    \begin{itemize}
+        \item Policy $\text{P1}$ (Nominal baseline): Successfully trained for 852,816 transitions over 11.25 hours (throughput: 19.75 steps/s).
+        \item Policy $\text{P4}$ (Combined DR): Successfully trained for 704,512 transitions over 9.88 hours (throughput: 19.69 steps/s).
+    \end{itemize}
+    \item \textbf{Standalone Inference Node:} Developed \texttt{ppo\_inference\_node.py}, an asynchronous ROS 2 node executing deterministic policy inference at 5.0\,Hz with integrated sensor watchdog fail-safe.
+    \item \textbf{Automated Test Suites:} Implemented 11 unit tests verifying observation tensor layout, LiDAR min-pooling symmetry, action scaling, and VecNormalize running variance consistency (100\% pass rate).
+    \item \textbf{Reward Audit Harness:} Executed a multi-baseline reward audit producing 321,557 lines of per-step reward traces across reactive, random, stationary, and spin-in-place policies.
+    \item \textbf{Live Gazebo Demonstrations:} Successfully conducted 3 consecutive multi-target navigation trials in Gazebo Classic without collisions or timeouts.
+\end{itemize}
+
+\begin{table}[t]
+\caption{Preliminary Held-Out Evaluation Results ($N=50$ Scenarios)}
+\centering
+\begin{tabular}{lrr}
+\toprule
+\textbf{Metric} & \textbf{Policy P1 (Nominal)} & \textbf{Policy P4 (Combined DR)} \\
+\midrule
+Training Steps Completed & 852,816 & 704,512 \\
+Training Random Seed & $s=0$ & $s=0$ \\
+Evaluation Scenarios ($N$) & 50 & 50 \\
+\textbf{Success Count} & \textbf{47 / 50} & \textbf{49 / 50} \\
+\textbf{Success Rate} & \textbf{94.0\%} & \textbf{98.0\%} \\
+95\% Wilson Score CI & $[83.45\%, 97.97\%]$ & $[89.51\%, 99.65\%]$ \\
+Collision Count & 1 / 50 (2.0\%) & 1 / 50 (2.0\%) \\
+Timeout Count & 2 / 50 (4.0\%) & 0 / 50 (0.0\%) \\
+Mean Steps to Goal (Succ.) & $106.17 \pm 48.2$ & $101.49 \pm 44.8$ \\
+Mean Duration to Goal (Succ.) & $21.23 \pm 9.6\,\text{s}$ & $20.30 \pm 9.0\,\text{s}$ \\
+Mean Path Length (Succ.) & $2.25 \pm 0.72\,\text{m}$ & $2.07 \pm 0.58\,\text{m}$ \\
+Mean Min. Clearance (Succ.) & $0.289\,\text{m}$ & $0.298\,\text{m}$ \\
+\midrule
+\textbf{Paired McNemar Test} & \multicolumn{2}{c}{\textbf{Exact Two-Sided $p = 0.6250$ (Not Significant)}} \\
+\bottomrule
+\end{tabular}
+\label{tab:results}
+\end{table}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{figures/evaluation_results.pdf}
+\caption{Held-out evaluation outcomes on $N=50$ identical scenarios. (a) Outcome distributions showing higher success rate and zero timeouts for $\text{P4}$. (b) Wilson 95\% confidence intervals highlighting substantial interval overlap and the exact two-sided McNemar test result ($p = 0.6250$), demonstrating descriptive improvement without statistical significance.}
+\label{fig:results}
+\end{figure*}
+
+\section{Preliminary Results and Discussion}
+
+\subsection{Held-Out Scenario Evaluation}
+To evaluate generalization, policies $\text{P1}$ and $\text{P4}$ were benchmarked against a frozen test suite of $N=50$ held-out scenarios (\texttt{scenarios/test/scenarios.json}, SHA-256: \texttt{d9a6a25c...}). Table~\ref{tab:results} summarizes the comparative performance metrics.
+
+Policy $\text{P4}$ achieved 49 successes out of 50 episodes (98.0\%), compared to 47 successes for $\text{P1}$ (94.0\%). Crucially, $\text{P4}$ eliminated all episode timeouts (0 vs. 2 for $\text{P1}$), while maintaining identical collision counts (1 collision each). As illustrated in Fig.~\ref{fig:boxplots}, $\text{P4}$ also exhibited marginally superior path efficiency, reaching the goal in an average of $20.30\,\text{s}$ ($101.49$ steps) and $2.07\,\text{m}$ path length, compared to $21.23\,\text{s}$ ($106.17$ steps) and $2.25\,\text{m}$ for $\text{P1}$.
+
+\subsection{Statistical Interpretation and Rigor}
+A critical requirement of scientific reporting is distinguishing descriptive gains from statistical significance. Because both policies were evaluated on identical paired scenario configurations, we evaluated the contingency matrix:
+\begin{itemize}
+    \item Both policies succeeded: 46 scenarios.
+    \item $\text{P1}$ succeeded, $\text{P4}$ failed: 1 scenario (Scenario 34, collision).
+    \item $\text{P1}$ failed, $\text{P4}$ succeeded: 3 scenarios (Scenario 7 collision; Scenarios 25 and 37 timeouts).
+    \item Both policies failed: 0 scenarios.
+\end{itemize}
+
+Evaluating the discordant pairs ($b=1, c=3$) via the exact two-sided binomial McNemar test yields:
+\begin{equation}
+p = \sum_{k \in \{0, 1, 3, 4\}} \binom{4}{k} 0.5^4 = 2 \times (1 + 4) \times \frac{1}{16} = 0.6250
+\end{equation}
+Because $p = 0.6250 \gg 0.05$, the 4.0\% observed success advantage cannot be asserted as statistically significant. Furthermore, as depicted in Fig.~\ref{fig:results}(b), the 95\% Wilson score confidence intervals exhibit substantial overlap ($\text{P1}: [83.45\%, 97.97\%]$ vs. $\text{P4}: [89.51\%, 99.65\%]$). To achieve statistical power ($1-\beta \ge 0.80$) for a true 4\% performance delta, post-midterm testing must scale the benchmark to $N \ge 250$ episodes.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/trajectory_metrics.pdf}
+\caption{Distribution of navigation efficiency metrics for successful held-out episodes. (a) Execution steps to goal. (b) Trajectory path length in meters.}
+\label{fig:boxplots}
+\end{figure}
+
+\subsection{Methodological Limitations and Confounders}
+Our audit identified two key methodological confounders:
+\begin{enumerate}
+    \item \textbf{Unequal Training Budgets:} Due to strict execution deadlines, policy $\text{P1}$ was trained for 852,816 steps, whereas $\text{P4}$ completed 704,512 steps (a 17.4\% reduction). That $\text{P4}$ matches or exceeds $\text{P1}$ despite fewer gradient steps suggests strong sample efficiency, but the budget asymmetry remains an uncontrolled experimental variable.
+    \item \textbf{Single Random Seed:} Completed runs represent a single training seed ($s=0$). Consequently, inter-run training variance cannot currently be quantified.
+    \item \textbf{Simulation-Only Scope:} To date, all results reflect Gazebo Classic physics. Physical robot validation remains an active objective.
+\end{enumerate}
+
+\section{Work Remaining and Project Roadmap}
+The remaining project timeline is structured around three core phases:
+\begin{enumerate}
+    \item \textbf{Ablation Training ($\text{P2}$ and $\text{P3}$):} Complete training for policy $\text{P2}$ (sensor noise only) and policy $\text{P3}$ (dynamics perturbations only) using equalized budgets of 850k steps to isolate the relative contributions of observation vs. actuator domain randomization.
+    \item \textbf{Scaled Statistical Evaluation ($N=250$):} Scale the held-out evaluation scenario set from 50 to 250 diverse test cases across nominal, perturbed, and stress conditions to provide sufficient statistical power for paired significance testing.
+    \item \textbf{Physical Robot Deployment:} Deploy the trained $\text{P4}$ model to a physical TurtleBot3 Burger in a real-world testing arena, quantifying real-world success rates, collision frequency, and odometry drift tolerance.
+\end{enumerate}
+
+\section{Individual Contributions}
+\textit{Both authors contributed equally to the project; their responsibilities were complementary.}
+
+\begin{itemize}
+    \item \textbf{Saigirish S (B24ME1066):} Primary reinforcement learning pipeline architecture; implementation of the 43-D observation preprocessor and dead-reckoning module; domain randomization algorithms; multi-worker Gazebo orchestration; training executions of policies $\text{P1}$ and $\text{P4}$; ROS 2 standalone inference node development.
+    \item \textbf{Siddhi Vinayak (B24BB1036):} Reward decomposition audit framework; per-step reward trace logging and baseline behavior validation; observation and inference unit test suites; statistical hypothesis testing and McNemar significance evaluation; physical hardware deployment preparation.
+\end{itemize}
+
+\section{Conclusion}
+This mid-term progress report presents an audited, reproducible foundation for mapless autonomous navigation using PPO and domain randomization. By coupling sector min-pooled LiDAR readings with dead-reckoning goal tracking, the policy achieves high navigation reliability in simulation (94\%--98\% success). Methodological rigor demonstrates that observed preliminary differences between nominal and randomized policies are not yet statistically significant at $N=50$, establishing a clear requirement for expanded benchmarking. The completed simulation architecture, inference nodes, and test harnesses provide a solid trajectory toward completing the planned ablation matrix and physical robot deployment.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
