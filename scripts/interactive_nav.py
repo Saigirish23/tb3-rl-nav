@@ -3,8 +3,10 @@
 
 Allows the user to manually enter (x, y) target coordinates from the terminal.
 Navigates the robot from its CURRENT position to the target goal using the trained PPO policy.
-Validates boundaries: if target coordinates are outside the 4m x 4m arena, immediately
-halts the bot and alerts the user with an invalid coordinate message.
+Validates boundaries & obstacle clearance:
+- Rejects coordinates outside the 4m x 4m arena (safe limits [-1.85, 1.85] m).
+- Rejects coordinates that fall inside or too close to any active obstacle.
+- Automatically prevents the robot from spawning inside/on top of obstacles.
 """
 
 from __future__ import annotations
@@ -14,7 +16,7 @@ import time
 import math
 import argparse
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Tuple
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -33,6 +35,19 @@ from deploy.ppo_inference_node import PPOInferenceController
 ARENA_HALF_WIDTH = 2.0  # 4m x 4m arena -> bounds [-2.0, 2.0]
 SAFE_MARGIN = 0.15      # Wall thickness + robot clearance margin
 MAX_SAFE_COORD = ARENA_HALF_WIDTH - SAFE_MARGIN  # 1.85 meters
+ROBOT_FOOTPRINT_RADIUS = 0.105                   # TurtleBot3 Burger footprint
+
+# Known physical dimensions of pool obstacles in arena_4x4.world
+OBSTACLE_CATALOG = {
+    "obstacle_cyl_1": {"shape": "cylinder", "radius": 0.15},
+    "obstacle_cyl_2": {"shape": "cylinder", "radius": 0.12},
+    "obstacle_cyl_3": {"shape": "cylinder", "radius": 0.18},
+    "obstacle_cyl_4": {"shape": "cylinder", "radius": 0.15},
+    "obstacle_box_1": {"shape": "box", "half_size": 0.15},   # 0.30 x 0.30 m
+    "obstacle_box_2": {"shape": "box", "half_size": 0.125},  # 0.25 x 0.25 m
+    "obstacle_box_3": {"shape": "box", "half_size": 0.175},  # 0.35 x 0.35 m
+    "obstacle_box_4": {"shape": "box", "half_size": 0.15},   # 0.30 x 0.30 m
+}
 
 
 class InteractiveNavigator(Node):
@@ -42,6 +57,7 @@ class InteractiveNavigator(Node):
         self,
         model_path: Path,
         vecnorm_path: Optional[Path],
+        active_obstacles: Optional[List[Dict[str, Any]]] = None,
         arena_limit: float = 1.85,
         goal_tolerance: float = 0.20,
         collision_threshold: float = 0.13,
@@ -49,6 +65,7 @@ class InteractiveNavigator(Node):
         super().__init__("interactive_tb3_navigator")
         self.arena_limit = float(arena_limit)
         self.goal_tolerance = float(goal_tolerance)
+        self.active_obstacles = active_obstacles or []
 
         self.latest_scan: Optional[LaserScan] = None
         self.latest_odom: Optional[Odometry] = None
@@ -94,9 +111,54 @@ class InteractiveNavigator(Node):
         theta = math.atan2(2.0 * (q.w * q.z + q.x * q.y), 1.0 - 2.0 * (q.y * q.y + q.z * q.z))
         return float(p.x), float(p.y), float(theta)
 
-    def is_valid_coordinate(self, x: float, y: float) -> bool:
-        """Check if (x, y) is strictly within safe arena boundaries."""
-        return abs(x) <= self.arena_limit and abs(y) <= self.arena_limit
+    def check_coordinate_validity(self, x: float, y: float, clearance_margin: float = 0.05) -> Tuple[bool, str]:
+        """Validate if target (x, y) is inside the arena and clear of obstacles.
+        
+        Returns:
+            (is_valid, error_message)
+        """
+        # 1. Arena boundary check
+        if abs(x) > self.arena_limit or abs(y) > self.arena_limit:
+            msg = (
+                f"Target coordinate ({x:.2f}, {y:.2f}) is OUTSIDE the 4m x 4m arena boundary!\n"
+                f"  Safe navigable limits are [-{self.arena_limit:.2f}, +{self.arena_limit:.2f}] for both X and Y."
+            )
+            return False, msg
+
+        # 2. Obstacle collision check
+        for obs in self.active_obstacles:
+            name = obs.get("name", "unknown_obstacle")
+            ox = float(obs["x"])
+            oy = float(obs["y"])
+            geo = OBSTACLE_CATALOG.get(name, {"shape": "cylinder", "radius": 0.15})
+            shape = geo.get("shape", "cylinder")
+
+            # Required safety buffer = obstacle radius/half-size + robot radius (0.105m) + safety margin
+            if shape == "cylinder":
+                r = float(geo.get("radius", 0.15))
+                min_clearance = r + ROBOT_FOOTPRINT_RADIUS + clearance_margin
+                dist = math.hypot(x - ox, y - oy)
+                if dist <= min_clearance:
+                    msg = (
+                        f"Target coordinate ({x:.2f}, {y:.2f}) falls INSIDE or TOO CLOSE to obstacle '{name}'!\n"
+                        f"  Obstacle Center: ({ox:.2f}, {oy:.2f}) | Radius: {r:.2f} m\n"
+                        f"  Distance: {dist:.2f} m <= Minimum Required Clearance: {min_clearance:.2f} m"
+                    )
+                    return False, msg
+            elif shape == "box":
+                half_size = float(geo.get("half_size", 0.15))
+                min_half = half_size + ROBOT_FOOTPRINT_RADIUS + clearance_margin
+                dx = abs(x - ox)
+                dy = abs(y - oy)
+                if dx <= min_half and dy <= min_half:
+                    msg = (
+                        f"Target coordinate ({x:.2f}, {y:.2f}) falls INSIDE or TOO CLOSE to obstacle '{name}'!\n"
+                        f"  Obstacle Center: ({ox:.2f}, {oy:.2f}) | Box Half-Width: {half_size:.2f} m\n"
+                        f"  Offsets: (|dx|={dx:.2f}m, |dy|={dy:.2f}m) <= Minimum Required Clearance: {min_half:.2f} m"
+                    )
+                    return False, msg
+
+        return True, ""
 
     def wait_for_sensors(self, timeout_sec: float = 10.0) -> bool:
         """Wait until /scan and /odom topics have published data."""
@@ -118,7 +180,6 @@ class InteractiveNavigator(Node):
             goal_y=goal_y,
         )
 
-        dt = 0.20
         rate_sec = 0.20
         start_dist = math.hypot(goal_x - cur_x, goal_y - cur_y)
         print(f"\n[Nav] Starting navigation: ({cur_x:.2f}, {cur_y:.2f}) -> Goal ({goal_x:.2f}, {goal_y:.2f}) | Dist: {start_dist:.2f}m")
@@ -177,8 +238,8 @@ class InteractiveNavigator(Node):
         return self.controller.outcome
 
 
-def setup_gazebo_obstacles(layout_name: str, port: int = 11345, domain_id: int = 30):
-    """Optionally spawn visual obstacles in Gazebo before navigation."""
+def setup_gazebo_obstacles(layout_name: str, port: int = 11345, domain_id: int = 30) -> Tuple[List[Dict[str, Any]], Optional[List[float]]]:
+    """Spawn visual obstacles in Gazebo and position robot cleanly at safe start."""
     try:
         from scripts.demo_with_obstacles import PRESET_LAYOUTS, teleport_entities_in_gazebo
     except ImportError:
@@ -197,13 +258,18 @@ def setup_gazebo_obstacles(layout_name: str, port: int = 11345, domain_id: int =
 
     if layout_name in PRESET_LAYOUTS:
         cfg = PRESET_LAYOUTS[layout_name]
+        robot_start = cfg.get("robot_start", [0.0, -1.2, math.pi / 2])
         print(f"[Gazebo] Spawning visual obstacle layout: '{layout_name}'...")
+        print(f"[Gazebo] Positioning robot at safe layout start pose: ({robot_start[0]:.2f}, {robot_start[1]:.2f})")
         teleport_entities_in_gazebo(
-            robot_pose=None,  # keep current robot pose
+            robot_pose=robot_start,
             active_obstacles=cfg["obstacles"],
             port=port,
             domain_id=domain_id,
         )
+        return cfg["obstacles"], robot_start
+
+    return [], None
 
 
 def main():
@@ -224,14 +290,18 @@ def main():
         model_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_model.zip"
         vecnorm_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_vecnormalize.pkl"
 
+    active_obstacles = []
+    robot_start = None
     if args.obstacles != "none":
-        setup_gazebo_obstacles(args.obstacles)
+        active_obstacles, robot_start = setup_gazebo_obstacles(args.obstacles)
 
     if not rclpy.ok():
         rclpy.init()
+
     navigator = InteractiveNavigator(
         model_path=model_path,
         vecnorm_path=vecnorm_path,
+        active_obstacles=active_obstacles,
         arena_limit=args.arena_limit,
         goal_tolerance=args.goal_tolerance,
         collision_threshold=args.collision_thresh,
@@ -244,15 +314,38 @@ def main():
         rclpy.shutdown()
         return
 
-    print("=" * 76)
+    # Extra safety: verify current robot pose isn't inside any obstacle
+    cur_x, cur_y, _ = navigator.get_current_pose()
+    is_safe, obstacle_err = navigator.check_coordinate_validity(cur_x, cur_y)
+    if not is_safe:
+        print(f"\n[WARNING] Detected robot starting pose ({cur_x:.2f}, {cur_y:.2f}) inside an obstacle!")
+        target_reset = robot_start if robot_start else [0.0, -1.2, math.pi / 2]
+        print(f"[Gazebo] Teleporting robot to safe start location: ({target_reset[0]:.2f}, {target_reset[1]:.2f})...")
+        try:
+            from scripts.demo_with_obstacles import teleport_entities_in_gazebo
+        except ImportError:
+            from demo_with_obstacles import teleport_entities_in_gazebo
+        teleport_entities_in_gazebo(robot_pose=target_reset, active_obstacles=active_obstacles)
+        time.sleep(0.5)
+        # Spin to refresh odometry
+        for _ in range(10):
+            rclpy.spin_once(navigator, timeout_sec=0.05)
+
+    print("=" * 78)
     print("      TURTLEBOT3 INTERACTIVE WAYPOINT CONTROLLER (PPO POLICY)")
-    print("=" * 76)
+    print("=" * 78)
     print(f"  Selected Policy:         {args.policy} ({model_path.name})")
     print(f"  Arena Physical Limits:   -2.00 m <= X, Y <= +2.00 m")
     print(f"  Safe Navigable Limits:   [-{args.arena_limit:.2f} m, +{args.arena_limit:.2f} m]")
     print(f"  Obstacle Layout:         {args.obstacles}")
+    if active_obstacles:
+        print("  Active Obstacles in Arena:")
+        for obs in active_obstacles:
+            geo = OBSTACLE_CATALOG.get(obs['name'], {})
+            shape_info = f"radius={geo.get('radius')}m" if geo.get("shape") == "cylinder" else f"size={2*geo.get('half_size', 0.15):.2f}m"
+            print(f"    * {obs['name']} ({geo.get('shape', 'obstacle')}, {shape_info}) at ({obs['x']:5.2f}, {obs['y']:5.2f})")
     print("  Type 'q' or 'exit' at any coordinate prompt to stop and quit.")
-    print("=" * 76)
+    print("=" * 78)
 
     try:
         while rclpy.ok():
@@ -279,15 +372,15 @@ def main():
                 navigator.stop_robot()
                 continue
 
-            # Validate arena boundaries
-            if not navigator.is_valid_coordinate(target_x, target_y):
+            # Validate arena boundaries and obstacle collision
+            is_valid, error_msg = navigator.check_coordinate_validity(target_x, target_y)
+            if not is_valid:
                 navigator.stop_robot()
-                print("\n" + "!" * 76)
+                print("\n" + "!" * 78)
                 print(f"  [ERROR] INVALID COORDINATE: ({target_x:.2f}, {target_y:.2f})")
-                print(f"  The target coordinate is OUTSIDE the 4m x 4m arena boundary!")
-                print(f"  Safe navigable limits are [-{args.arena_limit:.2f}, +{args.arena_limit:.2f}] for both X and Y.")
+                print(f"  {error_msg}")
                 print(f"  --> BOT STOPPED IMMEDIATELY (Zero velocity commanded).")
-                print("!" * 76)
+                print("!" * 78)
                 continue
 
             # Check if target is already reached

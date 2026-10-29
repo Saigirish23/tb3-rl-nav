@@ -34,8 +34,8 @@ def generate_launch_description():
     )
 
     x_pose_arg = DeclareLaunchArgument('x_pose', default_value='0.0', description='Initial robot x pose')
-    y_pose_arg = DeclareLaunchArgument('y_pose', default_value='0.0', description='Initial robot y pose')
-    z_pose_arg = DeclareLaunchArgument('z_pose', default_value='0.01', description='Initial robot z pose')
+    y_pose_arg = DeclareLaunchArgument('y_pose', default_value='-1.2', description='Initial robot y pose')
+    z_pose_arg = DeclareLaunchArgument('z_pose', default_value='0.015', description='Initial robot z pose')
 
     # Headless gzserver launch (NO gzclient)
     gzserver_cmd = IncludeLaunchDescription(
