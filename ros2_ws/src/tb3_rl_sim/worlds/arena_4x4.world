@@ -138,9 +138,15 @@
     <!-- Pre-spawned Obstacle Pool (Parked outside arena at x >= 10.0 initially) -->
     <!-- Obstacle Box 1 -->
     <model name="obstacle_box_1">
-      <static>true</static>
+      <static>false</static>
       <pose>10.0 0.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><box><size>0.3 0.3 0.5</size></box></geometry>
         </collision>
@@ -153,9 +159,15 @@
 
     <!-- Obstacle Box 2 -->
     <model name="obstacle_box_2">
-      <static>true</static>
+      <static>false</static>
       <pose>10.0 1.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><box><size>0.25 0.25 0.5</size></box></geometry>
         </collision>
@@ -168,9 +180,15 @@
 
     <!-- Obstacle Box 3 -->
     <model name="obstacle_box_3">
-      <static>true</static>
+      <static>false</static>
       <pose>10.0 2.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><box><size>0.35 0.35 0.5</size></box></geometry>
         </collision>
@@ -183,9 +201,15 @@
 
     <!-- Obstacle Box 4 -->
     <model name="obstacle_box_4">
-      <static>true</static>
+      <static>false</static>
       <pose>10.0 3.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><box><size>0.3 0.3 0.5</size></box></geometry>
         </collision>
@@ -198,9 +222,15 @@
 
     <!-- Obstacle Cylinder 1 -->
     <model name="obstacle_cyl_1">
-      <static>true</static>
+      <static>false</static>
       <pose>11.0 0.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry>
         </collision>
@@ -213,9 +243,15 @@
 
     <!-- Obstacle Cylinder 2 -->
     <model name="obstacle_cyl_2">
-      <static>true</static>
+      <static>false</static>
       <pose>11.0 1.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><cylinder><radius>0.12</radius><length>0.5</length></cylinder></geometry>
         </collision>
@@ -228,9 +264,15 @@
 
     <!-- Obstacle Cylinder 3 -->
     <model name="obstacle_cyl_3">
-      <static>true</static>
+      <static>false</static>
       <pose>11.0 2.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><cylinder><radius>0.18</radius><length>0.5</length></cylinder></geometry>
         </collision>
@@ -243,9 +285,15 @@
 
     <!-- Obstacle Cylinder 4 -->
     <model name="obstacle_cyl_4">
-      <static>true</static>
+      <static>false</static>
       <pose>11.0 3.0 0.25 0 0 0</pose>
       <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
         <collision name="col">
           <geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry>
         </collision>

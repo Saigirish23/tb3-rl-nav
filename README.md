@@ -198,44 +198,65 @@ PYTHONPATH=. pytest -v tests/test_inference_correctness.py
 
 ---
 
-## 7. Running the Simulation Demo
+## 7. Running the Simulation & Interactive Demonstrations
 
 For full terminal steps and troubleshooting, see the [`docs/demo_runbook.md`](docs/demo_runbook.md).
 
-### Automated 1-Command Demo Runner
-Launches Gazebo Classic headless, executes 3 multi-waypoint navigation challenges in the arena, displays real-time console status, and cleanly shuts down:
-```bash
-# Run Selected Best Policy (P4 - Combined Domain Randomization)
-python3 scripts/run_simulation_demo.py --policy P4
-
-# Run Nominal Baseline Policy (P1)
-python3 scripts/run_simulation_demo.py --policy P1
-```
-
-### Manual Execution with 3D GUI
-Open two terminals:
-
-**Terminal 1 (Gazebo Simulation):**
+### 7.1 Start Gazebo 3D Simulation with GUI (Terminal 1)
+Launch the Gazebo world with the 4 m $\times$ 4 m arena and TurtleBot3 Burger:
 ```bash
 source /opt/ros/humble/setup.bash
 source ~/sim-real-rl/ros2_ws/install/setup.bash
 export TURTLEBOT3_MODEL=burger
 export ROS_DOMAIN_ID=30
 export GAZEBO_MASTER_URI=http://localhost:11345
+export GAZEBO_MODEL_DATABASE_URI=""
 
-ros2 launch tb3_rl_sim headless_sim.launch.py &
-gzclient
+ros2 launch tb3_rl_sim sim.launch.py gui:=true
 ```
 
-**Terminal 2 (Inference Node):**
+---
+
+### 7.2 Interactive Terminal Waypoint Navigation (Terminal 2)
+Allows you to interactively type target coordinates $(X, Y)$ into the terminal from the robot's current position:
 ```bash
 source /opt/ros/humble/setup.bash
+source ~/sim-real-rl/ros2_ws/install/setup.bash
 export ROS_DOMAIN_ID=30
+export GAZEBO_MASTER_URI=http://localhost:11345
 
-python3 deploy/ppo_inference_node.py \
-  --model-path runs/main_p4_s0/final_model.zip \
-  --vecnorm-path runs/main_p4_s0/final_vecnormalize.pkl \
-  --goal-x 1.2 --goal-y 0.0
+python3 scripts/interactive_nav.py --obstacles center_pillar --policy P4
+```
+**Features:**
+- **Current Position Display:** Prints current pose $(X, Y, \theta)$ before every waypoint.
+- **Safety Boundary Protection:** The arena limits are $[-2.0, +2.0]\,\text{m}$ (safe boundary $[-1.85, +1.85]\,\text{m}$). If an out-of-bounds coordinate is entered (e.g. $X=2.5$), the robot **immediately commands zero velocity**, prints an `[ERROR] INVALID COORDINATE` warning, and prompts again without crashing.
+- **Continuous Looping:** Once a target is reached, prompts for the next waypoint (type `q` to quit).
+- **Obstacle Layouts:** Supports `--obstacles center_pillar`, `--obstacles slalom`, `--obstacles hallway_pinch`, or `--obstacles none`.
+
+---
+
+### 7.3 Preset Obstacle Avoidance Demo (Terminal 2)
+To run automated benchmark scenarios with visual obstacles in Gazebo:
+```bash
+# Central Column Avoidance (Pillar in robot path)
+python3 scripts/demo_with_obstacles.py --layout center_pillar --policy P4
+
+# Slalom Course (Zig-zag through 4 obstacles)
+python3 scripts/demo_with_obstacles.py --layout slalom --policy P4
+
+# Narrow Pinch-point Corridor
+python3 scripts/demo_with_obstacles.py --layout hallway_pinch --policy P4
+
+# Exact Benchmark Test Scenario from the Paper (0 to 49)
+python3 scripts/demo_with_obstacles.py --layout test_scenario --scenario-id 0 --policy P4
+```
+
+---
+
+### 7.4 Automated 1-Command Headless Demo Runner
+Executes 3 automated multi-waypoint navigation challenges headless in Gazebo:
+```bash
+python3 scripts/run_simulation_demo.py --policy P4
 ```
 
 ---
