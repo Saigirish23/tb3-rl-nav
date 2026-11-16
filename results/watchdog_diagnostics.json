@@ -1,9 +1,9 @@
 [
   {
     "event": "missing_scan_timeout",
-    "timestamp": "2026-10-23T23:31:42.787012",
-    "monotonic_time": 66106.850302784,
-    "stale_duration_sec": 2.01,
+    "timestamp": "2026-11-12T22:23:15.187049",
+    "monotonic_time": 960.566923281,
+    "stale_duration_sec": 2.008,
     "configured_timeout_sec": 2.0,
     "retry_attempt": 1,
     "max_retries": 2,
@@ -13,7 +13,7 @@
     "resumed_step_count": 2,
     "reconnected": true,
     "status": "RECOVERED",
-    "terminated_pid": 405822,
-    "new_pid": 406070
+    "terminated_pid": 16014,
+    "new_pid": 16243
   }
 ]

@@ -2,6 +2,7 @@
 <sdf version="1.6">
   <world name="default">
     <!-- ROS 2 World Plugin for state services (/gazebo/set_entity_state, /gazebo/get_entity_state) -->
+    <!-- Essential for runtime robot and obstacle teleportation during episode reset -->
     <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
       <ros>
         <namespace>/gazebo</namespace>
@@ -19,7 +20,7 @@
       <uri>model://ground_plane</uri>
     </include>
 
-    <!-- Physics settings -->
+    <!-- Physics settings optimized for headless ODE simulation -->
     <physics type="ode">
       <real_time_update_rate>1000.0</real_time_update_rate>
       <max_step_size>0.001</max_step_size>
@@ -39,23 +40,23 @@
       </ode>
     </physics>
 
-    <!-- 4m x 4m Boundary Walls (Centered at 0, 0) -->
+    <!-- 5m x 5m Warehouse Boundary Walls (Inner usable span: [-2.5, 2.5] x [-2.5, 2.5]) -->
     <model name="arena_walls">
       <static>true</static>
-      <!-- North Wall (y = +2.05) -->
+      <!-- North Wall (y = +2.55) -->
       <link name="wall_north">
-        <pose>0.0 2.05 0.25 0 0 0</pose>
+        <pose>0.0 2.55 0.25 0 0 0</pose>
         <collision name="collision">
           <geometry>
             <box>
-              <size>4.2 0.1 0.5</size>
+              <size>5.2 0.1 0.5</size>
             </box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <box>
-              <size>4.2 0.1 0.5</size>
+              <size>5.2 0.1 0.5</size>
             </box>
           </geometry>
           <material>
@@ -65,20 +66,20 @@
         </visual>
       </link>
 
-      <!-- South Wall (y = -2.05) -->
+      <!-- South Wall (y = -2.55) -->
       <link name="wall_south">
-        <pose>0.0 -2.05 0.25 0 0 0</pose>
+        <pose>0.0 -2.55 0.25 0 0 0</pose>
         <collision name="collision">
           <geometry>
             <box>
-              <size>4.2 0.1 0.5</size>
+              <size>5.2 0.1 0.5</size>
             </box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <box>
-              <size>4.2 0.1 0.5</size>
+              <size>5.2 0.1 0.5</size>
             </box>
           </geometry>
           <material>
@@ -88,20 +89,20 @@
         </visual>
       </link>
 
-      <!-- East Wall (x = +2.05) -->
+      <!-- East Wall (x = +2.55) -->
       <link name="wall_east">
-        <pose>2.05 0.0 0.25 0 0 0</pose>
+        <pose>2.55 0.0 0.25 0 0 0</pose>
         <collision name="collision">
           <geometry>
             <box>
-              <size>0.1 4.0 0.5</size>
+              <size>0.1 5.0 0.5</size>
             </box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <box>
-              <size>0.1 4.0 0.5</size>
+              <size>0.1 5.0 0.5</size>
             </box>
           </geometry>
           <material>
@@ -111,20 +112,20 @@
         </visual>
       </link>
 
-      <!-- West Wall (x = -2.05) -->
+      <!-- West Wall (x = -2.55) -->
       <link name="wall_west">
-        <pose>-2.05 0.0 0.25 0 0 0</pose>
+        <pose>-2.55 0.0 0.25 0 0 0</pose>
         <collision name="collision">
           <geometry>
             <box>
-              <size>0.1 4.0 0.5</size>
+              <size>0.1 5.0 0.5</size>
             </box>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <box>
-              <size>0.1 4.0 0.5</size>
+              <size>0.1 5.0 0.5</size>
             </box>
           </geometry>
           <material>
@@ -135,8 +136,157 @@
       </link>
     </model>
 
-    <!-- Pre-spawned Obstacle Pool (Parked outside arena at x >= 10.0 initially) -->
-    <!-- Obstacle Box 1 -->
+    <!-- ============================================================== -->
+    <!-- Static Warehouse Infrastructure: Shelves, Racks and Staging    -->
+    <!-- Designed to create realistic aisles, turning bays and chicanes -->
+    <!-- ============================================================== -->
+
+    <!-- Warehouse Storage Rack 1 (North-West Staggered Aisle Divider) -->
+    <!-- Positioned at x = -1.15, y = 0.65; span x: [-1.35, -0.95], y: [-0.10, 1.40] -->
+    <!-- West aisle width: 1.15m; Central cross-clearance: 0.95m -->
+    <model name="warehouse_rack_1">
+      <static>true</static>
+      <pose>-1.15 0.65 0.45 0 0 0</pose>
+      <link name="link">
+        <collision name="col">
+          <geometry>
+            <box>
+              <size>0.40 1.50 0.90</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="vis">
+          <geometry>
+            <box>
+              <size>0.40 1.50 0.90</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.15 0.25 0.50 1</ambient>
+            <diffuse>0.20 0.35 0.70 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Warehouse Storage Rack 2 (South-East Staggered Aisle Divider) -->
+    <!-- Positioned at x = 1.15, y = -0.65; span x: [0.95, 1.35], y: [-1.40, 0.10] -->
+    <!-- East aisle width: 1.15m; Robot spawn at (0.0, -1.2) has 0.95m clearance -->
+    <model name="warehouse_rack_2">
+      <static>true</static>
+      <pose>1.15 -0.65 0.45 0 0 0</pose>
+      <link name="link">
+        <collision name="col">
+          <geometry>
+            <box>
+              <size>0.40 1.50 0.90</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="vis">
+          <geometry>
+            <box>
+              <size>0.40 1.50 0.90</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.70 0.35 0.10 1</ambient>
+            <diffuse>0.85 0.45 0.15 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Warehouse Wall Shelf (North Staging Shelf Unit) -->
+    <!-- Positioned at x = 0.0, y = 2.25; span x: [-0.70, 0.70], y: [2.10, 2.40] -->
+    <model name="warehouse_shelf_north">
+      <static>true</static>
+      <pose>0.0 2.25 0.40 0 0 0</pose>
+      <link name="link">
+        <collision name="col">
+          <geometry>
+            <box>
+              <size>1.40 0.30 0.80</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="vis">
+          <geometry>
+            <box>
+              <size>1.40 0.30 0.80</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.35 0.35 0.40 1</ambient>
+            <diffuse>0.45 0.45 0.50 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Static Pallet Stack (North-West Staging Corner) -->
+    <!-- Positioned at x = -1.95, y = 1.95; span x: [-2.20, -1.70], y: [1.70, 2.20] -->
+    <model name="pallet_stack">
+      <static>true</static>
+      <pose>-1.95 1.95 0.175 0 0 0</pose>
+      <link name="link">
+        <collision name="col">
+          <geometry>
+            <box>
+              <size>0.50 0.50 0.35</size>
+            </box>
+          </geometry>
+        </collision>
+        <visual name="vis">
+          <geometry>
+            <box>
+              <size>0.50 0.50 0.35</size>
+            </box>
+          </geometry>
+          <material>
+            <ambient>0.55 0.40 0.25 1</ambient>
+            <diffuse>0.65 0.48 0.30 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Static Storage Container (South-East Corner Industrial Drum/Tote) -->
+    <!-- Positioned at x = 1.95, y = -1.95; radius 0.22m, height 0.45m -->
+    <model name="storage_container">
+      <static>true</static>
+      <pose>1.95 -1.95 0.225 0 0 0</pose>
+      <link name="link">
+        <collision name="col">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>0.45</length>
+            </cylinder>
+          </geometry>
+        </collision>
+        <visual name="vis">
+          <geometry>
+            <cylinder>
+              <radius>0.22</radius>
+              <length>0.45</length>
+            </cylinder>
+          </geometry>
+          <material>
+            <ambient>0.15 0.40 0.25 1</ambient>
+            <diffuse>0.20 0.50 0.30 1</diffuse>
+          </material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- ============================================================== -->
+    <!-- Pre-spawned Obstacle Pool for Episode-Level Randomization       -->
+    <!-- Parked outside arena at x >= 10.0 until teleported by env.reset-->
+    <!-- kinematic=true, gravity=false to avoid ODE penetration impulses-->
+    <!-- ============================================================== -->
+
+    <!-- Obstacle Box 1 (0.30m x 0.30m x 0.50m) -->
     <model name="obstacle_box_1">
       <static>false</static>
       <pose>10.0 0.0 0.25 0 0 0</pose>
@@ -157,7 +307,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Box 2 -->
+    <!-- Obstacle Box 2 (0.25m x 0.25m x 0.50m) -->
     <model name="obstacle_box_2">
       <static>false</static>
       <pose>10.0 1.0 0.25 0 0 0</pose>
@@ -178,7 +328,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Box 3 -->
+    <!-- Obstacle Box 3 (0.35m x 0.35m x 0.50m) -->
     <model name="obstacle_box_3">
       <static>false</static>
       <pose>10.0 2.0 0.25 0 0 0</pose>
@@ -199,7 +349,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Box 4 -->
+    <!-- Obstacle Box 4 (0.30m x 0.30m x 0.50m) -->
     <model name="obstacle_box_4">
       <static>false</static>
       <pose>10.0 3.0 0.25 0 0 0</pose>
@@ -220,7 +370,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Cylinder 1 -->
+    <!-- Obstacle Cylinder 1 (r = 0.15m, length = 0.50m) -->
     <model name="obstacle_cyl_1">
       <static>false</static>
       <pose>11.0 0.0 0.25 0 0 0</pose>
@@ -241,7 +391,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Cylinder 2 -->
+    <!-- Obstacle Cylinder 2 (r = 0.12m, length = 0.50m) -->
     <model name="obstacle_cyl_2">
       <static>false</static>
       <pose>11.0 1.0 0.25 0 0 0</pose>
@@ -262,7 +412,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Cylinder 3 -->
+    <!-- Obstacle Cylinder 3 (r = 0.18m, length = 0.50m) -->
     <model name="obstacle_cyl_3">
       <static>false</static>
       <pose>11.0 2.0 0.25 0 0 0</pose>
@@ -283,7 +433,7 @@
       </link>
     </model>
 
-    <!-- Obstacle Cylinder 4 -->
+    <!-- Obstacle Cylinder 4 (r = 0.15m, length = 0.50m) -->
     <model name="obstacle_cyl_4">
       <static>false</static>
       <pose>11.0 3.0 0.25 0 0 0</pose>
@@ -300,6 +450,90 @@
         <visual name="vis">
           <geometry><cylinder><radius>0.15</radius><length>0.5</length></cylinder></geometry>
           <material><ambient>0.8 0.4 0.2 1</ambient><diffuse>0.9 0.5 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Extended Obstacle Pool: Box 5 (0.28m x 0.28m x 0.50m) -->
+    <model name="obstacle_box_5">
+      <static>false</static>
+      <pose>12.0 0.0 0.25 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
+        <collision name="col">
+          <geometry><box><size>0.28 0.28 0.5</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.28 0.28 0.5</size></box></geometry>
+          <material><ambient>0.2 0.6 0.6 1</ambient><diffuse>0.3 0.7 0.7 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Extended Obstacle Pool: Box 6 (0.32m x 0.32m x 0.50m) -->
+    <model name="obstacle_box_6">
+      <static>false</static>
+      <pose>12.0 1.0 0.25 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
+        <collision name="col">
+          <geometry><box><size>0.32 0.32 0.5</size></box></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><box><size>0.32 0.32 0.5</size></box></geometry>
+          <material><ambient>0.6 0.3 0.6 1</ambient><diffuse>0.7 0.4 0.7 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Extended Obstacle Pool: Cylinder 5 (r = 0.14m, length = 0.50m) -->
+    <model name="obstacle_cyl_5">
+      <static>false</static>
+      <pose>12.0 2.0 0.25 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
+        <collision name="col">
+          <geometry><cylinder><radius>0.14</radius><length>0.5</length></cylinder></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.14</radius><length>0.5</length></cylinder></geometry>
+          <material><ambient>0.7 0.5 0.2 1</ambient><diffuse>0.8 0.6 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+
+    <!-- Extended Obstacle Pool: Cylinder 6 (r = 0.16m, length = 0.50m) -->
+    <model name="obstacle_cyl_6">
+      <static>false</static>
+      <pose>12.0 3.0 0.25 0 0 0</pose>
+      <link name="link">
+        <gravity>false</gravity>
+        <kinematic>true</kinematic>
+        <inertial>
+          <mass>1.0</mass>
+          <inertia><ixx>0.02</ixx><ixy>0</ixy><ixz>0</ixz><iyy>0.02</iyy><iyz>0</iyz><izz>0.02</izz></inertia>
+        </inertial>
+        <collision name="col">
+          <geometry><cylinder><radius>0.16</radius><length>0.5</length></cylinder></geometry>
+        </collision>
+        <visual name="vis">
+          <geometry><cylinder><radius>0.16</radius><length>0.5</length></cylinder></geometry>
+          <material><ambient>0.6 0.2 0.3 1</ambient><diffuse>0.7 0.3 0.4 1</diffuse></material>
         </visual>
       </link>
     </model>

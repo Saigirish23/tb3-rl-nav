@@ -10,8 +10,13 @@ find_package(rclpy REQUIRED)
 find_package(gazebo_ros REQUIRED)
 
 install(
-  DIRECTORY launch worlds
+  DIRECTORY launch worlds scripts
   DESTINATION share/${PROJECT_NAME}
+)
+
+install(
+  PROGRAMS scripts/evaluate_benchmark.py
+  DESTINATION lib/${PROJECT_NAME}
 )
 
 ament_package()
