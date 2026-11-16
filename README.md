@@ -209,8 +209,8 @@ source install/setup.bash
 ### 7.3 Run Tests
 ```bash
 cd ~/sim-real-rl
-# Run all unit and benchmark evaluation tests
-pytest -v tests/test_benchmark_evaluation.py tests/test_inference_correctness.py tests/test_observation.py
+# Run all unit, reset regression, actuation ordering, and benchmark evaluation tests
+pytest -v tests/test_benchmark_evaluation.py tests/test_episode_reset.py tests/test_actuation_order.py tests/test_inference_correctness.py tests/test_observation.py
 ```
 
 ### 7.4 Launch Unified Evaluation Suite

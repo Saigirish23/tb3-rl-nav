@@ -35,6 +35,7 @@ from rl.env.observation import (
     wrap_to_pi,
 )
 from rl.train.watchdog import load_watchdog_timeout, MissingScanTimeoutError, WatchdogRecoveryError
+from rl.env.randomizers import RANGE_MIN
 
 
 
@@ -357,6 +358,8 @@ class TurtleBot3NavigationEnv(gym.Env):
             self._latest_scan = None
             self._latest_odom = None
             self._latest_models = None
+            self._gazebo_contact_occurred = False
+            self._bumper_subscribed_and_active = False
 
             self.sub_scan = self.ros_node.create_subscription(
                 LaserScan, '/scan', self._scan_cb, qos_scan
@@ -367,6 +370,13 @@ class TurtleBot3NavigationEnv(gym.Env):
             self.sub_models = self.ros_node.create_subscription(
                 ModelStates, '/gazebo/model_states', self._model_cb, 10
             )
+            try:
+                from gazebo_msgs.msg import ContactsState
+                self.sub_bumper = self.ros_node.create_subscription(
+                    ContactsState, '/bumper_states', self._bumper_cb, 10
+                )
+            except Exception:
+                self.sub_bumper = None
             self.pub_cmd = self.ros_node.create_publisher(Twist, '/cmd_vel', 10)
             self.cli_set_state = self.ros_node.create_client(
                 SetEntityState, '/gazebo/set_entity_state'
@@ -394,6 +404,19 @@ class TurtleBot3NavigationEnv(gym.Env):
     def _model_cb(self, msg):
         self._latest_models = msg
 
+    def _bumper_cb(self, msg):
+        self._bumper_subscribed_and_active = True
+        if hasattr(msg, 'states') and len(msg.states) > 0:
+            for s in msg.states:
+                c1 = getattr(s, 'collision1_name', '')
+                c2 = getattr(s, 'collision2_name', '')
+                names = (c1 + " " + c2).lower()
+                if 'burger' in names:
+                    # Ignore normal tire/caster contact with ground plane
+                    if 'ground_plane' in names and not any(k in names for k in ['wall', 'rack', 'shelf', 'pallet', 'container', 'cylinder', 'obs', 'box']):
+                        continue
+                    self._gazebo_contact_occurred = True
+
     def reset(
         self,
         *,
@@ -416,6 +439,13 @@ class TurtleBot3NavigationEnv(gym.Env):
 
         self.step_count = 0
         self.prev_action = np.zeros(2, dtype=np.float32)
+        self._gazebo_contact_occurred = False
+        self.robot_v = 0.0
+        self.robot_omega = 0.0
+
+        # Reset randomizer state if present
+        if self.randomizer is not None and hasattr(self.randomizer, 'reset'):
+            self.randomizer.reset()
 
         # 0. Sample per-episode domain randomization parameters if active (and not pinned)
         if self.randomizer is not None and hasattr(self.randomizer, 'sample_episode'):
@@ -603,11 +633,18 @@ class TurtleBot3NavigationEnv(gym.Env):
             dt=self.dt,
         )
 
+        min_range_init = float(np.min(raw_ranges)) if len(raw_ranges) > 0 else RANGE_MAX
         info = {
             "step_count": self.step_count,
             "goal_distance": self.prev_goal_dist,
             "is_success": False,
             "is_collision": False,
+            "collision_physical": False,
+            "collision_gazebo_contact": False,
+            "collision_geometric": False,
+            "min_lidar_range_m": min_range_init,
+            "lidar_proximity_warning": bool(min_range_init <= RANGE_MIN),
+            "collision_disagreement": False,
             "num_obstacles": len(placed_obstacles),
         }
 
@@ -650,12 +687,15 @@ class TurtleBot3NavigationEnv(gym.Env):
         # 3. Ground-truth evaluation
         current_goal_dist = math.hypot(self.goal_x - self.robot_x, self.goal_y - self.robot_y)
         is_goal = current_goal_dist <= self.goal_tolerance
-        is_collision = self._check_collision()
+        is_geom_col = self.check_geometric_collision()
+        is_gazebo_col = bool(getattr(self, '_gazebo_contact_occurred', False))
+        is_physical_col = self.check_physical_collision()
+        is_collision = is_physical_col
 
         # 4. Termination vs Truncation (Gymnasium semantics)
-        # Goal or collision -> terminated
+        # Goal or physical collision -> terminated
         # Timeout (step_count >= 350) -> truncated
-        terminated = bool(is_goal or is_collision)
+        terminated = bool(is_goal or is_physical_col)
         is_timeout = (self.step_count >= self.max_episode_steps)
         truncated = bool(is_timeout and not terminated)
 
@@ -704,11 +744,21 @@ class TurtleBot3NavigationEnv(gym.Env):
         )
         self.prev_action = u.copy()
 
+        min_range_step = float(np.min(raw_ranges)) if len(raw_ranges) > 0 else RANGE_MAX
+        lidar_prox_warning = bool(min_range_step <= RANGE_MIN)
+        disagreement = bool(is_gazebo_col != is_geom_col) if getattr(self, '_bumper_subscribed_and_active', False) else False
+
         info = {
             "step_count": self.step_count,
             "goal_distance": current_goal_dist,
             "is_success": is_goal,
-            "is_collision": is_collision,
+            "is_collision": is_physical_col,
+            "collision_physical": is_physical_col,
+            "collision_gazebo_contact": is_gazebo_col,
+            "collision_geometric": is_geom_col,
+            "min_lidar_range_m": min_range_step,
+            "lidar_proximity_warning": lidar_prox_warning,
+            "collision_disagreement": disagreement,
             "reward_components": {
                 "progress": progress_reward,
                 "step_penalty": step_cost,
@@ -738,8 +788,8 @@ class TurtleBot3NavigationEnv(gym.Env):
         self.robot_y += cmd_v * self.dt * math.sin(theta_mid)
         self.robot_theta = wrap_to_pi(self.robot_theta + delta_theta)
 
-    def _check_collision(self) -> bool:
-        """Check ground-truth collision against boundary walls, static racks, and active dynamic obstacles."""
+    def check_geometric_collision(self) -> bool:
+        """Check ground-truth geometric penetration against boundary walls, static racks, and active dynamic obstacles."""
         # 1. Boundary walls collision (inner wall boundary at +/- (arena_half - 0.05))
         wall_limit = self.arena_half - 0.05 - self.robot_radius
         if abs(self.robot_x) >= wall_limit or abs(self.robot_y) >= wall_limit:
@@ -756,6 +806,21 @@ class TurtleBot3NavigationEnv(gym.Env):
                 return True
 
         return False
+
+    def check_physical_collision(self) -> bool:
+        """Evaluate primary physical collision outcome.
+
+        If Gazebo physical contact sensor is active, Gazebo contact serves as primary outcome.
+        Geometric penetration serves as independent cross-check.
+        If Gazebo contact is not active (or in mock/kinematic mode), geometric penetration is used.
+        """
+        if self.use_gazebo and getattr(self, '_bumper_subscribed_and_active', False):
+            return bool(self._gazebo_contact_occurred)
+        return self.check_geometric_collision()
+
+    def _check_collision(self) -> bool:
+        """Backwards-compatible alias for primary physical collision."""
+        return self.check_physical_collision()
 
     def _get_lidar_ranges(self) -> np.ndarray:
         """Get 360-beam LiDAR ranges (simulated or from Gazebo /scan topic)."""
@@ -816,7 +881,7 @@ class TurtleBot3NavigationEnv(gym.Env):
 
         return ranges
 
-    def _teleport_gazebo_entities(self):
+    def _teleport_gazebo_entities(self) -> bool:
         """Teleport robot and obstacles via Gazebo SetEntityState service.
 
         To prevent ODE penetration repulsion impulses:
@@ -824,63 +889,71 @@ class TurtleBot3NavigationEnv(gym.Env):
         2. Teleport all obstacles to their target (or out-of-bounds) positions first.
         3. Teleport robot to (x, y, z=0.012) with explicitly zeroed linear & angular velocities.
         4. Unpause Gazebo physics and allow a brief settle time.
+
+        Returns:
+            True on successful teleportation.
+
+        Raises:
+            RuntimeError: If service is unavailable or teleportation fails, ensuring failed
+                          resets invalidate the episode rather than corrupting benchmark data.
         """
-        try:
-            import rclpy
-            from gazebo_msgs.srv import SetEntityState
-            from std_srvs.srv import Empty
-            from geometry_msgs.msg import Pose, Point, Quaternion, Twist, Vector3
+        import rclpy
+        from gazebo_msgs.srv import SetEntityState
+        from std_srvs.srv import Empty
+        from geometry_msgs.msg import Pose, Point, Quaternion, Twist, Vector3
 
-            if not self.cli_set_state.wait_for_service(timeout_sec=1.0):
-                return
+        if not self.cli_set_state.wait_for_service(timeout_sec=2.0):
+            raise RuntimeError("Gazebo /gazebo/set_entity_state service unavailable during episode reset")
 
-            # 1. Zero out any active velocity command
-            stop_msg = Twist()
-            self.pub_cmd.publish(stop_msg)
+        # 1. Zero out any active velocity command
+        stop_msg = Twist()
+        self.pub_cmd.publish(stop_msg)
 
-            # 2. Pause physics
-            if hasattr(self, 'cli_pause') and self.cli_pause.wait_for_service(timeout_sec=0.2):
-                fut_pause = self.cli_pause.call_async(Empty.Request())
-                rclpy.spin_until_future_complete(self.ros_node, fut_pause, timeout_sec=0.2)
+        # 2. Pause physics
+        if hasattr(self, 'cli_pause') and self.cli_pause.wait_for_service(timeout_sec=0.2):
+            fut_pause = self.cli_pause.call_async(Empty.Request())
+            rclpy.spin_until_future_complete(self.ros_node, fut_pause, timeout_sec=0.2)
 
-            # 3. Teleport obstacles FIRST so previous obstacles are cleared from robot's new spot
-            for obs in self.obstacle_pool:
-                req_obs = SetEntityState.Request()
-                req_obs.state.name = obs.name
-                req_obs.state.pose.position = Point(x=obs.x, y=obs.y, z=0.25)
-                req_obs.state.pose.orientation = Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
-                req_obs.state.twist.linear = Vector3(x=0.0, y=0.0, z=0.0)
-                req_obs.state.twist.angular = Vector3(x=0.0, y=0.0, z=0.0)
-                req_obs.state.reference_frame = 'world'
-                fut_obs = self.cli_set_state.call_async(req_obs)
-                rclpy.spin_until_future_complete(self.ros_node, fut_obs, timeout_sec=0.1)
+        # 3. Teleport obstacles FIRST so previous obstacles are cleared from robot's new spot
+        for obs in self.obstacle_pool:
+            req_obs = SetEntityState.Request()
+            req_obs.state.name = obs.name
+            req_obs.state.pose.position = Point(x=obs.x, y=obs.y, z=0.25)
+            req_obs.state.pose.orientation = Quaternion(x=0.0, y=0.0, z=0.0, w=1.0)
+            req_obs.state.twist.linear = Vector3(x=0.0, y=0.0, z=0.0)
+            req_obs.state.twist.angular = Vector3(x=0.0, y=0.0, z=0.0)
+            req_obs.state.reference_frame = 'world'
+            fut_obs = self.cli_set_state.call_async(req_obs)
+            rclpy.spin_until_future_complete(self.ros_node, fut_obs, timeout_sec=0.2)
 
-            # 4. Teleport robot with explicitly zeroed linear & angular velocity
-            req = SetEntityState.Request()
-            req.state.name = 'burger'
-            req.state.pose.position = Point(x=self.robot_x, y=self.robot_y, z=0.012)
-            half_th = self.robot_theta * 0.5
-            req.state.pose.orientation = Quaternion(
-                x=0.0, y=0.0, z=math.sin(half_th), w=math.cos(half_th)
-            )
-            req.state.twist.linear = Vector3(x=0.0, y=0.0, z=0.0)
-            req.state.twist.angular = Vector3(x=0.0, y=0.0, z=0.0)
-            req.state.reference_frame = 'world'
+        # 4. Teleport robot with explicitly zeroed linear & angular velocity
+        req = SetEntityState.Request()
+        req.state.name = 'burger'
+        req.state.pose.position = Point(x=self.robot_x, y=self.robot_y, z=0.012)
+        half_th = self.robot_theta * 0.5
+        req.state.pose.orientation = Quaternion(
+            x=0.0, y=0.0, z=math.sin(half_th), w=math.cos(half_th)
+        )
+        req.state.twist.linear = Vector3(x=0.0, y=0.0, z=0.0)
+        req.state.twist.angular = Vector3(x=0.0, y=0.0, z=0.0)
+        req.state.reference_frame = 'world'
 
-            future = self.cli_set_state.call_async(req)
-            rclpy.spin_until_future_complete(self.ros_node, future, timeout_sec=0.5)
+        future = self.cli_set_state.call_async(req)
+        rclpy.spin_until_future_complete(self.ros_node, future, timeout_sec=0.5)
+        if future.result() is None or not getattr(future.result(), 'success', False):
+            raise RuntimeError(f"Gazebo SetEntityState teleportation failed for robot 'burger': {future.result()}")
 
-            # 5. Unpause physics
-            if hasattr(self, 'cli_unpause') and self.cli_unpause.wait_for_service(timeout_sec=0.2):
-                fut_unpause = self.cli_unpause.call_async(Empty.Request())
-                rclpy.spin_until_future_complete(self.ros_node, fut_unpause, timeout_sec=0.2)
+        # 5. Unpause physics
+        if hasattr(self, 'cli_unpause') and self.cli_unpause.wait_for_service(timeout_sec=0.2):
+            fut_unpause = self.cli_unpause.call_async(Empty.Request())
+            rclpy.spin_until_future_complete(self.ros_node, fut_unpause, timeout_sec=0.2)
 
-            # 6. Settle physics and update internal state
-            self.robot_v = 0.0
-            self.robot_omega = 0.0
-            rclpy.spin_once(self.ros_node, timeout_sec=0.05)
-        except Exception as e:
-            print(f"DEBUG: _teleport_gazebo_entities exception: {type(e).__name__}: {e}")
+        # 6. Settle physics and update internal state
+        self.robot_v = 0.0
+        self.robot_omega = 0.0
+        self._gazebo_contact_occurred = False
+        rclpy.spin_once(self.ros_node, timeout_sec=0.05)
+        return True
 
     def _step_gazebo(self, cmd_v: float, cmd_omega: float):
         """Send cmd_vel and wait for next scan in Gazebo."""

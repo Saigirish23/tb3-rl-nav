@@ -170,13 +170,20 @@ All object dimensions and poses match the physical SDF definitions:
 * **Layout**: Nominal warehouse layout across matched scenario seeds.
 
 ### Case 8: Actuation Lag & Dynamics Stress Test
-* **Perturbations Applied**:
-  - Command delay: $d = 0.20\,\text{s} = \Delta t$ (1-step delay: $a_t^{\text{delayed}} = a_{t-1}^{\text{cmd}}$).
-  - Out-of-distribution command gains: $k_v = 0.80, k_\omega = 1.20$ (outside training range $[0.85, 1.15]$).
-  - Acceleration limits: $a_{\text{lin}} = 0.20\,\text{m/s}^2, a_{\text{ang}} = 1.00\,\text{rad/s}^2$.
-  - First-order actuator lag: $\tau = 0.30\,\text{s}$ ($\alpha = \frac{0.20}{0.30 + 0.20} = 0.40$).
-  - Velocity output clipping: $v \in [0.0, 0.15]\,\text{m/s}, \omega \in [-0.60, +0.60]\,\text{rad/s}$.
-  - Buffer reset: `prev_action = [0.0, 0.0]`, delay buffer cleared, `actual_v = 0.0, actual_omega = 0.0`.
+* **Actuation Pipeline Ordering (Strict Sequence)**:
+  1. **Control Delay ($d = 0.20\,\text{s} = \Delta t$)**: Previous command held for fraction $f_{\text{prev}} = d / \Delta t = 1.0$, producing full 1-step latency ($v_{\text{delayed}} = v_{\text{prev}}$, $\omega_{\text{delayed}} = \omega_{\text{prev}}$).
+  2. **Command Gain Multipliers**: Out-of-distribution gains $k_v = 0.80$ (under-speed) and $k_\omega = 1.20$ (over-steer), outside training distribution $[0.85, 1.15]$:
+     $$v_{\text{gained}} = k_v \cdot v_{\text{delayed}}, \quad \omega_{\text{gained}} = k_\omega \cdot \omega_{\text{delayed}}$$
+  3. **Velocity Saturation / Clipping**: Motor limits enforced prior to rate limiting:
+     $$v_{\text{sat}} = \text{clip}(v_{\text{gained}}, 0.0, 0.15\,\text{m/s}), \quad \omega_{\text{sat}} = \text{clip}(\omega_{\text{gained}}, -0.60, +0.60\,\text{rad/s})$$
+  4. **Acceleration Limiting**: Bounded rate of change ($\Delta v_{\text{max}} = 0.20 \times 0.20 = 0.04\,\text{m/s}$, $\Delta \omega_{\text{max}} = 1.00 \times 0.20 = 0.20\,\text{rad/s}$):
+     $$v_{\text{limited}} = v_{\text{actual}} + \text{clip}(v_{\text{sat}} - v_{\text{actual}}, -0.04, +0.04)$$
+     $$\omega_{\text{limited}} = \omega_{\text{actual}} + \text{clip}(\omega_{\text{sat}} - \omega_{\text{actual}}, -0.20, +0.20)$$
+  5. **First-Order Actuator Lag Filter**: Filter parameter $\alpha = \frac{\Delta t}{\tau + \Delta t} = \frac{0.20}{0.30 + 0.20} = 0.40$ ($\tau = 0.30\,\text{s}$):
+     $$v_{\text{actual}}(t) = 0.60 \cdot v_{\text{actual}}(t-1) + 0.40 \cdot v_{\text{limited}}$$
+     $$\omega_{\text{actual}}(t) = 0.60 \cdot \omega_{\text{actual}}(t-1) + 0.40 \cdot \omega_{\text{limited}}$$
+  6. **Motor Boundary Clamp**: Final safety bounds $v \in [0.0, 0.15]\,\text{m/s}, \omega \in [-0.60, +0.60]\,\text{rad/s}$.
+* **Reset Isolation**: On episode reset, `actual_v = 0.0`, `actual_omega = 0.0`, `prev_action = [0.0, 0.0]`, and delay buffers are cleared to zero.
 * **Layout**: Nominal warehouse layout across matched scenario seeds.
 
 ---
@@ -189,12 +196,15 @@ All object dimensions and poses match the physical SDF definitions:
 * **Status**: Both pilot and benchmark modes are **planned and pending runtime execution**.
 
 ### 5.2 Performance Metrics & Selection Bias Treatment
-1. **Success ($SR$)**: $d_{\text{goal}} \le 0.25\,\text{m}$ without collision. *(Goal tolerance is $0.25\,\text{m}$ for evaluation vs $0.20\,\text{m}$ during training to account for robot physical diameter of $0.226\,\text{m}$).*
-2. **Collision ($CR$)**: Dual-source collision detection:
-   - `collision_geometric`: minimum distance from physical chassis footprint boundary to any obstacle $\le 0.0\,\text{m}$.
-   - `collision_sensor`: Gazebo contact trigger OR raw `/scan` range $\le 0.120\,\text{m}$.
-   - *Source of Truth*: An episode is classified as collision if **either** source indicates collision. Disagreements are logged (`collision_disagreement: 1`), with geometric clearance serving as ground truth.
-3. **Timeout ($TO$)**: Reaching $T_{\text{max}} = 500\,\text{steps}$ ($100.0\,\text{s}$) without goal arrival or collision.
+1. **Success ($SR$)**: $d_{\text{goal}} \le 0.25\,\text{m}$ without physical collision. *(Goal tolerance is $0.25\,\text{m}$ for evaluation vs $0.20\,\text{m}$ during training to account for robot physical diameter of $0.226\,\text{m}$).*
+2. **Physical Collision Ground Truth ($CR$)**:
+   - `collision_gazebo_contact`: Gazebo physical contact sensor event between robot chassis/body and obstacle or boundary wall (excluding ordinary tire/caster contact with the ground plane).
+   - `collision_geometric`: Analytical footprint penetration where minimum signed distance from physical robot circular bounding footprint ($R_{\text{bound}} = 0.113\,\text{m}$) to any obstacle or wall is $\le 0.0\,\text{m}$.
+   - `min_lidar_range_m`: The absolute minimum LiDAR range reading observed across all 360 beams and all control steps in the episode.
+   - `lidar_proximity_warning`: Binary indicator triggered when minimum LiDAR range $\le 0.120\,\text{m}$ (`RANGE_MIN`). This is recorded strictly as an advisory proximity event and **does not determine physical collision ground truth**. Sensor noise (Case 7A) and blind-sector masking (Case 7B) cannot falsely trigger a physical collision termination.
+   - `collision_disagreement`: Flagged (`1`) whenever Gazebo physical contact and geometric footprint penetration disagree.
+   - *Ground Truth Hierarchy*: Gazebo physical contact serves as primary physical collision outcome during live simulation; geometric footprint penetration serves as an independent analytical cross-check. In kinematic simulation, geometric penetration serves as ground truth.
+3. **Timeout ($TO$)**: Reaching $T_{\text{max}} = 500\,\text{steps}$ ($100.0\,\text{s}$) without goal arrival or physical collision.
 4. **Penalized Completion Time ($T_{\text{penalized}}$)**: Full-cohort metric assigning $T_{\text{penalized}} = T_{\text{goal}}$ for successes, and $T_{\text{max}} = 100.0\,\text{s}$ for collisions and timeouts.
 5. **Conditional Trajectory Metrics**:
    - Path length ($L$), completion time ($T_{\text{goal}}$), and action smoothness ($\text{TV}_{\text{norm}}(\omega)$) are **conditional on successful episodes only**.
@@ -204,3 +214,4 @@ All object dimensions and poses match the physical SDF definitions:
 * **Binary Outcomes ($SR, CR$)**: Paired **McNemar's test** across matched seeds with Bonferroni correction for family-wise error control across the 6 policy pairs ($\alpha_{\text{adjusted}} = 0.05 / 6 \approx 0.0083$). Unadjusted tests are labeled exploratory.
 * **Continuous Outcomes ($T_{\text{goal}}, L, \text{TV}_{\text{norm}}$)**: Paired **two-sided Wilcoxon signed-rank test** evaluated strictly over the subset of mutually successful seed pairs. **The exact number of common successful seeds ($N_{\text{both}}$) must be reported for every comparison**.
 * **Statistical Power Notice**: With $N = 20$ matched seeds per condition, statistical power is inherently limited. Small effect sizes cannot be reliably distinguished from sample noise; claims of definitive policy superiority are avoided in favor of diagnostic failure-mode characterization.
+

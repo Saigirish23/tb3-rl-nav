@@ -77,11 +77,13 @@ class EpisodeResult:
     seed: int
     outcome: str               # 'SUCCESS', 'COLLISION', 'TIMEOUT'
     success: int               # 1 or 0
-    collision: int             # 1 or 0
+    collision: int             # 1 or 0 (Primary physical collision outcome)
     timeout: int               # 1 or 0
-    collision_geometric: int   # 1 or 0
-    collision_sensor: int      # 1 or 0
-    collision_disagreement: int# 1 or 0
+    collision_gazebo_contact: int   # 1 or 0 (Gazebo physical contact sensor)
+    collision_geometric: int        # 1 or 0 (Geometric footprint penetration)
+    min_lidar_range_m: float        # Minimum LiDAR range observed across episode
+    lidar_proximity_warning: int    # 1 if min LiDAR range <= RANGE_MIN (0.120m), else 0
+    collision_disagreement: int     # 1 if Gazebo contact != geometric collision, else 0
     completion_time_sec: float
     penalized_time_sec: float
     steps: int
@@ -340,11 +342,14 @@ def evaluate_trial(
     # 4. Configure condition-specific randomizers
     sens_rand = None
     dyn_rand = None
+    env.randomizer = None
 
     if condition == "case7a_sensor_noise":
         sens_rand = SensorRandomizer(seed=seed)
         # OOD noise exceeding training parameters: intercept 0.025, slope 0.015
         sens_rand.params = SensorParams(range_noise_a=0.025, range_noise_b=0.015)
+        sens_rand.reset()
+        env.randomizer = sens_rand
     elif condition == "case8_actuation_lag":
         dyn_rand = DynamicsRandomizer(seed=seed)
         # OOD actuation: delay 0.20s (1 step), lag tau 0.30s (alpha=0.40), gains 0.80/1.20
@@ -356,9 +361,8 @@ def evaluate_trial(
             v_command_gain=0.80,
             omega_command_gain=1.20,
         )
-        dyn_rand.prev_action = np.zeros(2, dtype=np.float32)
-        dyn_rand.actual_v = 0.0
-        dyn_rand.actual_omega = 0.0
+        dyn_rand.reset()
+        env.randomizer = dyn_rand
 
     # 5. Gazebo physical state synchronization
     if env.use_gazebo and env.ros_node is not None:
@@ -387,11 +391,13 @@ def evaluate_trial(
     trajectory = [(env.robot_x, env.robot_y)]
     omegas = []
     min_clearance = float("inf")
+    min_lidar_range_episode = float(np.min(raw_ranges)) if len(raw_ranges) > 0 else RANGE_MAX
+    lidar_proximity_event = bool(min_lidar_range_episode <= RANGE_MIN)
+    had_geometric_col = False
+    had_gazebo_col = False
     total_reward = 0.0
     outcome = "TIMEOUT"
     failure_reason = "TIMEOUT"
-    is_geom_col = False
-    is_sensor_col = False
 
     for step_idx in range(max_steps):
         # Case 5 dynamic obstacle update:
@@ -424,20 +430,7 @@ def evaluate_trial(
         action, _ = policy.predict(current_obs, deterministic=True)
         omegas.append(float(0.60 * action[1]))
 
-        # Apply Case 8 dynamics perturbation if active
-        if condition == "case8_actuation_lag" and dyn_rand is not None:
-            raw_v = float(0.075 * (action[0] + 1.0))
-            raw_w = float(0.60 * action[1])
-            prev_v = float(0.075 * (env.prev_action[0] + 1.0))
-            prev_w = float(0.60 * env.prev_action[1])
-            eff_v, eff_w = dyn_rand.perturb_action(raw_v, raw_w, prev_v, prev_w, dt=env.dt)
-            # Re-map back to normalized action space for environment stepping
-            action = np.array([
-                np.clip((eff_v / 0.075) - 1.0, -1.0, 1.0),
-                np.clip(eff_w / 0.60, -1.0, 1.0)
-            ], dtype=np.float32)
-
-        # Step environment
+        # Step environment (applies dynamics randomizer perturb_action internally if attached)
         next_obs, reward, terminated, truncated, step_info = env.step(action)
         total_reward += reward
         current_obs = next_obs
@@ -454,17 +447,34 @@ def evaluate_trial(
                 d = o.distance_to_point(env.robot_x, env.robot_y) - env.robot_radius
                 min_clearance = min(min_clearance, d)
 
-        # Evaluate dual-source collision
-        is_geom_col = env._check_collision() or (min_clearance <= 0.0)
+        # Track minimum LiDAR range across the episode
         ranges_step = env._get_lidar_ranges()
-        is_sensor_col = (np.min(ranges_step) <= RANGE_MIN)
+        step_min_range = float(np.min(ranges_step))
+        min_lidar_range_episode = min(min_lidar_range_episode, step_min_range)
+        if step_min_range <= RANGE_MIN:
+            lidar_proximity_event = True
+
+        # Evaluate physical vs geometric collision
+        step_geom_col = env.check_geometric_collision() or (min_clearance <= 0.0)
+        step_gazebo_col = bool(getattr(env, '_gazebo_contact_occurred', False))
+
+        if step_geom_col:
+            had_geometric_col = True
+        if step_gazebo_col:
+            had_gazebo_col = True
+
+        # Primary physical collision: Gazebo contact if active; otherwise geometric penetration
+        if env.use_gazebo and getattr(env, '_bumper_subscribed_and_active', False):
+            is_physical_col = step_gazebo_col
+        else:
+            is_physical_col = step_geom_col or step_gazebo_col
 
         # Goal arrival check using evaluation threshold (0.25m)
         is_goal_reached = (d_goal <= goal_eval_tolerance)
 
-        if is_geom_col or is_sensor_col:
+        if is_physical_col:
             outcome = "COLLISION"
-            failure_reason = "OBSTACLE_COLLISION" if min_clearance <= 0.0 else "SENSOR_COLLISION"
+            failure_reason = "PHYSICAL_CONTACT" if step_gazebo_col else "GEOMETRIC_PENETRATION"
             break
         elif is_goal_reached:
             outcome = "SUCCESS"
@@ -474,6 +484,9 @@ def evaluate_trial(
             outcome = "TIMEOUT"
             failure_reason = "MAX_STEPS_EXCEEDED"
             break
+
+    # Clean up trial randomizer
+    env.randomizer = None
 
     # Calculate trajectory metrics
     path_len = sum(
@@ -504,9 +517,11 @@ def evaluate_trial(
         success=is_success,
         collision=is_col,
         timeout=is_to,
-        collision_geometric=1 if is_geom_col else 0,
-        collision_sensor=1 if is_sensor_col else 0,
-        collision_disagreement=1 if (is_geom_col != is_sensor_col) else 0,
+        collision_gazebo_contact=1 if had_gazebo_col else 0,
+        collision_geometric=1 if had_geometric_col else 0,
+        min_lidar_range_m=round(min_lidar_range_episode, 3),
+        lidar_proximity_warning=1 if lidar_proximity_event else 0,
+        collision_disagreement=1 if (had_gazebo_col != had_geometric_col) else 0,
         completion_time_sec=round(duration_sec, 3),
         penalized_time_sec=round(penalized_time, 3),
         steps=steps_taken,
@@ -526,6 +541,7 @@ def run_benchmark(
     base_seed: int = 2000000,
     out_dir: str = "runs/benchmark_results",
     use_gazebo: bool = False,
+    use_final: bool = False,
     watchdog_timeout: float = 5.0,
 ) -> Dict[str, Any]:
     """Execute evaluation across selected policies and conditions."""
@@ -541,6 +557,7 @@ def run_benchmark(
     print("=" * 80)
     print(f" SIM-TO-REAL LIDAR NAVIGATION PHASE 2 BENCHMARK")
     print(f" Mode: {mode.upper()} ({len(conditions_to_run)} conditions x {len(policies_to_run)} policies x {len(seeds)} seeds = {len(conditions_to_run)*len(policies_to_run)*len(seeds)} episodes)")
+    print(f" Checkpoint Tier: {'FINAL CHECKPOINTS' if use_final else 'BEST CHECKPOINTS (PRIMARY)'}")
     print(f" Gazebo Simulation: {'ACTIVE' if use_gazebo else 'FAST ANALYTICAL MOCK'}")
     print(f" Output Directory: {out_path}")
     print("=" * 80)
@@ -548,13 +565,20 @@ def run_benchmark(
     # Load policies
     loaded_policies: Dict[str, NumPyPolicy] = {}
     for p_name in policies_to_run:
-        npz_candidate = REPO_ROOT / f"deploy/{p_name.lower()}_best_policy.npz"
-        zip_candidate = REPO_ROOT / f"runs/main_{p_name.lower()}_s0/best_model/best_model.zip"
+        if use_final:
+            npz_candidate = REPO_ROOT / f"deploy/{p_name.lower()}_policy.npz"
+            zip_candidate = REPO_ROOT / f"runs/main_{p_name.lower()}_s0/final_model.zip"
+            tier_name = "FINAL"
+        else:
+            npz_candidate = REPO_ROOT / f"deploy/{p_name.lower()}_best_policy.npz"
+            zip_candidate = REPO_ROOT / f"runs/main_{p_name.lower()}_s0/best_model/best_model.zip"
+            tier_name = "BEST"
+
         target_path = npz_candidate if npz_candidate.exists() else zip_candidate
         if not target_path.exists():
-            raise FileNotFoundError(f"Checkpoint for {p_name} not found at {npz_candidate} or {zip_candidate}")
+            raise FileNotFoundError(f"Checkpoint for {p_name} ({tier_name}) not found at {npz_candidate} or {zip_candidate}")
         loaded_policies[p_name] = NumPyPolicy.load(target_path)
-        print(f"Loaded policy {p_name} from: {target_path}")
+        print(f"Loaded policy {p_name} [{tier_name}] from: {target_path}")
 
     # Initialize environment
     env = TurtleBot3NavigationEnv(
@@ -703,6 +727,7 @@ def main():
     parser.add_argument("--base-seed", type=int, default=2000000, help="Base seed for evaluation")
     parser.add_argument("--out-dir", type=str, default="runs/benchmark_results", help="Output directory")
     parser.add_argument("--use-gazebo", type=str, default="false", help="Use live Gazebo simulation (true/false)")
+    parser.add_argument("--use-final", action="store_true", default=False, help="Evaluate final model checkpoints instead of best checkpoints")
     args = parser.parse_args()
 
     use_gz = args.use_gazebo.lower() in ["true", "1", "yes"]
@@ -722,6 +747,7 @@ def main():
         base_seed=args.base_seed,
         out_dir=args.out_dir,
         use_gazebo=use_gz,
+        use_final=args.use_final,
     )
 
 

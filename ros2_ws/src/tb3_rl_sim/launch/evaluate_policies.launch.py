@@ -92,6 +92,11 @@ def generate_launch_description():
         default_value='true',
         description='Use live Gazebo simulation (true/false)'
     )
+    use_final_arg = DeclareLaunchArgument(
+        'use_final',
+        default_value='false',
+        description='Evaluate final model checkpoints instead of best checkpoints (true/false)'
+    )
 
     # Condition objects
     cond_gazebo_headless = IfCondition(
@@ -163,6 +168,7 @@ def generate_launch_description():
     ld.add_action(out_dir_arg)
     ld.add_action(headless_arg)
     ld.add_action(use_gazebo_arg)
+    ld.add_action(use_final_arg)
 
     # Gazebo instances (conditional)
     ld.add_action(headless_gazebo_cmd)
@@ -173,3 +179,4 @@ def generate_launch_description():
     ld.add_action(shutdown_handler)
 
     return ld
+

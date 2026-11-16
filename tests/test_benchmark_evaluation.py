@@ -141,6 +141,11 @@ def test_output_csv_and_json_schemas():
                 assert "penalized_time_sec" in r
                 assert "smoothness_tv" in r
                 assert "min_clearance_m" in r
+                assert "collision_geometric" in r
+                assert "collision_gazebo_contact" in r
+                assert "min_lidar_range_m" in r
+                assert "lidar_proximity_warning" in r
+                assert "collision_disagreement" in r
 
         # Verify JSON structure
         with open(json_path, "r", encoding="utf-8") as f:
@@ -156,3 +161,4 @@ def test_output_csv_and_json_schemas():
 
 if __name__ == "__main__":
     pytest.main(["-v", str(__file__)])
+
