@@ -1,0 +1,5978 @@
+{
+  "evaluation_scope": "50_held_out_scenarios_seeds_2000000_to_2000049",
+  "arena": "4x4m_nominal",
+  "policies_evaluated": {
+    "P1_nominal": {
+      "policy_name": "P1",
+      "condition": "nominal",
+      "n_episodes": 50,
+      "successes": 47,
+      "collisions": 1,
+      "timeouts": 2,
+      "success_rate": 0.94,
+      "collision_rate": 0.02,
+      "timeout_rate": 0.04,
+      "mean_reward": 103.75372462001613,
+      "std_reward": 37.71496092831864,
+      "mean_steps_success": 106.17021276595744,
+      "mean_path_length_success": 2.2510232106192,
+      "mean_min_clearance": 0.2817703260809851,
+      "wilson_lower": 0.8378265662912299,
+      "wilson_upper": 0.9793854036353695,
+      "per_episode": [
+        {
+          "scenario_id": 0,
+          "seed": 2000000,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 124,
+          "total_reward": 107.29719565766433,
+          "final_goal_distance": 0.19286766670544955,
+          "path_length": 2.0465765864029524,
+          "min_clearance": 0.21437146062623247,
+          "time_to_goal": 24.8,
+          "reward_components": {
+            "progress": 13.497195657664335,
+            "step_penalty": -6.199999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 1,
+          "seed": 2000001,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 114,
+          "total_reward": 116.02865632660652,
+          "final_goal_distance": 0.19221010202808,
+          "path_length": 2.3447479274868974,
+          "min_clearance": 0.348558880214321,
+          "time_to_goal": 22.8,
+          "reward_components": {
+            "progress": 21.728656326606526,
+            "step_penalty": -5.699999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 2,
+          "seed": 2000002,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 109.49752061711686,
+          "final_goal_distance": 0.18645598092153032,
+          "path_length": 1.785789930559695,
+          "min_clearance": 0.23506516217283574,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 13.89752061711686,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 3,
+          "seed": 2000003,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 68,
+          "total_reward": 111.70910104601401,
+          "final_goal_distance": 0.1951717632835467,
+          "path_length": 1.7360073536261917,
+          "min_clearance": 0.26615062827259417,
+          "time_to_goal": 13.600000000000001,
+          "reward_components": {
+            "progress": 15.109101046014018,
+            "step_penalty": -3.399999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 4,
+          "seed": 2000004,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 124,
+          "total_reward": 117.76222539596233,
+          "final_goal_distance": 0.19862186465909565,
+          "path_length": 2.749850754886867,
+          "min_clearance": 0.3868446679032448,
+          "time_to_goal": 24.8,
+          "reward_components": {
+            "progress": 23.962225395962353,
+            "step_penalty": -6.199999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 5,
+          "seed": 2000005,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 126,
+          "total_reward": 119.18035709505108,
+          "final_goal_distance": 0.19243770490077453,
+          "path_length": 2.9165875338390452,
+          "min_clearance": 0.3156627419926571,
+          "time_to_goal": 25.200000000000003,
+          "reward_components": {
+            "progress": 25.480357095051083,
+            "step_penalty": -6.299999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 6,
+          "seed": 2000006,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 135,
+          "total_reward": 112.67064993049505,
+          "final_goal_distance": 0.197324420606498,
+          "path_length": 2.5987123879417786,
+          "min_clearance": 0.1452129400148181,
+          "time_to_goal": 27.0,
+          "reward_components": {
+            "progress": 19.42064993049504,
+            "step_penalty": -6.749999999999984,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 7,
+          "seed": 2000007,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 67,
+          "total_reward": -96.16340574982523,
+          "final_goal_distance": 1.7709052062558095,
+          "path_length": 1.2312868561595673,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 7.18659425017476,
+            "step_penalty": -3.349999999999996,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 8,
+          "seed": 2000008,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 93,
+          "total_reward": 114.96309620781295,
+          "final_goal_distance": 0.19507751083111957,
+          "path_length": 2.2584370477125058,
+          "min_clearance": 0.3435032840005908,
+          "time_to_goal": 18.6,
+          "reward_components": {
+            "progress": 19.613096207812937,
+            "step_penalty": -4.6499999999999915,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 9,
+          "seed": 2000009,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 123,
+          "total_reward": 111.79345693299626,
+          "final_goal_distance": 0.19694862436108956,
+          "path_length": 2.585473251342774,
+          "min_clearance": 0.11997875825856215,
+          "time_to_goal": 24.6,
+          "reward_components": {
+            "progress": 17.943456932996252,
+            "step_penalty": -6.149999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 10,
+          "seed": 2000010,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 87,
+          "total_reward": 110.85134361419149,
+          "final_goal_distance": 0.18086052018899532,
+          "path_length": 1.6450353878550237,
+          "min_clearance": 0.23494554632628817,
+          "time_to_goal": 17.400000000000002,
+          "reward_components": {
+            "progress": 15.201343614191494,
+            "step_penalty": -4.3499999999999925,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 11,
+          "seed": 2000011,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 102,
+          "total_reward": 113.13033144598474,
+          "final_goal_distance": 0.18611595561436212,
+          "path_length": 2.2059058347344402,
+          "min_clearance": 0.2418577655817481,
+          "time_to_goal": 20.400000000000002,
+          "reward_components": {
+            "progress": 18.23033144598473,
+            "step_penalty": -5.09999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 12,
+          "seed": 2000012,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 157,
+          "total_reward": 124.38284370250656,
+          "final_goal_distance": 0.19670455241854057,
+          "path_length": 3.4155497482046484,
+          "min_clearance": 0.05005827246535173,
+          "time_to_goal": 31.400000000000002,
+          "reward_components": {
+            "progress": 32.23284370250654,
+            "step_penalty": -7.84999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 13,
+          "seed": 2000013,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 94,
+          "total_reward": 112.0618753482503,
+          "final_goal_distance": 0.1879048724985882,
+          "path_length": 2.0715830773115154,
+          "min_clearance": 0.26778351464738537,
+          "time_to_goal": 18.8,
+          "reward_components": {
+            "progress": 16.761875348250296,
+            "step_penalty": -4.699999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 14,
+          "seed": 2000014,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 97,
+          "total_reward": 114.06778522053513,
+          "final_goal_distance": 0.17700926083721835,
+          "path_length": 2.3220807574689384,
+          "min_clearance": 0.5250009600309846,
+          "time_to_goal": 19.400000000000002,
+          "reward_components": {
+            "progress": 18.917785220535123,
+            "step_penalty": -4.849999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 15,
+          "seed": 2000015,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 114,
+          "total_reward": 109.16475517711261,
+          "final_goal_distance": 0.19002923738801608,
+          "path_length": 2.290014295354485,
+          "min_clearance": 0.21479718514151747,
+          "time_to_goal": 22.8,
+          "reward_components": {
+            "progress": 14.864755177112613,
+            "step_penalty": -5.699999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 16,
+          "seed": 2000016,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 92,
+          "total_reward": 111.57514646066126,
+          "final_goal_distance": 0.1919133127631294,
+          "path_length": 1.7137310186773538,
+          "min_clearance": 0.02798587454406333,
+          "time_to_goal": 18.400000000000002,
+          "reward_components": {
+            "progress": 16.17514646066126,
+            "step_penalty": -4.599999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 17,
+          "seed": 2000017,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 93,
+          "total_reward": 111.35927976575287,
+          "final_goal_distance": 0.1922423713428773,
+          "path_length": 1.8785609545558697,
+          "min_clearance": 0.17344632672681182,
+          "time_to_goal": 18.6,
+          "reward_components": {
+            "progress": 16.009279765752876,
+            "step_penalty": -4.6499999999999915,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 18,
+          "seed": 2000018,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 73,
+          "total_reward": 112.53365380527264,
+          "final_goal_distance": 0.1811929252403282,
+          "path_length": 1.712521553635597,
+          "min_clearance": 0.26494554925051106,
+          "time_to_goal": 14.600000000000001,
+          "reward_components": {
+            "progress": 16.18365380527263,
+            "step_penalty": -3.649999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 19,
+          "seed": 2000019,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 94,
+          "total_reward": 112.52158984210166,
+          "final_goal_distance": 0.19883764658924083,
+          "path_length": 1.96996539440006,
+          "min_clearance": 0.33437969730428313,
+          "time_to_goal": 18.8,
+          "reward_components": {
+            "progress": 17.221589842101668,
+            "step_penalty": -4.699999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 20,
+          "seed": 2000020,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 107,
+          "total_reward": 111.94342237922125,
+          "final_goal_distance": 0.19345423814916146,
+          "path_length": 1.967010041624308,
+          "min_clearance": 0.2992053830533896,
+          "time_to_goal": 21.400000000000002,
+          "reward_components": {
+            "progress": 17.293422379221255,
+            "step_penalty": -5.349999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 21,
+          "seed": 2000021,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 114,
+          "total_reward": 115.59022725356236,
+          "final_goal_distance": 0.19684927685461817,
+          "path_length": 2.8116955621540547,
+          "min_clearance": 0.16268256387361724,
+          "time_to_goal": 22.8,
+          "reward_components": {
+            "progress": 21.29022725356236,
+            "step_penalty": -5.699999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 22,
+          "seed": 2000022,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 262,
+          "total_reward": 105.26976587194164,
+          "final_goal_distance": 0.19677332258152908,
+          "path_length": 5.025184105820952,
+          "min_clearance": 0.0,
+          "time_to_goal": 52.400000000000006,
+          "reward_components": {
+            "progress": 18.369765871941624,
+            "step_penalty": -13.100000000000051,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 23,
+          "seed": 2000023,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 159,
+          "total_reward": 113.07370909111233,
+          "final_goal_distance": 0.19969273464412635,
+          "path_length": 2.8032856440916647,
+          "min_clearance": 0.2558052472966409,
+          "time_to_goal": 31.8,
+          "reward_components": {
+            "progress": 21.023709091112355,
+            "step_penalty": -7.94999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 24,
+          "seed": 2000024,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 76,
+          "total_reward": 110.55332267480577,
+          "final_goal_distance": 0.19139339473477995,
+          "path_length": 1.5927842032536863,
+          "min_clearance": 0.2966280995757813,
+          "time_to_goal": 15.200000000000001,
+          "reward_components": {
+            "progress": 14.353322674805774,
+            "step_penalty": -3.7999999999999945,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 25,
+          "seed": 2000025,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -22.09142371633819,
+          "final_goal_distance": 3.0879185523436203,
+          "path_length": 0.4707214339077481,
+          "min_clearance": 0.3128994530390039,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": -4.591423716338077,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 26,
+          "seed": 2000026,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 94,
+          "total_reward": 111.28550854369507,
+          "final_goal_distance": 0.19371807340654212,
+          "path_length": 1.6723237804323428,
+          "min_clearance": 0.43178164428580335,
+          "time_to_goal": 18.8,
+          "reward_components": {
+            "progress": 15.985508543695062,
+            "step_penalty": -4.699999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 27,
+          "seed": 2000027,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 71,
+          "total_reward": 112.81529982878416,
+          "final_goal_distance": 0.19949374175751092,
+          "path_length": 1.7367195291817183,
+          "min_clearance": 0.4237243738674522,
+          "time_to_goal": 14.200000000000001,
+          "reward_components": {
+            "progress": 16.36529982878415,
+            "step_penalty": -3.5499999999999954,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 28,
+          "seed": 2000028,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 73,
+          "total_reward": 112.31092240595602,
+          "final_goal_distance": 0.18466282533803946,
+          "path_length": 1.7911355374753475,
+          "min_clearance": 0.5990868510917232,
+          "time_to_goal": 14.600000000000001,
+          "reward_components": {
+            "progress": 15.96092240595601,
+            "step_penalty": -3.649999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 29,
+          "seed": 2000029,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 74,
+          "total_reward": 110.58265577244957,
+          "final_goal_distance": 0.19309130423175047,
+          "path_length": 1.8814482356607916,
+          "min_clearance": 0.6131723667240983,
+          "time_to_goal": 14.8,
+          "reward_components": {
+            "progress": 14.282655772449576,
+            "step_penalty": -3.699999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 30,
+          "seed": 2000030,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 101,
+          "total_reward": 115.7533145615218,
+          "final_goal_distance": 0.1989298698799989,
+          "path_length": 2.4931489015370607,
+          "min_clearance": 0.17293309106582422,
+          "time_to_goal": 20.200000000000003,
+          "reward_components": {
+            "progress": 20.803314561521816,
+            "step_penalty": -5.04999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 31,
+          "seed": 2000031,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 94,
+          "total_reward": 110.8905760496559,
+          "final_goal_distance": 0.19153537509984964,
+          "path_length": 1.8477981011196971,
+          "min_clearance": 0.6218118190086268,
+          "time_to_goal": 18.8,
+          "reward_components": {
+            "progress": 15.590576049655905,
+            "step_penalty": -4.699999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 32,
+          "seed": 2000032,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": 110.71215249756489,
+          "final_goal_distance": 0.19223090377514598,
+          "path_length": 1.8133851382881403,
+          "min_clearance": 0.2564057615803278,
+          "time_to_goal": 16.0,
+          "reward_components": {
+            "progress": 14.712152497564901,
+            "step_penalty": -3.999999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 33,
+          "seed": 2000033,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 73,
+          "total_reward": 114.92268986744419,
+          "final_goal_distance": 0.18919808174451655,
+          "path_length": 1.9610902798175818,
+          "min_clearance": 0.4842607987378753,
+          "time_to_goal": 14.600000000000001,
+          "reward_components": {
+            "progress": 18.5726898674442,
+            "step_penalty": -3.649999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 34,
+          "seed": 2000034,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 157,
+          "total_reward": 109.06475551921677,
+          "final_goal_distance": 0.18298267779413713,
+          "path_length": 3.3535216425172982,
+          "min_clearance": 0.041100805583553016,
+          "time_to_goal": 31.400000000000002,
+          "reward_components": {
+            "progress": 16.91475551921676,
+            "step_penalty": -7.84999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 35,
+          "seed": 2000035,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 111,
+          "total_reward": 117.60867905862011,
+          "final_goal_distance": 0.19537751126019248,
+          "path_length": 2.3846311664208786,
+          "min_clearance": 0.083498421173496,
+          "time_to_goal": 22.200000000000003,
+          "reward_components": {
+            "progress": 23.158679058620134,
+            "step_penalty": -5.549999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 36,
+          "seed": 2000036,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 91,
+          "total_reward": 112.14762510699201,
+          "final_goal_distance": 0.1921493500394074,
+          "path_length": 2.138399301767349,
+          "min_clearance": 0.5349563148823011,
+          "time_to_goal": 18.2,
+          "reward_components": {
+            "progress": 16.697625106992,
+            "step_penalty": -4.549999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 37,
+          "seed": 2000037,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -0.44622518434008523,
+          "final_goal_distance": 0.4766851218895606,
+          "path_length": 6.191180688142775,
+          "min_clearance": 0.1874522769492094,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 17.053774815659935,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 38,
+          "seed": 2000038,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 180,
+          "total_reward": 113.0834995186276,
+          "final_goal_distance": 0.1966344739505533,
+          "path_length": 3.4685660145431734,
+          "min_clearance": 0.23331492286008593,
+          "time_to_goal": 36.0,
+          "reward_components": {
+            "progress": 22.083499518627594,
+            "step_penalty": -8.999999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 39,
+          "seed": 2000039,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 91,
+          "total_reward": 116.82435584181736,
+          "final_goal_distance": 0.19725720542100517,
+          "path_length": 2.232076651677491,
+          "min_clearance": 0.25918268049967064,
+          "time_to_goal": 18.2,
+          "reward_components": {
+            "progress": 21.37435584181736,
+            "step_penalty": -4.549999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 40,
+          "seed": 2000040,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 67,
+          "total_reward": 111.10557365905908,
+          "final_goal_distance": 0.19158925609275795,
+          "path_length": 1.517235490679741,
+          "min_clearance": 0.5258993900830848,
+          "time_to_goal": 13.4,
+          "reward_components": {
+            "progress": 14.455573659059072,
+            "step_penalty": -3.349999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 41,
+          "seed": 2000041,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 136,
+          "total_reward": 120.2752101220654,
+          "final_goal_distance": 0.1971028900700022,
+          "path_length": 2.9687293495237856,
+          "min_clearance": 0.4409709416057942,
+          "time_to_goal": 27.200000000000003,
+          "reward_components": {
+            "progress": 27.075210122065414,
+            "step_penalty": -6.799999999999984,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 42,
+          "seed": 2000042,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 123,
+          "total_reward": 113.40290565737342,
+          "final_goal_distance": 0.19501933519637363,
+          "path_length": 2.3978776209801436,
+          "min_clearance": 0.1965101757131434,
+          "time_to_goal": 24.6,
+          "reward_components": {
+            "progress": 19.55290565737342,
+            "step_penalty": -6.149999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 43,
+          "seed": 2000043,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 68,
+          "total_reward": 112.37545941921243,
+          "final_goal_distance": 0.18381853149471672,
+          "path_length": 1.6518823380768297,
+          "min_clearance": 0.059567597696135635,
+          "time_to_goal": 13.600000000000001,
+          "reward_components": {
+            "progress": 15.775459419212426,
+            "step_penalty": -3.399999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 44,
+          "seed": 2000044,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 103,
+          "total_reward": 109.68485765269716,
+          "final_goal_distance": 0.18824480558692305,
+          "path_length": 1.8831193627417073,
+          "min_clearance": 0.3144095144533048,
+          "time_to_goal": 20.6,
+          "reward_components": {
+            "progress": 14.834857652697158,
+            "step_penalty": -5.14999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 45,
+          "seed": 2000045,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 68,
+          "total_reward": 111.6182579548247,
+          "final_goal_distance": 0.1932052192007239,
+          "path_length": 1.5344257239997385,
+          "min_clearance": 0.35258838212885607,
+          "time_to_goal": 13.600000000000001,
+          "reward_components": {
+            "progress": 15.018257954824696,
+            "step_penalty": -3.399999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 46,
+          "seed": 2000046,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 143,
+          "total_reward": 114.14168247400242,
+          "final_goal_distance": 0.19263297349740516,
+          "path_length": 2.5507087217643867,
+          "min_clearance": 0.2487231157708092,
+          "time_to_goal": 28.6,
+          "reward_components": {
+            "progress": 21.291682474002428,
+            "step_penalty": -7.149999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 47,
+          "seed": 2000047,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 91,
+          "total_reward": 111.02752411438553,
+          "final_goal_distance": 0.19469146710978638,
+          "path_length": 2.1260210182517767,
+          "min_clearance": 0.2771977144934368,
+          "time_to_goal": 18.2,
+          "reward_components": {
+            "progress": 15.577524114385536,
+            "step_penalty": -4.549999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 48,
+          "seed": 2000048,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 68,
+          "total_reward": 109.93660038185455,
+          "final_goal_distance": 0.19924002310724986,
+          "path_length": 1.4768870821595188,
+          "min_clearance": 0.517108893576735,
+          "time_to_goal": 13.600000000000001,
+          "reward_components": {
+            "progress": 13.336600381854545,
+            "step_penalty": -3.399999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 49,
+          "seed": 2000049,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 117,
+          "total_reward": 115.83586878075761,
+          "final_goal_distance": 0.19116882238773564,
+          "path_length": 2.469869557544588,
+          "min_clearance": 0.17508848790467624,
+          "time_to_goal": 23.400000000000002,
+          "reward_components": {
+            "progress": 21.685868780757602,
+            "step_penalty": -5.849999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        }
+      ]
+    },
+    "P2_sensor": {
+      "policy_name": "P2",
+      "condition": "nominal",
+      "n_episodes": 50,
+      "successes": 48,
+      "collisions": 1,
+      "timeouts": 1,
+      "success_rate": 0.96,
+      "collision_rate": 0.02,
+      "timeout_rate": 0.02,
+      "mean_reward": 106.9356050494771,
+      "std_reward": 35.96824461889692,
+      "mean_steps_success": 93.0625,
+      "mean_path_length_success": 2.236184062390821,
+      "mean_min_clearance": 0.2622450301256525,
+      "wilson_lower": 0.8653966212204534,
+      "wilson_upper": 0.9889613473391734,
+      "per_episode": [
+        {
+          "scenario_id": 0,
+          "seed": 2000000,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 250,
+          "total_reward": -105.72119609970376,
+          "final_goal_distance": 0.8647068424422605,
+          "path_length": 4.591818683948365,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 6.7788039002962215,
+            "step_penalty": -12.500000000000043,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 1,
+          "seed": 2000001,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 106,
+          "total_reward": 116.3878338781379,
+          "final_goal_distance": 0.1962923468749421,
+          "path_length": 2.3947698863223192,
+          "min_clearance": 0.3255970138745665,
+          "time_to_goal": 21.200000000000003,
+          "reward_components": {
+            "progress": 21.687833878137894,
+            "step_penalty": -5.299999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 2,
+          "seed": 2000002,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -21.867820785314056,
+          "final_goal_distance": 2.0129901211646173,
+          "path_length": 0.43805056750774285,
+          "min_clearance": 0.39698023335193655,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": -4.367820785314012,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 3,
+          "seed": 2000003,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 111.61812259641913,
+          "final_goal_distance": 0.1992696082430349,
+          "path_length": 1.9055291537940513,
+          "min_clearance": 0.2679947357695148,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 15.068122596419137,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 4,
+          "seed": 2000004,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 104,
+          "total_reward": 118.77744554165798,
+          "final_goal_distance": 0.1970998500895339,
+          "path_length": 2.7988726158812645,
+          "min_clearance": 0.2850610982167968,
+          "time_to_goal": 20.8,
+          "reward_components": {
+            "progress": 23.97744554165797,
+            "step_penalty": -5.1999999999999895,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 5,
+          "seed": 2000005,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 108,
+          "total_reward": 120.04075627659348,
+          "final_goal_distance": 0.19639778674653585,
+          "path_length": 2.8643755607306947,
+          "min_clearance": 0.33478531533338296,
+          "time_to_goal": 21.6,
+          "reward_components": {
+            "progress": 25.44075627659348,
+            "step_penalty": -5.399999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 6,
+          "seed": 2000006,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 95,
+          "total_reward": 114.6897338663404,
+          "final_goal_distance": 0.1954160270219614,
+          "path_length": 2.349065524879842,
+          "min_clearance": 0.0855107857870986,
+          "time_to_goal": 19.0,
+          "reward_components": {
+            "progress": 19.439733866340404,
+            "step_penalty": -4.749999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 7,
+          "seed": 2000007,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 118,
+          "total_reward": 117.13755988376646,
+          "final_goal_distance": 0.18580864289663895,
+          "path_length": 2.7969133146666003,
+          "min_clearance": 0.08605284243857732,
+          "time_to_goal": 23.6,
+          "reward_components": {
+            "progress": 23.03755988376647,
+            "step_penalty": -5.899999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 8,
+          "seed": 2000008,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 83,
+          "total_reward": 115.6379115193998,
+          "final_goal_distance": 0.17759597967243382,
+          "path_length": 2.281865665912629,
+          "min_clearance": 0.3835604424149298,
+          "time_to_goal": 16.6,
+          "reward_components": {
+            "progress": 19.78791151939981,
+            "step_penalty": -4.149999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 9,
+          "seed": 2000009,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 113.612237535073,
+          "final_goal_distance": 0.19007056415341375,
+          "path_length": 2.1247194773610687,
+          "min_clearance": 0.13583184274925442,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 18.012237535073,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 10,
+          "seed": 2000010,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 64,
+          "total_reward": 111.82219244675211,
+          "final_goal_distance": 0.19877563693293424,
+          "path_length": 1.6235313110053546,
+          "min_clearance": 0.23859276040181038,
+          "time_to_goal": 12.8,
+          "reward_components": {
+            "progress": 15.022192446752111,
+            "step_penalty": -3.1999999999999966,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 11,
+          "seed": 2000011,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": 114.35349534644956,
+          "final_goal_distance": 0.17379956556787937,
+          "path_length": 2.11352548263967,
+          "min_clearance": 0.238079447408291,
+          "time_to_goal": 16.0,
+          "reward_components": {
+            "progress": 18.35349534644956,
+            "step_penalty": -3.999999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 12,
+          "seed": 2000012,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 229,
+          "total_reward": 120.85135309187628,
+          "final_goal_distance": 0.1898536134815706,
+          "path_length": 3.343574038892984,
+          "min_clearance": 0.03312500361338773,
+          "time_to_goal": 45.800000000000004,
+          "reward_components": {
+            "progress": 32.30135309187625,
+            "step_penalty": -11.450000000000028,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 13,
+          "seed": 2000013,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 86,
+          "total_reward": 112.53200093289584,
+          "final_goal_distance": 0.18089231403403241,
+          "path_length": 2.018154792096466,
+          "min_clearance": 0.16953747497014104,
+          "time_to_goal": 17.2,
+          "reward_components": {
+            "progress": 16.83200093289585,
+            "step_penalty": -4.299999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 14,
+          "seed": 2000014,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 82,
+          "total_reward": 114.73556567510687,
+          "final_goal_distance": 0.18523121538004342,
+          "path_length": 2.2162698192894457,
+          "min_clearance": 0.5141865032778331,
+          "time_to_goal": 16.400000000000002,
+          "reward_components": {
+            "progress": 18.83556567510687,
+            "step_penalty": -4.099999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 15,
+          "seed": 2000015,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 122,
+          "total_reward": 108.78305174020839,
+          "final_goal_distance": 0.188199581078438,
+          "path_length": 2.459983583735303,
+          "min_clearance": 0.3989425073580779,
+          "time_to_goal": 24.400000000000002,
+          "reward_components": {
+            "progress": 14.88305174020839,
+            "step_penalty": -6.099999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 16,
+          "seed": 2000016,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 75,
+          "total_reward": 112.38446927459958,
+          "final_goal_distance": 0.1959810313692975,
+          "path_length": 1.764572404772044,
+          "min_clearance": 0.06960217336314108,
+          "time_to_goal": 15.0,
+          "reward_components": {
+            "progress": 16.13446927459958,
+            "step_penalty": -3.7499999999999947,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 17,
+          "seed": 2000017,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 153,
+          "total_reward": 108.4412813798792,
+          "final_goal_distance": 0.18404220993024498,
+          "path_length": 2.622435189876706,
+          "min_clearance": 0.025682275225337017,
+          "time_to_goal": 30.6,
+          "reward_components": {
+            "progress": 16.0912813798792,
+            "step_penalty": -7.649999999999981,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 18,
+          "seed": 2000018,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 63,
+          "total_reward": 113.07783993871166,
+          "final_goal_distance": 0.17677431189642465,
+          "path_length": 1.7268619917333135,
+          "min_clearance": 0.34916361926133577,
+          "time_to_goal": 12.600000000000001,
+          "reward_components": {
+            "progress": 16.227839938711664,
+            "step_penalty": -3.149999999999997,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 19,
+          "seed": 2000019,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 78,
+          "total_reward": 113.42142587816727,
+          "final_goal_distance": 0.18885404298267905,
+          "path_length": 2.022064905278385,
+          "min_clearance": 0.2613944438225293,
+          "time_to_goal": 15.600000000000001,
+          "reward_components": {
+            "progress": 17.32142587816728,
+            "step_penalty": -3.899999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 20,
+          "seed": 2000020,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 78,
+          "total_reward": 113.5093967216659,
+          "final_goal_distance": 0.1818568039046973,
+          "path_length": 1.9014863662328578,
+          "min_clearance": 0.3090168345067271,
+          "time_to_goal": 15.600000000000001,
+          "reward_components": {
+            "progress": 17.409396721665896,
+            "step_penalty": -3.899999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 21,
+          "seed": 2000021,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 108,
+          "total_reward": 115.90060517251277,
+          "final_goal_distance": 0.1958114849595782,
+          "path_length": 2.7477393286675205,
+          "min_clearance": 0.11783537590120037,
+          "time_to_goal": 21.6,
+          "reward_components": {
+            "progress": 21.300605172512746,
+            "step_penalty": -5.399999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 22,
+          "seed": 2000022,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 111,
+          "total_reward": 112.80590188142405,
+          "final_goal_distance": 0.19815972163328777,
+          "path_length": 2.346630288949235,
+          "min_clearance": 0.07418931547930858,
+          "time_to_goal": 22.200000000000003,
+          "reward_components": {
+            "progress": 18.355901881424042,
+            "step_penalty": -5.549999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 23,
+          "seed": 2000023,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 219,
+          "total_reward": 110.2553897885799,
+          "final_goal_distance": 0.1815246648973716,
+          "path_length": 4.155338895460586,
+          "min_clearance": 0.27623875511358065,
+          "time_to_goal": 43.800000000000004,
+          "reward_components": {
+            "progress": 21.205389788579883,
+            "step_penalty": -10.95000000000002,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 24,
+          "seed": 2000024,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 57,
+          "total_reward": 111.54337758571052,
+          "final_goal_distance": 0.1873879036443064,
+          "path_length": 1.5134897232893854,
+          "min_clearance": 0.2792532285031887,
+          "time_to_goal": 11.4,
+          "reward_components": {
+            "progress": 14.393377585710507,
+            "step_penalty": -2.849999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 25,
+          "seed": 2000025,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 116,
+          "total_reward": 118.51540744654373,
+          "final_goal_distance": 0.19723543605544008,
+          "path_length": 2.7407252969406533,
+          "min_clearance": 0.15183960846429512,
+          "time_to_goal": 23.200000000000003,
+          "reward_components": {
+            "progress": 24.315407446543723,
+            "step_penalty": -5.799999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 26,
+          "seed": 2000026,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 66,
+          "total_reward": 112.70632463415924,
+          "final_goal_distance": 0.1916364643601247,
+          "path_length": 1.6623867827653886,
+          "min_clearance": 0.39038168082546454,
+          "time_to_goal": 13.200000000000001,
+          "reward_components": {
+            "progress": 16.006324634159242,
+            "step_penalty": -3.2999999999999963,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 27,
+          "seed": 2000027,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 63,
+          "total_reward": 113.2540178790376,
+          "final_goal_distance": 0.19562193673216566,
+          "path_length": 1.7421734979003671,
+          "min_clearance": 0.33686622705592084,
+          "time_to_goal": 12.600000000000001,
+          "reward_components": {
+            "progress": 16.404017879037603,
+            "step_penalty": -3.149999999999997,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 28,
+          "seed": 2000028,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 65,
+          "total_reward": 112.71928996439985,
+          "final_goal_distance": 0.1838260694936572,
+          "path_length": 1.7760789430886517,
+          "min_clearance": 0.4681299446230607,
+          "time_to_goal": 13.0,
+          "reward_components": {
+            "progress": 15.969289964399827,
+            "step_penalty": -3.2499999999999964,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 29,
+          "seed": 2000029,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 77,
+          "total_reward": 110.37964861748758,
+          "final_goal_distance": 0.19839201972795126,
+          "path_length": 1.9962534729391341,
+          "min_clearance": 0.5798047633047988,
+          "time_to_goal": 15.4,
+          "reward_components": {
+            "progress": 14.229648617487566,
+            "step_penalty": -3.8499999999999943,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 30,
+          "seed": 2000030,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 90,
+          "total_reward": 116.49914836270041,
+          "final_goal_distance": 0.17934648976213846,
+          "path_length": 2.4137069003283975,
+          "min_clearance": 0.21577545623662336,
+          "time_to_goal": 18.0,
+          "reward_components": {
+            "progress": 20.999148362700407,
+            "step_penalty": -4.499999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 31,
+          "seed": 2000031,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 112.0592378481669,
+          "final_goal_distance": 0.19966919524875,
+          "path_length": 1.8071385275758804,
+          "min_clearance": 0.6079828346102742,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 15.509237848166888,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 32,
+          "seed": 2000032,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 111.40638859416318,
+          "final_goal_distance": 0.17780729411531884,
+          "path_length": 1.7586825220473121,
+          "min_clearance": 0.26826244664703724,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 14.856388594163171,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 33,
+          "seed": 2000033,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 115.03354201671942,
+          "final_goal_distance": 0.19811286681699347,
+          "path_length": 2.0381684929132464,
+          "min_clearance": 0.47520317969061376,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 18.48354201671943,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 34,
+          "seed": 2000034,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 90,
+          "total_reward": 112.34437888342741,
+          "final_goal_distance": 0.19002034137307225,
+          "path_length": 2.2035904684849092,
+          "min_clearance": 0.09907737298371495,
+          "time_to_goal": 18.0,
+          "reward_components": {
+            "progress": 16.844378883427407,
+            "step_penalty": -4.499999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 35,
+          "seed": 2000035,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 89,
+          "total_reward": 118.90779705299457,
+          "final_goal_distance": 0.1754657118227472,
+          "path_length": 2.3951412083208568,
+          "min_clearance": 0.035048119956312254,
+          "time_to_goal": 17.8,
+          "reward_components": {
+            "progress": 23.357797052994584,
+            "step_penalty": -4.449999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 36,
+          "seed": 2000036,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 81,
+          "total_reward": 112.57804288750974,
+          "final_goal_distance": 0.19910757198763346,
+          "path_length": 2.102149358522147,
+          "min_clearance": 0.5225509987959593,
+          "time_to_goal": 16.2,
+          "reward_components": {
+            "progress": 16.628042887509743,
+            "step_penalty": -4.049999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 37,
+          "seed": 2000037,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 96,
+          "total_reward": 115.03604981393005,
+          "final_goal_distance": 0.19845762206254636,
+          "path_length": 2.460231227204204,
+          "min_clearance": 0.17830465479645918,
+          "time_to_goal": 19.200000000000003,
+          "reward_components": {
+            "progress": 19.836049813930046,
+            "step_penalty": -4.799999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 38,
+          "seed": 2000038,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 92,
+          "total_reward": 117.60301252048002,
+          "final_goal_distance": 0.18468317376531115,
+          "path_length": 2.3932089842855944,
+          "min_clearance": 0.13023794681693068,
+          "time_to_goal": 18.400000000000002,
+          "reward_components": {
+            "progress": 22.203012520480005,
+            "step_penalty": -4.599999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 39,
+          "seed": 2000039,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 77,
+          "total_reward": 117.69524921712298,
+          "final_goal_distance": 0.18016786789044262,
+          "path_length": 2.2436609669029712,
+          "min_clearance": 0.1807772181870111,
+          "time_to_goal": 15.4,
+          "reward_components": {
+            "progress": 21.545249217122972,
+            "step_penalty": -3.8499999999999943,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 40,
+          "seed": 2000040,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 57,
+          "total_reward": 111.60662462002102,
+          "final_goal_distance": 0.19148415999656393,
+          "path_length": 1.5688487970829017,
+          "min_clearance": 0.4820158650573889,
+          "time_to_goal": 11.4,
+          "reward_components": {
+            "progress": 14.456624620021008,
+            "step_penalty": -2.849999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 41,
+          "seed": 2000041,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 124,
+          "total_reward": 121.0415614195584,
+          "final_goal_distance": 0.1804677603207021,
+          "path_length": 3.0754041219502657,
+          "min_clearance": 0.28794964065311446,
+          "time_to_goal": 24.8,
+          "reward_components": {
+            "progress": 27.241561419558412,
+            "step_penalty": -6.199999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 42,
+          "seed": 2000042,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 102,
+          "total_reward": 114.50024002611941,
+          "final_goal_distance": 0.19028589832177353,
+          "path_length": 2.547099279575049,
+          "min_clearance": 0.16388486574524025,
+          "time_to_goal": 20.400000000000002,
+          "reward_components": {
+            "progress": 19.60024002611942,
+            "step_penalty": -5.09999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 43,
+          "seed": 2000043,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 64,
+          "total_reward": 112.69332999859999,
+          "final_goal_distance": 0.17203147355596046,
+          "path_length": 1.6660920709557838,
+          "min_clearance": 0.12012725180913904,
+          "time_to_goal": 12.8,
+          "reward_components": {
+            "progress": 15.893329998599988,
+            "step_penalty": -3.1999999999999966,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 44,
+          "seed": 2000044,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 96,
+          "total_reward": 109.98522068796363,
+          "final_goal_distance": 0.19320850206027518,
+          "path_length": 1.8871789486147474,
+          "min_clearance": 0.29999317066662157,
+          "time_to_goal": 19.200000000000003,
+          "reward_components": {
+            "progress": 14.785220687963626,
+            "step_penalty": -4.799999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 45,
+          "seed": 2000045,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 59,
+          "total_reward": 112.16197319394583,
+          "final_goal_distance": 0.1838336952886126,
+          "path_length": 1.5447523294575516,
+          "min_clearance": 0.38817020856554874,
+          "time_to_goal": 11.8,
+          "reward_components": {
+            "progress": 15.111973193945806,
+            "step_penalty": -2.9499999999999975,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 46,
+          "seed": 2000046,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 152,
+          "total_reward": 113.77309879631754,
+          "final_goal_distance": 0.1844913412658955,
+          "path_length": 3.060484983958305,
+          "min_clearance": 0.068429728327033,
+          "time_to_goal": 30.400000000000002,
+          "reward_components": {
+            "progress": 21.37309879631752,
+            "step_penalty": -7.599999999999981,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 47,
+          "seed": 2000047,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 83,
+          "total_reward": 111.60806633578683,
+          "final_goal_distance": 0.17663724496965694,
+          "path_length": 2.0830704887956384,
+          "min_clearance": 0.3284730384089959,
+          "time_to_goal": 16.6,
+          "reward_components": {
+            "progress": 15.758066335786834,
+            "step_penalty": -4.149999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 48,
+          "seed": 2000048,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 57,
+          "total_reward": 110.53057780685805,
+          "final_goal_distance": 0.19484228060690018,
+          "path_length": 1.5268290719389919,
+          "min_clearance": 0.472672778586097,
+          "time_to_goal": 11.4,
+          "reward_components": {
+            "progress": 13.38057780685804,
+            "step_penalty": -2.849999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 49,
+          "seed": 2000049,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 117.41209278293205,
+          "final_goal_distance": 0.1785464221702928,
+          "path_length": 2.55200893074274,
+          "min_clearance": 0.20407847732702278,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 21.812092782932037,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        }
+      ]
+    },
+    "P3_dynamics": {
+      "policy_name": "P3",
+      "condition": "nominal",
+      "n_episodes": 50,
+      "successes": 49,
+      "collisions": 1,
+      "timeouts": 0,
+      "success_rate": 0.98,
+      "collision_rate": 0.02,
+      "timeout_rate": 0.0,
+      "mean_reward": 109.04842008793713,
+      "std_reward": 28.7583078926013,
+      "mean_steps_success": 105.75510204081633,
+      "mean_path_length_success": 2.144380131587766,
+      "mean_min_clearance": 0.2862112173820646,
+      "wilson_lower": 0.8950431352816304,
+      "wilson_upper": 0.9964608319110235,
+      "per_episode": [
+        {
+          "scenario_id": 0,
+          "seed": 2000000,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 156,
+          "total_reward": 105.81046376840997,
+          "final_goal_distance": 0.1815408556308859,
+          "path_length": 2.4407625585235664,
+          "min_clearance": 0.326803519687612,
+          "time_to_goal": 31.200000000000003,
+          "reward_components": {
+            "progress": 13.610463768409971,
+            "step_penalty": -7.79999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 1,
+          "seed": 2000001,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 121,
+          "total_reward": 115.68494315548422,
+          "final_goal_distance": 0.1915814191403108,
+          "path_length": 2.326778024621308,
+          "min_clearance": 0.2752157234181689,
+          "time_to_goal": 24.200000000000003,
+          "reward_components": {
+            "progress": 21.734943155484217,
+            "step_penalty": -6.0499999999999865,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 2,
+          "seed": 2000002,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 117,
+          "total_reward": 107.95292272540914,
+          "final_goal_distance": 0.19591577009230357,
+          "path_length": 1.9762650462426252,
+          "min_clearance": 0.21075820454457667,
+          "time_to_goal": 23.400000000000002,
+          "reward_components": {
+            "progress": 13.80292272540913,
+            "step_penalty": -5.849999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 3,
+          "seed": 2000003,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 66,
+          "total_reward": 111.88439783898,
+          "final_goal_distance": 0.18764208398694987,
+          "path_length": 1.736272399351001,
+          "min_clearance": 0.29246669086404764,
+          "time_to_goal": 13.200000000000001,
+          "reward_components": {
+            "progress": 15.184397838979987,
+            "step_penalty": -3.2999999999999963,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 4,
+          "seed": 2000004,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 109,
+          "total_reward": 118.63976140266595,
+          "final_goal_distance": 0.18586826398873682,
+          "path_length": 2.5278174641355875,
+          "min_clearance": 0.4193578721544924,
+          "time_to_goal": 21.8,
+          "reward_components": {
+            "progress": 24.089761402665932,
+            "step_penalty": -5.449999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 5,
+          "seed": 2000005,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 113,
+          "total_reward": 119.8778224732661,
+          "final_goal_distance": 0.18769116707927486,
+          "path_length": 2.6856715445034207,
+          "min_clearance": 0.13929361979115368,
+          "time_to_goal": 22.6,
+          "reward_components": {
+            "progress": 25.52782247326609,
+            "step_penalty": -5.649999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 6,
+          "seed": 2000006,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 109,
+          "total_reward": 113.97883496882022,
+          "final_goal_distance": 0.19650591677397974,
+          "path_length": 2.1804074417240904,
+          "min_clearance": 0.23604872597702753,
+          "time_to_goal": 21.8,
+          "reward_components": {
+            "progress": 19.428834968820226,
+            "step_penalty": -5.449999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 7,
+          "seed": 2000007,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 130,
+          "total_reward": 116.41927798918664,
+          "final_goal_distance": 0.1976368323546229,
+          "path_length": 2.822217986471951,
+          "min_clearance": 0.26052974434170106,
+          "time_to_goal": 26.0,
+          "reward_components": {
+            "progress": 22.919277989186646,
+            "step_penalty": -6.499999999999985,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 8,
+          "seed": 2000008,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 115.17241930831031,
+          "final_goal_distance": 0.1991452007813837,
+          "path_length": 2.0071735950373113,
+          "min_clearance": 0.27191263625057605,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 19.57241930831031,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 9,
+          "seed": 2000009,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 97,
+          "total_reward": 113.08013497551325,
+          "final_goal_distance": 0.1982808201093893,
+          "path_length": 2.058179190102965,
+          "min_clearance": 0.24781474566940165,
+          "time_to_goal": 19.400000000000002,
+          "reward_components": {
+            "progress": 17.93013497551325,
+            "step_penalty": -4.849999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 10,
+          "seed": 2000010,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 81,
+          "total_reward": 111.11266105191145,
+          "final_goal_distance": 0.18472877641700086,
+          "path_length": 1.6006047814339401,
+          "min_clearance": 0.11079466969890066,
+          "time_to_goal": 16.2,
+          "reward_components": {
+            "progress": 15.162661051911439,
+            "step_penalty": -4.049999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 11,
+          "seed": 2000011,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 103,
+          "total_reward": 112.97167627555773,
+          "final_goal_distance": 0.1969814726570639,
+          "path_length": 1.9903296758048243,
+          "min_clearance": 0.15254583773507047,
+          "time_to_goal": 20.6,
+          "reward_components": {
+            "progress": 18.12167627555773,
+            "step_penalty": -5.14999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 12,
+          "seed": 2000012,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 149,
+          "total_reward": 124.88756523493356,
+          "final_goal_distance": 0.18623239917584083,
+          "path_length": 3.628074313066898,
+          "min_clearance": 0.05000975979833107,
+          "time_to_goal": 29.8,
+          "reward_components": {
+            "progress": 32.33756523493354,
+            "step_penalty": -7.4499999999999815,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 13,
+          "seed": 2000013,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 93,
+          "total_reward": 112.14473705675465,
+          "final_goal_distance": 0.18461870164815225,
+          "path_length": 2.0419038062542674,
+          "min_clearance": 0.4082689740592844,
+          "time_to_goal": 18.6,
+          "reward_components": {
+            "progress": 16.79473705675465,
+            "step_penalty": -4.6499999999999915,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 14,
+          "seed": 2000014,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 85,
+          "total_reward": 114.4561440538869,
+          "final_goal_distance": 0.19817337750204086,
+          "path_length": 1.908622202575207,
+          "min_clearance": 0.24800939362234486,
+          "time_to_goal": 17.0,
+          "reward_components": {
+            "progress": 18.70614405388689,
+            "step_penalty": -4.249999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 15,
+          "seed": 2000015,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 101,
+          "total_reward": 109.76609270170641,
+          "final_goal_distance": 0.1948954849286359,
+          "path_length": 1.7579378863424062,
+          "min_clearance": 0.05691047803392661,
+          "time_to_goal": 20.200000000000003,
+          "reward_components": {
+            "progress": 14.81609270170641,
+            "step_penalty": -5.04999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 16,
+          "seed": 2000016,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 176,
+          "total_reward": 107.37194168102972,
+          "final_goal_distance": 0.19223379072628252,
+          "path_length": 2.788286517374217,
+          "min_clearance": 0.0788400063872335,
+          "time_to_goal": 35.2,
+          "reward_components": {
+            "progress": 16.171941681029733,
+            "step_penalty": -8.79999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 17,
+          "seed": 2000017,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 87,
+          "total_reward": 111.65990969438542,
+          "final_goal_distance": 0.19217937847962263,
+          "path_length": 1.8196454125083983,
+          "min_clearance": 0.2796467045588171,
+          "time_to_goal": 17.400000000000002,
+          "reward_components": {
+            "progress": 16.009909694385424,
+            "step_penalty": -4.3499999999999925,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 18,
+          "seed": 2000018,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 82,
+          "total_reward": 112.08430590824247,
+          "final_goal_distance": 0.18112771494334495,
+          "path_length": 1.7234964312985543,
+          "min_clearance": 0.1574323655258576,
+          "time_to_goal": 16.400000000000002,
+          "reward_components": {
+            "progress": 16.184305908242457,
+            "step_penalty": -4.099999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 19,
+          "seed": 2000019,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 83,
+          "total_reward": 113.185709305533,
+          "final_goal_distance": 0.1874257002461078,
+          "path_length": 1.8469222825393088,
+          "min_clearance": 0.38399375858228635,
+          "time_to_goal": 16.6,
+          "reward_components": {
+            "progress": 17.335709305532998,
+            "step_penalty": -4.149999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 20,
+          "seed": 2000020,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 90,
+          "total_reward": 112.84633648512097,
+          "final_goal_distance": 0.18816282755918926,
+          "path_length": 1.773486865907908,
+          "min_clearance": 0.44297740256403617,
+          "time_to_goal": 18.0,
+          "reward_components": {
+            "progress": 17.346336485120965,
+            "step_penalty": -4.499999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 21,
+          "seed": 2000021,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 90,
+          "total_reward": 116.79383533576103,
+          "final_goal_distance": 0.19648846863475056,
+          "path_length": 2.311253717131913,
+          "min_clearance": 0.2836175320415836,
+          "time_to_goal": 18.0,
+          "reward_components": {
+            "progress": 21.293835335761035,
+            "step_penalty": -4.499999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 22,
+          "seed": 2000022,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 113,
+          "total_reward": 112.71954274047334,
+          "final_goal_distance": 0.19679563572835734,
+          "path_length": 2.13293699529022,
+          "min_clearance": 0.1832868975179785,
+          "time_to_goal": 22.6,
+          "reward_components": {
+            "progress": 18.36954274047335,
+            "step_penalty": -5.649999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 23,
+          "seed": 2000023,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 304,
+          "total_reward": 105.94602845258875,
+          "final_goal_distance": 0.18746079849648642,
+          "path_length": 3.878794933464375,
+          "min_clearance": 0.17247788345153592,
+          "time_to_goal": 60.800000000000004,
+          "reward_components": {
+            "progress": 21.14602845258874,
+            "step_penalty": -15.200000000000081,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 24,
+          "seed": 2000024,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 118,
+          "total_reward": 108.40796934682227,
+          "final_goal_distance": 0.19592872753312945,
+          "path_length": 1.997358444202692,
+          "min_clearance": 0.3090230968987102,
+          "time_to_goal": 23.6,
+          "reward_components": {
+            "progress": 14.30796934682228,
+            "step_penalty": -5.899999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 25,
+          "seed": 2000025,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 182,
+          "total_reward": 115.23706668036809,
+          "final_goal_distance": 0.19506951267300465,
+          "path_length": 2.8835004990175364,
+          "min_clearance": 0.214932976388424,
+          "time_to_goal": 36.4,
+          "reward_components": {
+            "progress": 24.33706668036807,
+            "step_penalty": -9.099999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 26,
+          "seed": 2000026,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 103,
+          "total_reward": 110.8597492456891,
+          "final_goal_distance": 0.19129400320713916,
+          "path_length": 1.62020337793976,
+          "min_clearance": 0.40420476842925446,
+          "time_to_goal": 20.6,
+          "reward_components": {
+            "progress": 16.009749245689093,
+            "step_penalty": -5.14999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 27,
+          "seed": 2000027,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 74,
+          "total_reward": 112.7010336497658,
+          "final_goal_distance": 0.19592035965934526,
+          "path_length": 1.7640135129913683,
+          "min_clearance": 0.6907368921582421,
+          "time_to_goal": 14.8,
+          "reward_components": {
+            "progress": 16.40103364976581,
+            "step_penalty": -3.699999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 28,
+          "seed": 2000028,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 76,
+          "total_reward": 112.10579483669282,
+          "final_goal_distance": 0.19017558226435854,
+          "path_length": 1.8881279913336038,
+          "min_clearance": 0.758099796194456,
+          "time_to_goal": 15.200000000000001,
+          "reward_components": {
+            "progress": 15.90579483669282,
+            "step_penalty": -3.7999999999999945,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 29,
+          "seed": 2000029,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 67,
+          "total_reward": 111.05639691047264,
+          "final_goal_distance": 0.18071719042944456,
+          "path_length": 1.730313839502633,
+          "min_clearance": 0.6191005005204064,
+          "time_to_goal": 13.4,
+          "reward_components": {
+            "progress": 14.40639691047264,
+            "step_penalty": -3.349999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 30,
+          "seed": 2000030,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 70,
+          "total_reward": -90.6573020433048,
+          "final_goal_distance": 0.9949915303626596,
+          "path_length": 1.330418515764177,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 12.842697956695195,
+            "step_penalty": -3.4999999999999956,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 31,
+          "seed": 2000031,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 79,
+          "total_reward": 111.6889247835777,
+          "final_goal_distance": 0.18670050170767047,
+          "path_length": 1.6577672962099312,
+          "min_clearance": 0.49249008760180757,
+          "time_to_goal": 15.8,
+          "reward_components": {
+            "progress": 15.638924783577686,
+            "step_penalty": -3.949999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 32,
+          "seed": 2000032,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 111.30652845364946,
+          "final_goal_distance": 0.18779330816669004,
+          "path_length": 1.6735147270560267,
+          "min_clearance": 0.35584050092268515,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 14.756528453649457,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 33,
+          "seed": 2000033,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 73,
+          "total_reward": 114.85186918040566,
+          "final_goal_distance": 0.19628015044837163,
+          "path_length": 1.944567701518536,
+          "min_clearance": 0.4766612025038801,
+          "time_to_goal": 14.600000000000001,
+          "reward_components": {
+            "progress": 18.501869180405645,
+            "step_penalty": -3.649999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 34,
+          "seed": 2000034,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 83,
+          "total_reward": 112.60682753645683,
+          "final_goal_distance": 0.19877547607012963,
+          "path_length": 1.955324829518795,
+          "min_clearance": 0.15750503222251255,
+          "time_to_goal": 16.6,
+          "reward_components": {
+            "progress": 16.756827536456832,
+            "step_penalty": -4.149999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 35,
+          "seed": 2000035,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 108,
+          "total_reward": 117.76313804492045,
+          "final_goal_distance": 0.19493161263015985,
+          "path_length": 2.4963608746044352,
+          "min_clearance": 0.20009733815854858,
+          "time_to_goal": 21.6,
+          "reward_components": {
+            "progress": 23.163138044920455,
+            "step_penalty": -5.399999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 36,
+          "seed": 2000036,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 77,
+          "total_reward": 112.92757144547147,
+          "final_goal_distance": 0.18415471619146065,
+          "path_length": 1.856207532808185,
+          "min_clearance": 0.5170083126146845,
+          "time_to_goal": 15.4,
+          "reward_components": {
+            "progress": 16.77757144547147,
+            "step_penalty": -3.8499999999999943,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 37,
+          "seed": 2000037,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 107,
+          "total_reward": 114.48578101121362,
+          "final_goal_distance": 0.19848450233418993,
+          "path_length": 2.0965604179166255,
+          "min_clearance": 0.13820502409392776,
+          "time_to_goal": 21.400000000000002,
+          "reward_components": {
+            "progress": 19.835781011213612,
+            "step_penalty": -5.349999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 38,
+          "seed": 2000038,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 101,
+          "total_reward": 117.01913096959728,
+          "final_goal_distance": 0.198071328853584,
+          "path_length": 2.3570928914844997,
+          "min_clearance": 0.33792601642131315,
+          "time_to_goal": 20.200000000000003,
+          "reward_components": {
+            "progress": 22.06913096959728,
+            "step_penalty": -5.04999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 39,
+          "seed": 2000039,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 85,
+          "total_reward": 117.20069644142184,
+          "final_goal_distance": 0.18962314546055614,
+          "path_length": 2.2755465406179427,
+          "min_clearance": 0.4435169404285628,
+          "time_to_goal": 17.0,
+          "reward_components": {
+            "progress": 21.450696441421844,
+            "step_penalty": -4.249999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 40,
+          "seed": 2000040,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 58,
+          "total_reward": 111.51179847598932,
+          "final_goal_distance": 0.19596677439973428,
+          "path_length": 1.4452273343503477,
+          "min_clearance": 0.5104856430031371,
+          "time_to_goal": 11.600000000000001,
+          "reward_components": {
+            "progress": 14.411798475989306,
+            "step_penalty": -2.8999999999999977,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 41,
+          "seed": 2000041,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 136,
+          "total_reward": 120.27551794766597,
+          "final_goal_distance": 0.1970721075099453,
+          "path_length": 2.872060651089996,
+          "min_clearance": 0.3296283038467198,
+          "time_to_goal": 27.200000000000003,
+          "reward_components": {
+            "progress": 27.075517947665976,
+            "step_penalty": -6.799999999999984,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 42,
+          "seed": 2000042,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 121,
+          "total_reward": 113.4605939658133,
+          "final_goal_distance": 0.19925050435238384,
+          "path_length": 2.3784753554686895,
+          "min_clearance": 0.009504717780937963,
+          "time_to_goal": 24.200000000000003,
+          "reward_components": {
+            "progress": 19.510593965813317,
+            "step_penalty": -6.0499999999999865,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 43,
+          "seed": 2000043,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 75,
+          "total_reward": 111.9469924749701,
+          "final_goal_distance": 0.19166522591895,
+          "path_length": 1.6952484764344995,
+          "min_clearance": 0.0160715184607559,
+          "time_to_goal": 15.0,
+          "reward_components": {
+            "progress": 15.696992474970095,
+            "step_penalty": -3.7499999999999947,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 44,
+          "seed": 2000044,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 94,
+          "total_reward": 110.0752386922552,
+          "final_goal_distance": 0.19420670163111886,
+          "path_length": 1.6360477345995603,
+          "min_clearance": 0.4500330150567564,
+          "time_to_goal": 18.8,
+          "reward_components": {
+            "progress": 14.775238692255199,
+            "step_penalty": -4.699999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 45,
+          "seed": 2000045,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 65,
+          "total_reward": 111.79508371967766,
+          "final_goal_distance": 0.190522642715428,
+          "path_length": 1.5807661657780407,
+          "min_clearance": 0.2544051571160761,
+          "time_to_goal": 13.0,
+          "reward_components": {
+            "progress": 15.04508371967766,
+            "step_penalty": -3.2499999999999964,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 46,
+          "seed": 2000046,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 144,
+          "total_reward": 114.03147027189334,
+          "final_goal_distance": 0.19865419370831208,
+          "path_length": 2.35353118110448,
+          "min_clearance": 0.1854411913702121,
+          "time_to_goal": 28.8,
+          "reward_components": {
+            "progress": 21.23147027189335,
+            "step_penalty": -7.199999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 47,
+          "seed": 2000047,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 168,
+          "total_reward": 107.13574342655635,
+          "final_goal_distance": 0.198869535892707,
+          "path_length": 3.2752225052565325,
+          "min_clearance": 0.08371497592861661,
+          "time_to_goal": 33.6,
+          "reward_components": {
+            "progress": 15.535743426556333,
+            "step_penalty": -8.399999999999984,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 48,
+          "seed": 2000048,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 57,
+          "total_reward": 110.49908502976626,
+          "final_goal_distance": 0.19799155831607765,
+          "path_length": 1.3585740722715858,
+          "min_clearance": 0.6265367073931214,
+          "time_to_goal": 11.4,
+          "reward_components": {
+            "progress": 13.349085029766263,
+            "step_penalty": -2.849999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 49,
+          "seed": 2000049,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 119,
+          "total_reward": 115.68083931511816,
+          "final_goal_distance": 0.19667176895167884,
+          "path_length": 2.3191714230179787,
+          "min_clearance": 0.04037800731353898,
+          "time_to_goal": 23.8,
+          "reward_components": {
+            "progress": 21.630839315118173,
+            "step_penalty": -5.949999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        }
+      ]
+    },
+    "P4_combined": {
+      "policy_name": "P4",
+      "condition": "nominal",
+      "n_episodes": 50,
+      "successes": 49,
+      "collisions": 1,
+      "timeouts": 0,
+      "success_rate": 0.98,
+      "collision_rate": 0.02,
+      "timeout_rate": 0.0,
+      "mean_reward": 109.02981229675035,
+      "std_reward": 30.947856133691467,
+      "mean_steps_success": 101.48979591836735,
+      "mean_path_length_success": 2.067286540834728,
+      "mean_min_clearance": 0.2917436383442037,
+      "wilson_lower": 0.8950431352816304,
+      "wilson_upper": 0.9964608319110235,
+      "per_episode": [
+        {
+          "scenario_id": 0,
+          "seed": 2000000,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 124,
+          "total_reward": 107.26590251525566,
+          "final_goal_distance": 0.1959969809463181,
+          "path_length": 1.8657029758952557,
+          "min_clearance": 0.20386463927979448,
+          "time_to_goal": 24.8,
+          "reward_components": {
+            "progress": 13.465902515255646,
+            "step_penalty": -6.199999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 1,
+          "seed": 2000001,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 123,
+          "total_reward": 115.50520461233677,
+          "final_goal_distance": 0.19955527345505564,
+          "path_length": 2.238100401498377,
+          "min_clearance": 0.34903477151653617,
+          "time_to_goal": 24.6,
+          "reward_components": {
+            "progress": 21.655204612336767,
+            "step_penalty": -6.149999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 2,
+          "seed": 2000002,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 99,
+          "total_reward": 108.92376375381095,
+          "final_goal_distance": 0.1888316672521224,
+          "path_length": 1.7236824992671609,
+          "min_clearance": 0.30312297954146256,
+          "time_to_goal": 19.8,
+          "reward_components": {
+            "progress": 13.873763753810934,
+            "step_penalty": -4.94999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 3,
+          "seed": 2000003,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 66,
+          "total_reward": 111.91264687474906,
+          "final_goal_distance": 0.18481718041004327,
+          "path_length": 1.6586354207620027,
+          "min_clearance": 0.30646349550153007,
+          "time_to_goal": 13.200000000000001,
+          "reward_components": {
+            "progress": 15.212646874749055,
+            "step_penalty": -3.2999999999999963,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 4,
+          "seed": 2000004,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 110,
+          "total_reward": 118.45999994146607,
+          "final_goal_distance": 0.19884441010872456,
+          "path_length": 2.5222224375419313,
+          "min_clearance": 0.44487481273465823,
+          "time_to_goal": 22.0,
+          "reward_components": {
+            "progress": 23.95999994146607,
+            "step_penalty": -5.4999999999999885,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 5,
+          "seed": 2000005,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 132,
+          "total_reward": 118.85171494622753,
+          "final_goal_distance": 0.19530191978313072,
+          "path_length": 2.711489602793008,
+          "min_clearance": 0.16805469231804437,
+          "time_to_goal": 26.400000000000002,
+          "reward_components": {
+            "progress": 25.451714946227522,
+            "step_penalty": -6.5999999999999845,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 6,
+          "seed": 2000006,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 96,
+          "total_reward": 114.61535318508787,
+          "final_goal_distance": 0.19785409514721589,
+          "path_length": 2.1134334260411567,
+          "min_clearance": 0.2099797393111663,
+          "time_to_goal": 19.200000000000003,
+          "reward_components": {
+            "progress": 19.415353185087852,
+            "step_penalty": -4.799999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 7,
+          "seed": 2000007,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 130,
+          "total_reward": 116.53023408674682,
+          "final_goal_distance": 0.18654122259860417,
+          "path_length": 2.7908365925028926,
+          "min_clearance": 0.1579312217414085,
+          "time_to_goal": 26.0,
+          "reward_components": {
+            "progress": 23.030234086746812,
+            "step_penalty": -6.499999999999985,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 8,
+          "seed": 2000008,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": 115.67499060678072,
+          "final_goal_distance": 0.18888807093434207,
+          "path_length": 2.0135779464617367,
+          "min_clearance": 0.28968428891135,
+          "time_to_goal": 16.0,
+          "reward_components": {
+            "progress": 19.674990606780735,
+            "step_penalty": -3.999999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 9,
+          "seed": 2000009,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 103,
+          "total_reward": 112.82265335688868,
+          "final_goal_distance": 0.19402898197184668,
+          "path_length": 2.1808410465717314,
+          "min_clearance": 0.24106979392527572,
+          "time_to_goal": 20.6,
+          "reward_components": {
+            "progress": 17.972653356888678,
+            "step_penalty": -5.14999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 10,
+          "seed": 2000010,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 82,
+          "total_reward": 110.92574506014341,
+          "final_goal_distance": 0.19842037559380357,
+          "path_length": 1.5566259880922735,
+          "min_clearance": 0.11186883970885307,
+          "time_to_goal": 16.400000000000002,
+          "reward_components": {
+            "progress": 15.025745060143404,
+            "step_penalty": -4.099999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 11,
+          "seed": 2000011,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 97,
+          "total_reward": 113.27707125207478,
+          "final_goal_distance": 0.1964419750053582,
+          "path_length": 1.9768315738812092,
+          "min_clearance": 0.15590510153262083,
+          "time_to_goal": 19.400000000000002,
+          "reward_components": {
+            "progress": 18.127071252074774,
+            "step_penalty": -4.849999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 12,
+          "seed": 2000012,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 163,
+          "total_reward": 124.20527532380846,
+          "final_goal_distance": 0.1844613902883497,
+          "path_length": 3.586682485118511,
+          "min_clearance": 0.029964870542014146,
+          "time_to_goal": 32.6,
+          "reward_components": {
+            "progress": 32.355275323808456,
+            "step_penalty": -8.14999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 13,
+          "seed": 2000013,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 95,
+          "total_reward": 112.05870352825052,
+          "final_goal_distance": 0.18322205449856455,
+          "path_length": 1.8886245451122523,
+          "min_clearance": 0.4169112151728056,
+          "time_to_goal": 19.0,
+          "reward_components": {
+            "progress": 16.808703528250525,
+            "step_penalty": -4.749999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 14,
+          "seed": 2000014,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": 114.70840709125847,
+          "final_goal_distance": 0.1979470737648843,
+          "path_length": 1.9410363069176668,
+          "min_clearance": 0.31486526579107244,
+          "time_to_goal": 16.0,
+          "reward_components": {
+            "progress": 18.70840709125847,
+            "step_penalty": -3.999999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 15,
+          "seed": 2000015,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 92,
+          "total_reward": 110.19890014735293,
+          "final_goal_distance": 0.19661474036398555,
+          "path_length": 1.6326160877197982,
+          "min_clearance": 0.09444640445228424,
+          "time_to_goal": 18.400000000000002,
+          "reward_components": {
+            "progress": 14.798900147352914,
+            "step_penalty": -4.599999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 16,
+          "seed": 2000016,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 96,
+          "total_reward": 111.36834250049343,
+          "final_goal_distance": 0.19259370877991244,
+          "path_length": 1.7738845865987238,
+          "min_clearance": 0.018971837296305097,
+          "time_to_goal": 19.200000000000003,
+          "reward_components": {
+            "progress": 16.168342500493427,
+            "step_penalty": -4.799999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 17,
+          "seed": 2000017,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 86,
+          "total_reward": 111.7220987351153,
+          "final_goal_distance": 0.19096047440663524,
+          "path_length": 1.7461893625929943,
+          "min_clearance": 0.28481335592798784,
+          "time_to_goal": 17.2,
+          "reward_components": {
+            "progress": 16.022098735115293,
+            "step_penalty": -4.299999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 18,
+          "seed": 2000018,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 112.6503806225011,
+          "final_goal_distance": 0.18952024351748095,
+          "path_length": 1.6841511655971402,
+          "min_clearance": 0.2100057268858021,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 16.100380622501095,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 19,
+          "seed": 2000019,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": 113.21745867539974,
+          "final_goal_distance": 0.1992507632594328,
+          "path_length": 1.7768055529519913,
+          "min_clearance": 0.39937631609179425,
+          "time_to_goal": 16.0,
+          "reward_components": {
+            "progress": 17.217458675399744,
+            "step_penalty": -3.999999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 20,
+          "seed": 2000020,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 99,
+          "total_reward": 112.30951726442298,
+          "final_goal_distance": 0.19684474962898982,
+          "path_length": 1.743560275565833,
+          "min_clearance": 0.48528521689100623,
+          "time_to_goal": 19.8,
+          "reward_components": {
+            "progress": 17.259517264422968,
+            "step_penalty": -4.94999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 21,
+          "seed": 2000021,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 92,
+          "total_reward": 116.7230495495587,
+          "final_goal_distance": 0.1935670472549845,
+          "path_length": 2.4123834848776475,
+          "min_clearance": 0.34149855622419434,
+          "time_to_goal": 18.400000000000002,
+          "reward_components": {
+            "progress": 21.323049549558693,
+            "step_penalty": -4.599999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 22,
+          "seed": 2000022,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 107,
+          "total_reward": 112.99075461045744,
+          "final_goal_distance": 0.19967444872994847,
+          "path_length": 1.9717948418855669,
+          "min_clearance": 0.2619621453414607,
+          "time_to_goal": 21.400000000000002,
+          "reward_components": {
+            "progress": 18.34075461045743,
+            "step_penalty": -5.349999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 23,
+          "seed": 2000023,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 139,
+          "total_reward": 114.08932116124099,
+          "final_goal_distance": 0.19813152763126135,
+          "path_length": 2.5682305844686906,
+          "min_clearance": 0.17776856666298502,
+          "time_to_goal": 27.8,
+          "reward_components": {
+            "progress": 21.039321161241,
+            "step_penalty": -6.949999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 24,
+          "seed": 2000024,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 98,
+          "total_reward": 109.44864727234878,
+          "final_goal_distance": 0.19186093498047868,
+          "path_length": 1.7565241890773178,
+          "min_clearance": 0.3159497525036421,
+          "time_to_goal": 19.6,
+          "reward_components": {
+            "progress": 14.348647272348789,
+            "step_penalty": -4.899999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 25,
+          "seed": 2000025,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 124,
+          "total_reward": 118.10369058067997,
+          "final_goal_distance": 0.19840712264181543,
+          "path_length": 2.5392556098103545,
+          "min_clearance": 0.20303087645680884,
+          "time_to_goal": 24.8,
+          "reward_components": {
+            "progress": 24.303690580679966,
+            "step_penalty": -6.199999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 26,
+          "seed": 2000026,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 90,
+          "total_reward": 111.46100056014153,
+          "final_goal_distance": 0.19616887176189626,
+          "path_length": 1.61257908962667,
+          "min_clearance": 0.4273392702446748,
+          "time_to_goal": 18.0,
+          "reward_components": {
+            "progress": 15.961000560141525,
+            "step_penalty": -4.499999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 27,
+          "seed": 2000027,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 72,
+          "total_reward": 112.89470897322475,
+          "final_goal_distance": 0.18655282731344972,
+          "path_length": 1.7092617282271387,
+          "min_clearance": 0.5777291640730292,
+          "time_to_goal": 14.4,
+          "reward_components": {
+            "progress": 16.494708973224768,
+            "step_penalty": -3.599999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 28,
+          "seed": 2000028,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 76,
+          "total_reward": 112.04906595840133,
+          "final_goal_distance": 0.19584847009350906,
+          "path_length": 1.7540694547444584,
+          "min_clearance": 0.6799686031503288,
+          "time_to_goal": 15.200000000000001,
+          "reward_components": {
+            "progress": 15.849065958401313,
+            "step_penalty": -3.7999999999999945,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 29,
+          "seed": 2000029,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 70,
+          "total_reward": 110.72920260068157,
+          "final_goal_distance": 0.1984366214085504,
+          "path_length": 1.6938238972797999,
+          "min_clearance": 0.6361162667730809,
+          "time_to_goal": 14.0,
+          "reward_components": {
+            "progress": 14.229202600681578,
+            "step_penalty": -3.4999999999999956,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 30,
+          "seed": 2000030,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 82,
+          "total_reward": 116.79816029000013,
+          "final_goal_distance": 0.18944529703216606,
+          "path_length": 2.186189487129449,
+          "min_clearance": 0.0615226236333135,
+          "time_to_goal": 16.400000000000002,
+          "reward_components": {
+            "progress": 20.89816029000014,
+            "step_penalty": -4.099999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 31,
+          "seed": 2000031,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": 111.55739346438969,
+          "final_goal_distance": 0.19485363362647015,
+          "path_length": 1.6358585368841885,
+          "min_clearance": 0.4520568403223487,
+          "time_to_goal": 16.0,
+          "reward_components": {
+            "progress": 15.557393464389692,
+            "step_penalty": -3.999999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 32,
+          "seed": 2000032,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 72,
+          "total_reward": 111.15305370985917,
+          "final_goal_distance": 0.18814078254571984,
+          "path_length": 1.656493084542453,
+          "min_clearance": 0.39292949144272304,
+          "time_to_goal": 14.4,
+          "reward_components": {
+            "progress": 14.753053709859158,
+            "step_penalty": -3.599999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 33,
+          "seed": 2000033,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 67,
+          "total_reward": 115.29696846095455,
+          "final_goal_distance": 0.1817702223934815,
+          "path_length": 1.8873950815200808,
+          "min_clearance": 0.484148346545882,
+          "time_to_goal": 13.4,
+          "reward_components": {
+            "progress": 18.646968460954543,
+            "step_penalty": -3.349999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 34,
+          "seed": 2000034,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 78,
+          "total_reward": -106.00233402914202,
+          "final_goal_distance": 2.084691632630016,
+          "path_length": 1.1769827111810451,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": -2.102334029142028,
+            "step_penalty": -3.899999999999994,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 35,
+          "seed": 2000035,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 109,
+          "total_reward": 117.77770178196624,
+          "final_goal_distance": 0.18847523892558024,
+          "path_length": 2.499928443208337,
+          "min_clearance": 0.17183533022235464,
+          "time_to_goal": 21.8,
+          "reward_components": {
+            "progress": 23.22770178196626,
+            "step_penalty": -5.449999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 36,
+          "seed": 2000036,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 84,
+          "total_reward": 112.46351664602135,
+          "final_goal_distance": 0.1955601961364724,
+          "path_length": 1.8865037708356975,
+          "min_clearance": 0.5309359960719675,
+          "time_to_goal": 16.8,
+          "reward_components": {
+            "progress": 16.66351664602135,
+            "step_penalty": -4.199999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 37,
+          "seed": 2000037,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 115.47842169813585,
+          "final_goal_distance": 0.19422043364196698,
+          "path_length": 2.1388243381306533,
+          "min_clearance": 0.20861337721070328,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 19.878421698135863,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 38,
+          "seed": 2000038,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 105,
+          "total_reward": 116.95546846002205,
+          "final_goal_distance": 0.1844375798111072,
+          "path_length": 2.339983805939556,
+          "min_clearance": 0.2640380694786042,
+          "time_to_goal": 21.0,
+          "reward_components": {
+            "progress": 22.205468460022065,
+            "step_penalty": -5.249999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 39,
+          "seed": 2000039,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 84,
+          "total_reward": 117.31664200414059,
+          "final_goal_distance": 0.18302858918868156,
+          "path_length": 2.2382572652399544,
+          "min_clearance": 0.41255494269537907,
+          "time_to_goal": 16.8,
+          "reward_components": {
+            "progress": 21.51664200414058,
+            "step_penalty": -4.199999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 40,
+          "seed": 2000040,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 69,
+          "total_reward": 111.04026610956696,
+          "final_goal_distance": 0.18812001104196907,
+          "path_length": 1.4512130732461808,
+          "min_clearance": 0.5055820173898188,
+          "time_to_goal": 13.8,
+          "reward_components": {
+            "progress": 14.490266109566965,
+            "step_penalty": -3.4499999999999957,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 41,
+          "seed": 2000041,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 145,
+          "total_reward": 119.80133729794748,
+          "final_goal_distance": 0.19949017248179535,
+          "path_length": 2.8186029124259955,
+          "min_clearance": 0.3636238418170491,
+          "time_to_goal": 29.0,
+          "reward_components": {
+            "progress": 27.051337297947484,
+            "step_penalty": -7.249999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 42,
+          "seed": 2000042,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 101,
+          "total_reward": 114.5744772817342,
+          "final_goal_distance": 0.18786217276029468,
+          "path_length": 2.090872892551125,
+          "min_clearance": 0.2650815440663544,
+          "time_to_goal": 20.200000000000003,
+          "reward_components": {
+            "progress": 19.624477281734194,
+            "step_penalty": -5.04999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 43,
+          "seed": 2000043,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 93,
+          "total_reward": 110.96594545007792,
+          "final_goal_distance": 0.19976992840816632,
+          "path_length": 1.900062284767628,
+          "min_clearance": 0.0,
+          "time_to_goal": 18.6,
+          "reward_components": {
+            "progress": 15.61594545007793,
+            "step_penalty": -4.6499999999999915,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 44,
+          "seed": 2000044,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 105,
+          "total_reward": 109.53862975788829,
+          "final_goal_distance": 0.1928675950678108,
+          "path_length": 1.5942609059438118,
+          "min_clearance": 0.4229600697551852,
+          "time_to_goal": 21.0,
+          "reward_components": {
+            "progress": 14.788629757888271,
+            "step_penalty": -5.249999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 45,
+          "seed": 2000045,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 82,
+          "total_reward": 110.87579697917025,
+          "final_goal_distance": 0.19745131676616895,
+          "path_length": 1.5731940348073843,
+          "min_clearance": 0.227896443296901,
+          "time_to_goal": 16.400000000000002,
+          "reward_components": {
+            "progress": 14.975796979170243,
+            "step_penalty": -4.099999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 46,
+          "seed": 2000046,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 142,
+          "total_reward": 114.17822431304157,
+          "final_goal_distance": 0.19397878959349166,
+          "path_length": 2.2925744679942732,
+          "min_clearance": 0.1596855093577575,
+          "time_to_goal": 28.400000000000002,
+          "reward_components": {
+            "progress": 21.27822431304156,
+            "step_penalty": -7.099999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 47,
+          "seed": 2000047,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 321,
+          "total_reward": 99.55564687798005,
+          "final_goal_distance": 0.19187919075033666,
+          "path_length": 4.266725643798712,
+          "min_clearance": 0.14906711518607985,
+          "time_to_goal": 64.2,
+          "reward_components": {
+            "progress": 15.605646877980035,
+            "step_penalty": -16.050000000000093,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 48,
+          "seed": 2000048,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 66,
+          "total_reward": 110.19820074624347,
+          "final_goal_distance": 0.1830799866683581,
+          "path_length": 1.372945960052312,
+          "min_clearance": 0.6530327272464129,
+          "time_to_goal": 13.200000000000001,
+          "reward_components": {
+            "progress": 13.49820074624346,
+            "step_penalty": -3.2999999999999963,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 49,
+          "seed": 2000049,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 108,
+          "total_reward": 116.27329219061238,
+          "final_goal_distance": 0.1924264814022599,
+          "path_length": 2.3237013524025683,
+          "min_clearance": 0.043759844967372855,
+          "time_to_goal": 21.6,
+          "reward_components": {
+            "progress": 21.673292190612376,
+            "step_penalty": -5.399999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        }
+      ]
+    },
+    "P2_best_checkpoint": {
+      "policy_name": "P2_best",
+      "condition": "nominal",
+      "n_episodes": 50,
+      "successes": 43,
+      "collisions": 2,
+      "timeouts": 5,
+      "success_rate": 0.86,
+      "collision_rate": 0.04,
+      "timeout_rate": 0.1,
+      "mean_reward": 90.88799342901933,
+      "std_reward": 55.02050889279876,
+      "mean_steps_success": 135.65116279069767,
+      "mean_path_length_success": 2.3411460763798635,
+      "mean_min_clearance": 0.2773320136973387,
+      "wilson_lower": 0.738135428014719,
+      "wilson_upper": 0.9304925473797714,
+      "per_episode": [
+        {
+          "scenario_id": 0,
+          "seed": 2000000,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 161,
+          "total_reward": 105.42676650328839,
+          "final_goal_distance": 0.19491058214304455,
+          "path_length": 2.2648423773888506,
+          "min_clearance": 0.2940500773219381,
+          "time_to_goal": 32.2,
+          "reward_components": {
+            "progress": 13.476766503288378,
+            "step_penalty": -8.04999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 1,
+          "seed": 2000001,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 152,
+          "total_reward": 114.1416759057509,
+          "final_goal_distance": 0.19090814411364362,
+          "path_length": 2.374529489222913,
+          "min_clearance": 0.3868056872199973,
+          "time_to_goal": 30.400000000000002,
+          "reward_components": {
+            "progress": 21.741675905750885,
+            "step_penalty": -7.599999999999981,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 2,
+          "seed": 2000002,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 199,
+          "total_reward": -116.38126225430484,
+          "final_goal_distance": 2.219334268063698,
+          "path_length": 1.2833606011793024,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": -6.4312622543048175,
+            "step_penalty": -9.950000000000006,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 3,
+          "seed": 2000003,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 84,
+          "total_reward": 110.98995007560428,
+          "final_goal_distance": 0.1870868603245195,
+          "path_length": 1.7642007872555405,
+          "min_clearance": 0.2820664420216734,
+          "time_to_goal": 16.8,
+          "reward_components": {
+            "progress": 15.18995007560429,
+            "step_penalty": -4.199999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 4,
+          "seed": 2000004,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 144,
+          "total_reward": 116.80665210777231,
+          "final_goal_distance": 0.19417919347810045,
+          "path_length": 2.7252157923113542,
+          "min_clearance": 0.41780230846216815,
+          "time_to_goal": 28.8,
+          "reward_components": {
+            "progress": 24.00665210777229,
+            "step_penalty": -7.199999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 5,
+          "seed": 2000005,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 147,
+          "total_reward": 118.15248578474626,
+          "final_goal_distance": 0.19022483593125847,
+          "path_length": 2.8517838618904365,
+          "min_clearance": 0.34475146567440296,
+          "time_to_goal": 29.400000000000002,
+          "reward_components": {
+            "progress": 25.50248578474625,
+            "step_penalty": -7.349999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 6,
+          "seed": 2000006,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 150,
+          "total_reward": 111.92010625750065,
+          "final_goal_distance": 0.19737878790593666,
+          "path_length": 2.50507315565832,
+          "min_clearance": 0.18549927152940193,
+          "time_to_goal": 30.0,
+          "reward_components": {
+            "progress": 19.420106257500656,
+            "step_penalty": -7.499999999999981,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 7,
+          "seed": 2000007,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 173,
+          "total_reward": 114.25950418811317,
+          "final_goal_distance": 0.19861421246196878,
+          "path_length": 2.983014562223106,
+          "min_clearance": 0.13388157339583945,
+          "time_to_goal": 34.6,
+          "reward_components": {
+            "progress": 22.909504188113168,
+            "step_penalty": -8.649999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 8,
+          "seed": 2000008,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 114,
+          "total_reward": 113.99856216965198,
+          "final_goal_distance": 0.18653091464721672,
+          "path_length": 2.1878215640131375,
+          "min_clearance": 0.41886746498219674,
+          "time_to_goal": 22.8,
+          "reward_components": {
+            "progress": 19.698562169651975,
+            "step_penalty": -5.699999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 9,
+          "seed": 2000009,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 142,
+          "total_reward": 110.89886514036739,
+          "final_goal_distance": 0.19140780362397636,
+          "path_length": 2.379995544562117,
+          "min_clearance": 0.14373820288393835,
+          "time_to_goal": 28.400000000000002,
+          "reward_components": {
+            "progress": 17.998865140367382,
+            "step_penalty": -7.099999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 10,
+          "seed": 2000010,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -15.848324735870515,
+          "final_goal_distance": 1.5358273551951978,
+          "path_length": 4.444692264217881,
+          "min_clearance": 0.029321817325825297,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 1.6516752641294765,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 11,
+          "seed": 2000011,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 116,
+          "total_reward": 112.41409190430379,
+          "final_goal_distance": 0.1877399097824574,
+          "path_length": 2.1157619556784635,
+          "min_clearance": 0.24581745679347333,
+          "time_to_goal": 23.200000000000003,
+          "reward_components": {
+            "progress": 18.214091904303793,
+            "step_penalty": -5.799999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 12,
+          "seed": 2000012,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 196,
+          "total_reward": 122.48084549932874,
+          "final_goal_distance": 0.1919043727363243,
+          "path_length": 3.6300940728653246,
+          "min_clearance": 0.0,
+          "time_to_goal": 39.2,
+          "reward_components": {
+            "progress": 32.28084549932869,
+            "step_penalty": -9.800000000000004,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 13,
+          "seed": 2000013,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 124,
+          "total_reward": 110.5591726371268,
+          "final_goal_distance": 0.18817514361093718,
+          "path_length": 2.066144470330328,
+          "min_clearance": 0.31384730143256045,
+          "time_to_goal": 24.8,
+          "reward_components": {
+            "progress": 16.7591726371268,
+            "step_penalty": -6.199999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 14,
+          "seed": 2000014,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 117,
+          "total_reward": 112.9354764369592,
+          "final_goal_distance": 0.19024013919481042,
+          "path_length": 2.2389277735166253,
+          "min_clearance": 0.5474677196164515,
+          "time_to_goal": 23.400000000000002,
+          "reward_components": {
+            "progress": 18.785476436959197,
+            "step_penalty": -5.849999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 15,
+          "seed": 2000015,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 198,
+          "total_reward": 105.02131988324331,
+          "final_goal_distance": 0.18437276677494777,
+          "path_length": 2.575507842348887,
+          "min_clearance": 0.17388015659676004,
+          "time_to_goal": 39.6,
+          "reward_components": {
+            "progress": 14.92131988324329,
+            "step_penalty": -9.900000000000006,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 16,
+          "seed": 2000016,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 131,
+          "total_reward": 109.62272636054531,
+          "final_goal_distance": 0.19215532277472377,
+          "path_length": 2.058772611441089,
+          "min_clearance": 0.035664727061887294,
+          "time_to_goal": 26.200000000000003,
+          "reward_components": {
+            "progress": 16.17272636054532,
+            "step_penalty": -6.549999999999985,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 17,
+          "seed": 2000017,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 214,
+          "total_reward": 105.26063945192777,
+          "final_goal_distance": 0.1971064027253872,
+          "path_length": 2.871289000902325,
+          "min_clearance": 0.04576231838083718,
+          "time_to_goal": 42.800000000000004,
+          "reward_components": {
+            "progress": 15.960639451927772,
+            "step_penalty": -10.700000000000017,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 18,
+          "seed": 2000018,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 107,
+          "total_reward": 110.70394378923815,
+          "final_goal_distance": 0.19416392684377573,
+          "path_length": 1.9337460170779381,
+          "min_clearance": 0.17808256302199055,
+          "time_to_goal": 21.400000000000002,
+          "reward_components": {
+            "progress": 16.05394378923815,
+            "step_penalty": -5.349999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 19,
+          "seed": 2000019,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 100,
+          "total_reward": 112.2336133152717,
+          "final_goal_distance": 0.19763529927223625,
+          "path_length": 1.961635013166814,
+          "min_clearance": 0.32242734279849217,
+          "time_to_goal": 20.0,
+          "reward_components": {
+            "progress": 17.233613315271707,
+            "step_penalty": -4.99999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 20,
+          "seed": 2000020,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 116,
+          "total_reward": 111.48769690708362,
+          "final_goal_distance": 0.19402678536292514,
+          "path_length": 1.9406344933714712,
+          "min_clearance": 0.3095055334872381,
+          "time_to_goal": 23.200000000000003,
+          "reward_components": {
+            "progress": 17.287696907083596,
+            "step_penalty": -5.799999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 21,
+          "seed": 2000021,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 141,
+          "total_reward": 114.2218620556531,
+          "final_goal_distance": 0.19868579664554373,
+          "path_length": 2.8059953873232013,
+          "min_clearance": 0.1712225935384728,
+          "time_to_goal": 28.200000000000003,
+          "reward_components": {
+            "progress": 21.271862055653106,
+            "step_penalty": -7.049999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 22,
+          "seed": 2000022,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -14.591327221206402,
+          "final_goal_distance": 1.742882631896333,
+          "path_length": 4.959658035747709,
+          "min_clearance": 0.057228653309171665,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 2.9086727787935773,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 23,
+          "seed": 2000023,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 322,
+          "total_reward": 104.9240975281755,
+          "final_goal_distance": 0.19965389093781186,
+          "path_length": 4.984141913875936,
+          "min_clearance": 0.2872040808138041,
+          "time_to_goal": 64.4,
+          "reward_components": {
+            "progress": 21.024097528175464,
+            "step_penalty": -16.100000000000094,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 24,
+          "seed": 2000024,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -17.702394108150774,
+          "final_goal_distance": 1.6469650730304346,
+          "path_length": 4.336014740606772,
+          "min_clearance": 0.13819352881555957,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": -0.20239410815077408,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 25,
+          "seed": 2000025,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 184,
+          "total_reward": 115.2274211428668,
+          "final_goal_distance": 0.18603406642313147,
+          "path_length": 2.8669259887933736,
+          "min_clearance": 0.2031905090656091,
+          "time_to_goal": 36.800000000000004,
+          "reward_components": {
+            "progress": 24.427421142866816,
+            "step_penalty": -9.199999999999996,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 26,
+          "seed": 2000026,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 120,
+          "total_reward": 109.98919164955832,
+          "final_goal_distance": 0.19334976282021762,
+          "path_length": 1.738432504003868,
+          "min_clearance": 0.34669903520183065,
+          "time_to_goal": 24.0,
+          "reward_components": {
+            "progress": 15.989191649558308,
+            "step_penalty": -5.999999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 27,
+          "seed": 2000027,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 98,
+          "total_reward": 111.57979589699559,
+          "final_goal_distance": 0.1880441349363676,
+          "path_length": 1.725327004026621,
+          "min_clearance": 0.548283930773031,
+          "time_to_goal": 19.6,
+          "reward_components": {
+            "progress": 16.47979589699558,
+            "step_penalty": -4.899999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 28,
+          "seed": 2000028,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 98,
+          "total_reward": 111.0254464453962,
+          "final_goal_distance": 0.1882104213940213,
+          "path_length": 1.7845083059929312,
+          "min_clearance": 0.703006126142727,
+          "time_to_goal": 19.6,
+          "reward_components": {
+            "progress": 15.925446445396194,
+            "step_penalty": -4.899999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 29,
+          "seed": 2000029,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 94,
+          "total_reward": 109.60912049965495,
+          "final_goal_distance": 0.1904448315112135,
+          "path_length": 1.8343074276857085,
+          "min_clearance": 0.6187894392570525,
+          "time_to_goal": 18.8,
+          "reward_components": {
+            "progress": 14.30912049965494,
+            "step_penalty": -4.699999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 30,
+          "seed": 2000030,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 126,
+          "total_reward": 114.55066668843348,
+          "final_goal_distance": 0.1941946571888321,
+          "path_length": 2.5033518850989633,
+          "min_clearance": 0.18570929631288008,
+          "time_to_goal": 25.200000000000003,
+          "reward_components": {
+            "progress": 20.850666688433467,
+            "step_penalty": -6.299999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 31,
+          "seed": 2000031,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 104,
+          "total_reward": 110.30923860745992,
+          "final_goal_distance": 0.19966911931944886,
+          "path_length": 1.763250480433926,
+          "min_clearance": 0.62611157898167,
+          "time_to_goal": 20.8,
+          "reward_components": {
+            "progress": 15.509238607459896,
+            "step_penalty": -5.1999999999999895,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 32,
+          "seed": 2000032,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 86,
+          "total_reward": 110.43855877962383,
+          "final_goal_distance": 0.1895902755692528,
+          "path_length": 1.7675088143348696,
+          "min_clearance": 0.244372465058446,
+          "time_to_goal": 17.2,
+          "reward_components": {
+            "progress": 14.73855877962383,
+            "step_penalty": -4.299999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 33,
+          "seed": 2000033,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 87,
+          "total_reward": 114.1470078081434,
+          "final_goal_distance": 0.1967662876745971,
+          "path_length": 1.872886789664626,
+          "min_clearance": 0.471941740317513,
+          "time_to_goal": 17.400000000000002,
+          "reward_components": {
+            "progress": 18.497007808143387,
+            "step_penalty": -4.3499999999999925,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 34,
+          "seed": 2000034,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 144,
+          "total_reward": 109.58024483873163,
+          "final_goal_distance": 0.1964337458426513,
+          "path_length": 2.464756013760343,
+          "min_clearance": 0.028588277583308577,
+          "time_to_goal": 28.8,
+          "reward_components": {
+            "progress": 16.780244838731623,
+            "step_penalty": -7.199999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 35,
+          "seed": 2000035,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 166,
+          "total_reward": 114.87815036041822,
+          "final_goal_distance": 0.1934303810803823,
+          "path_length": 2.7910270229168246,
+          "min_clearance": 0.05257728193340684,
+          "time_to_goal": 33.2,
+          "reward_components": {
+            "progress": 23.17815036041821,
+            "step_penalty": -8.299999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 36,
+          "seed": 2000036,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 114,
+          "total_reward": 110.94745485497454,
+          "final_goal_distance": 0.19716637524115327,
+          "path_length": 2.1044584003463407,
+          "min_clearance": 0.5223125036647813,
+          "time_to_goal": 22.8,
+          "reward_components": {
+            "progress": 16.64745485497454,
+            "step_penalty": -5.699999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 37,
+          "seed": 2000037,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 160,
+          "total_reward": 111.89211136116967,
+          "final_goal_distance": 0.1928514673385845,
+          "path_length": 2.758122355537489,
+          "min_clearance": 0.24016824725958352,
+          "time_to_goal": 32.0,
+          "reward_components": {
+            "progress": 19.89211136116967,
+            "step_penalty": -7.99999999999998,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 38,
+          "seed": 2000038,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 138,
+          "total_reward": 115.19884912169297,
+          "final_goal_distance": 0.19509951364401498,
+          "path_length": 2.4312976997159432,
+          "min_clearance": 0.1965860777339382,
+          "time_to_goal": 27.6,
+          "reward_components": {
+            "progress": 22.098849121692965,
+            "step_penalty": -6.8999999999999835,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 39,
+          "seed": 2000039,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 107,
+          "total_reward": 116.18493437391557,
+          "final_goal_distance": 0.18119935221118413,
+          "path_length": 2.2657785004377367,
+          "min_clearance": 0.3252282139133671,
+          "time_to_goal": 21.400000000000002,
+          "reward_components": {
+            "progress": 21.53493437391556,
+            "step_penalty": -5.349999999999989,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 40,
+          "seed": 2000040,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 83,
+          "total_reward": 110.2885791690591,
+          "final_goal_distance": 0.19328870509275498,
+          "path_length": 1.5218550862278788,
+          "min_clearance": 0.5283490052304538,
+          "time_to_goal": 16.6,
+          "reward_components": {
+            "progress": 14.4385791690591,
+            "step_penalty": -4.149999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 41,
+          "seed": 2000041,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 166,
+          "total_reward": 118.81757374557026,
+          "final_goal_distance": 0.19286652771951773,
+          "path_length": 2.9595902436319754,
+          "min_clearance": 0.4257465488764046,
+          "time_to_goal": 33.2,
+          "reward_components": {
+            "progress": 27.117573745570255,
+            "step_penalty": -8.299999999999983,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 42,
+          "seed": 2000042,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -9.97826923430644,
+          "final_goal_distance": 1.3981368243643597,
+          "path_length": 5.06605089060031,
+          "min_clearance": 0.1780644559240997,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 7.521730765693544,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 43,
+          "seed": 2000043,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 63,
+          "total_reward": -96.12193769678524,
+          "final_goal_distance": 1.058558243094484,
+          "path_length": 0.9444828241132199,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 7.028062303214755,
+            "step_penalty": -3.149999999999997,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 44,
+          "seed": 2000044,
+          "success": false,
+          "collision": false,
+          "timeout": true,
+          "steps": 350,
+          "total_reward": -4.4472508130641275,
+          "final_goal_distance": 0.36645565216305215,
+          "path_length": 4.8546654967591145,
+          "min_clearance": 0.3648303931904048,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 13.052749186935857,
+            "step_penalty": -17.500000000000114,
+            "goal": 0.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 45,
+          "seed": 2000045,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 89,
+          "total_reward": 110.56800159012417,
+          "final_goal_distance": 0.19323085567077744,
+          "path_length": 1.5522963790968063,
+          "min_clearance": 0.3715840270111042,
+          "time_to_goal": 17.8,
+          "reward_components": {
+            "progress": 15.018001590124157,
+            "step_penalty": -4.449999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 46,
+          "seed": 2000046,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 186,
+          "total_reward": 111.93260087195198,
+          "final_goal_distance": 0.19854113370245138,
+          "path_length": 2.7383306327741583,
+          "min_clearance": 0.24382978447593695,
+          "time_to_goal": 37.2,
+          "reward_components": {
+            "progress": 21.232600871951966,
+            "step_penalty": -9.299999999999997,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 47,
+          "seed": 2000047,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 112,
+          "total_reward": 109.9489573012565,
+          "final_goal_distance": 0.1975481484226901,
+          "path_length": 2.0005201100371783,
+          "min_clearance": 0.28072637578543913,
+          "time_to_goal": 22.400000000000002,
+          "reward_components": {
+            "progress": 15.548957301256504,
+            "step_penalty": -5.599999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 48,
+          "seed": 2000048,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 108.96832715228216,
+          "final_goal_distance": 0.1960673460644892,
+          "path_length": 1.5229839041177176,
+          "min_clearance": 0.49918075933680695,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 13.368327152282157,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 49,
+          "seed": 2000049,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 134,
+          "total_reward": 114.92815135372314,
+          "final_goal_distance": 0.1969405650911832,
+          "path_length": 2.482638049274682,
+          "min_clearance": 0.19763632535305908,
+          "time_to_goal": 26.8,
+          "reward_components": {
+            "progress": 21.628151353723133,
+            "step_penalty": -6.699999999999984,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        }
+      ]
+    },
+    "P3_best_checkpoint": {
+      "policy_name": "P3_best",
+      "condition": "nominal",
+      "n_episodes": 50,
+      "successes": 46,
+      "collisions": 4,
+      "timeouts": 0,
+      "success_rate": 0.92,
+      "collision_rate": 0.08,
+      "timeout_rate": 0.0,
+      "mean_reward": 96.22694145176645,
+      "std_reward": 56.20894446716742,
+      "mean_steps_success": 113.76086956521739,
+      "mean_path_length_success": 2.15688243253521,
+      "mean_min_clearance": 0.26838481081956406,
+      "wilson_lower": 0.8116149745493629,
+      "wilson_upper": 0.9684509967442093,
+      "per_episode": [
+        {
+          "scenario_id": 0,
+          "seed": 2000000,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 190,
+          "total_reward": 103.97904301278724,
+          "final_goal_distance": 0.194682931193159,
+          "path_length": 2.704590253829957,
+          "min_clearance": 0.19051499721962384,
+          "time_to_goal": 38.0,
+          "reward_components": {
+            "progress": 13.479043012787239,
+            "step_penalty": -9.5,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 1,
+          "seed": 2000001,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 135,
+          "total_reward": 114.9825379386163,
+          "final_goal_distance": 0.1918219408271014,
+          "path_length": 2.3724907277338194,
+          "min_clearance": 0.22703078791136966,
+          "time_to_goal": 27.0,
+          "reward_components": {
+            "progress": 21.732537938616318,
+            "step_penalty": -6.749999999999984,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 2,
+          "seed": 2000002,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 122,
+          "total_reward": 107.76947512935558,
+          "final_goal_distance": 0.18926052969765797,
+          "path_length": 2.10862428367138,
+          "min_clearance": 0.15313247842962158,
+          "time_to_goal": 24.400000000000002,
+          "reward_components": {
+            "progress": 13.869475129355578,
+            "step_penalty": -6.099999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 3,
+          "seed": 2000003,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 75,
+          "total_reward": 111.31549170477795,
+          "final_goal_distance": 0.19953269740715202,
+          "path_length": 1.788105880580843,
+          "min_clearance": 0.29953925184059094,
+          "time_to_goal": 15.0,
+          "reward_components": {
+            "progress": 15.065491704777969,
+            "step_penalty": -3.7499999999999947,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 4,
+          "seed": 2000004,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 123,
+          "total_reward": 117.91122733009021,
+          "final_goal_distance": 0.18872167124630937,
+          "path_length": 2.5427772755362117,
+          "min_clearance": 0.42498638061634453,
+          "time_to_goal": 24.6,
+          "reward_components": {
+            "progress": 24.0612273300902,
+            "step_penalty": -6.149999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 5,
+          "seed": 2000005,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 123,
+          "total_reward": 119.26665991554094,
+          "final_goal_distance": 0.19880742285178812,
+          "path_length": 2.67705572348088,
+          "min_clearance": 0.1006326622767295,
+          "time_to_goal": 24.6,
+          "reward_components": {
+            "progress": 25.41665991554094,
+            "step_penalty": -6.149999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 6,
+          "seed": 2000006,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 121,
+          "total_reward": 113.46718658792582,
+          "final_goal_distance": 0.18767075486341905,
+          "path_length": 2.185051798336209,
+          "min_clearance": 0.27135787705041725,
+          "time_to_goal": 24.200000000000003,
+          "reward_components": {
+            "progress": 19.517186587925814,
+            "step_penalty": -6.0499999999999865,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 7,
+          "seed": 2000007,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 148,
+          "total_reward": 115.64535714830596,
+          "final_goal_distance": 0.18502891644269,
+          "path_length": 2.8975662719830857,
+          "min_clearance": 0.30128084642981623,
+          "time_to_goal": 29.6,
+          "reward_components": {
+            "progress": 23.045357148305964,
+            "step_penalty": -7.399999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 8,
+          "seed": 2000008,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 95,
+          "total_reward": 114.96891345412725,
+          "final_goal_distance": 0.18449578619968934,
+          "path_length": 2.0348227252252395,
+          "min_clearance": 0.14103772389710645,
+          "time_to_goal": 19.0,
+          "reward_components": {
+            "progress": 19.718913454127254,
+            "step_penalty": -4.749999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 9,
+          "seed": 2000009,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 113,
+          "total_reward": 112.32978232454583,
+          "final_goal_distance": 0.19331608520613247,
+          "path_length": 2.0767193156294517,
+          "min_clearance": 0.27722224761675296,
+          "time_to_goal": 22.6,
+          "reward_components": {
+            "progress": 17.979782324545827,
+            "step_penalty": -5.649999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 10,
+          "seed": 2000010,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 89,
+          "total_reward": 110.70645396311924,
+          "final_goal_distance": 0.1853494852962208,
+          "path_length": 1.6105286574549966,
+          "min_clearance": 0.06373275652390979,
+          "time_to_goal": 17.8,
+          "reward_components": {
+            "progress": 15.156453963119235,
+            "step_penalty": -4.449999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 11,
+          "seed": 2000011,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 111,
+          "total_reward": 112.6966726235937,
+          "final_goal_distance": 0.1844818378534662,
+          "path_length": 1.9931162663921713,
+          "min_clearance": 0.12714376197622312,
+          "time_to_goal": 22.200000000000003,
+          "reward_components": {
+            "progress": 18.2466726235937,
+            "step_penalty": -5.549999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 12,
+          "seed": 2000012,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 165,
+          "total_reward": 123.98591449981552,
+          "final_goal_distance": 0.19639747268764324,
+          "path_length": 3.6279917010851195,
+          "min_clearance": 0.05385543157631002,
+          "time_to_goal": 33.0,
+          "reward_components": {
+            "progress": 32.235914499815536,
+            "step_penalty": -8.249999999999982,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 13,
+          "seed": 2000013,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 100,
+          "total_reward": 111.64827696181871,
+          "final_goal_distance": 0.1992647111417464,
+          "path_length": 2.0754217515885838,
+          "min_clearance": 0.46761476022553516,
+          "time_to_goal": 20.0,
+          "reward_components": {
+            "progress": 16.64827696181871,
+            "step_penalty": -4.99999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 14,
+          "seed": 2000014,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 97,
+          "total_reward": 114.0234727691786,
+          "final_goal_distance": 0.18144050597287087,
+          "path_length": 1.9118060967139903,
+          "min_clearance": 0.17430363415115369,
+          "time_to_goal": 19.400000000000002,
+          "reward_components": {
+            "progress": 18.87347276917861,
+            "step_penalty": -4.849999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 15,
+          "seed": 2000015,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 212,
+          "total_reward": 104.22967841816762,
+          "final_goal_distance": 0.19353691328251488,
+          "path_length": 2.2114792303740978,
+          "min_clearance": 0.023923470980693792,
+          "time_to_goal": 42.400000000000006,
+          "reward_components": {
+            "progress": 14.82967841816762,
+            "step_penalty": -10.600000000000016,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 16,
+          "seed": 2000016,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 80,
+          "total_reward": -99.24632874683853,
+          "final_goal_distance": 1.334060833513108,
+          "path_length": 0.5583402916230259,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 4.7536712531614755,
+            "step_penalty": -3.999999999999994,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 17,
+          "seed": 2000017,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 101,
+          "total_reward": 110.88221050371864,
+          "final_goal_distance": 0.19994929754630159,
+          "path_length": 1.8535454196296626,
+          "min_clearance": 0.31105923359652543,
+          "time_to_goal": 20.200000000000003,
+          "reward_components": {
+            "progress": 15.932210503718633,
+            "step_penalty": -5.04999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 18,
+          "seed": 2000018,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 85,
+          "total_reward": 111.86594040314962,
+          "final_goal_distance": 0.1879642654526301,
+          "path_length": 1.7768148384243247,
+          "min_clearance": 0.1357850090148296,
+          "time_to_goal": 17.0,
+          "reward_components": {
+            "progress": 16.115940403149608,
+            "step_penalty": -4.249999999999993,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 19,
+          "seed": 2000019,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 89,
+          "total_reward": 112.88174183631708,
+          "final_goal_distance": 0.1878224471677004,
+          "path_length": 1.8325779265724123,
+          "min_clearance": 0.3877602579163373,
+          "time_to_goal": 17.8,
+          "reward_components": {
+            "progress": 17.33174183631707,
+            "step_penalty": -4.449999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 20,
+          "seed": 2000020,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 95,
+          "total_reward": 112.48956478266734,
+          "final_goal_distance": 0.19883999780455094,
+          "path_length": 1.7495808704942462,
+          "min_clearance": 0.46561101505493263,
+          "time_to_goal": 19.0,
+          "reward_components": {
+            "progress": 17.23956478266735,
+            "step_penalty": -4.749999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 21,
+          "seed": 2000021,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 95,
+          "total_reward": 116.53908846686298,
+          "final_goal_distance": 0.1969631555245579,
+          "path_length": 2.269904171861708,
+          "min_clearance": 0.23047311463261533,
+          "time_to_goal": 19.0,
+          "reward_components": {
+            "progress": 21.289088466862957,
+            "step_penalty": -4.749999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 22,
+          "seed": 2000022,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 125,
+          "total_reward": 112.14638348343311,
+          "final_goal_distance": 0.19411156143238195,
+          "path_length": 2.158018475007266,
+          "min_clearance": 0.18677782935243875,
+          "time_to_goal": 25.0,
+          "reward_components": {
+            "progress": 18.3963834834331,
+            "step_penalty": -6.249999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 23,
+          "seed": 2000023,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 178,
+          "total_reward": 112.15239650452058,
+          "final_goal_distance": 0.19682399330330286,
+          "path_length": 2.9679260472022,
+          "min_clearance": 0.16422054728800461,
+          "time_to_goal": 35.6,
+          "reward_components": {
+            "progress": 21.052396504520605,
+            "step_penalty": -8.899999999999991,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 24,
+          "seed": 2000024,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 112,
+          "total_reward": 108.69171006114925,
+          "final_goal_distance": 0.19755465610043152,
+          "path_length": 1.8943688193149866,
+          "min_clearance": 0.316780999285712,
+          "time_to_goal": 22.400000000000002,
+          "reward_components": {
+            "progress": 14.29171006114925,
+            "step_penalty": -5.599999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 25,
+          "seed": 2000025,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 170,
+          "total_reward": 115.87719712543989,
+          "final_goal_distance": 0.19105646816582486,
+          "path_length": 2.8230345102399603,
+          "min_clearance": 0.11683285170452436,
+          "time_to_goal": 34.0,
+          "reward_components": {
+            "progress": 24.377197125439885,
+            "step_penalty": -8.499999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 26,
+          "seed": 2000026,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 118,
+          "total_reward": 110.09675982843261,
+          "final_goal_distance": 0.19259294493278903,
+          "path_length": 1.6308415968529881,
+          "min_clearance": 0.3887485648556668,
+          "time_to_goal": 23.6,
+          "reward_components": {
+            "progress": 15.996759828432596,
+            "step_penalty": -5.899999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 27,
+          "seed": 2000027,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 112.02357737923163,
+          "final_goal_distance": 0.19366598671276408,
+          "path_length": 1.8601600696519023,
+          "min_clearance": 0.7117226720158634,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 16.423577379231613,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 28,
+          "seed": 2000028,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 92,
+          "total_reward": 111.31248065608335,
+          "final_goal_distance": 0.18950700032530624,
+          "path_length": 2.0705259123444555,
+          "min_clearance": 0.76002359172384,
+          "time_to_goal": 18.400000000000002,
+          "reward_components": {
+            "progress": 15.912480656083343,
+            "step_penalty": -4.599999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 29,
+          "seed": 2000029,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 74,
+          "total_reward": 110.6410619382031,
+          "final_goal_distance": 0.18725068765639885,
+          "path_length": 1.7797148251533512,
+          "min_clearance": 0.6144579554773157,
+          "time_to_goal": 14.8,
+          "reward_components": {
+            "progress": 14.341061938203092,
+            "step_penalty": -3.699999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 30,
+          "seed": 2000030,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 59,
+          "total_reward": -91.00547042400936,
+          "final_goal_distance": 1.0848083684331151,
+          "path_length": 1.2016465859860184,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 11.944529575990643,
+            "step_penalty": -2.9499999999999975,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 31,
+          "seed": 2000031,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 87,
+          "total_reward": 111.20640703885753,
+          "final_goal_distance": 0.19495227617968705,
+          "path_length": 1.6417184850946063,
+          "min_clearance": 0.41648770881978847,
+          "time_to_goal": 17.400000000000002,
+          "reward_components": {
+            "progress": 15.55640703885752,
+            "step_penalty": -4.3499999999999925,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 32,
+          "seed": 2000032,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 74,
+          "total_reward": 111.15554580738035,
+          "final_goal_distance": 0.17789157279360113,
+          "path_length": 1.6902750011533496,
+          "min_clearance": 0.36857614297079044,
+          "time_to_goal": 14.8,
+          "reward_components": {
+            "progress": 14.855545807380343,
+            "step_penalty": -3.699999999999995,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 33,
+          "seed": 2000033,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 88,
+          "total_reward": 114.16038335141783,
+          "final_goal_distance": 0.19042873334715152,
+          "path_length": 2.0749003414437173,
+          "min_clearance": 0.4765482250928621,
+          "time_to_goal": 17.6,
+          "reward_components": {
+            "progress": 18.56038335141785,
+            "step_penalty": -4.399999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 34,
+          "seed": 2000034,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 91,
+          "total_reward": 112.32296778767751,
+          "final_goal_distance": 0.18716145094806236,
+          "path_length": 1.9763383561000236,
+          "min_clearance": 0.15348698800798244,
+          "time_to_goal": 18.2,
+          "reward_components": {
+            "progress": 16.872967787677503,
+            "step_penalty": -4.549999999999992,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 35,
+          "seed": 2000035,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 120,
+          "total_reward": 117.21417556407279,
+          "final_goal_distance": 0.1898278607149262,
+          "path_length": 2.5451340323500347,
+          "min_clearance": 0.1829055202141927,
+          "time_to_goal": 24.0,
+          "reward_components": {
+            "progress": 23.214175564072796,
+            "step_penalty": -5.999999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 36,
+          "seed": 2000036,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 87,
+          "total_reward": 112.3979353352468,
+          "final_goal_distance": 0.18711832721392768,
+          "path_length": 1.8762177692167465,
+          "min_clearance": 0.5179708476677305,
+          "time_to_goal": 17.400000000000002,
+          "reward_components": {
+            "progress": 16.74793533524679,
+            "step_penalty": -4.3499999999999925,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 37,
+          "seed": 2000037,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 114,
+          "total_reward": 114.13618515483603,
+          "final_goal_distance": 0.1984440879719503,
+          "path_length": 2.0525701345503324,
+          "min_clearance": 0.11527722705851816,
+          "time_to_goal": 22.8,
+          "reward_components": {
+            "progress": 19.836185154836006,
+            "step_penalty": -5.699999999999988,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 38,
+          "seed": 2000038,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 117,
+          "total_reward": 116.21814943115265,
+          "final_goal_distance": 0.19816948269804674,
+          "path_length": 2.4020743886008873,
+          "min_clearance": 0.3407858170349596,
+          "time_to_goal": 23.400000000000002,
+          "reward_components": {
+            "progress": 22.06814943115266,
+            "step_penalty": -5.849999999999987,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 39,
+          "seed": 2000039,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 101,
+          "total_reward": 116.32894789348923,
+          "final_goal_distance": 0.1967980002538174,
+          "path_length": 2.3765818326920267,
+          "min_clearance": 0.45258900848265016,
+          "time_to_goal": 20.200000000000003,
+          "reward_components": {
+            "progress": 21.37894789348922,
+            "step_penalty": -5.04999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 40,
+          "seed": 2000040,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 63,
+          "total_reward": 111.29467243094297,
+          "final_goal_distance": 0.19267937890436834,
+          "path_length": 1.4490775009989734,
+          "min_clearance": 0.4745922668948501,
+          "time_to_goal": 12.600000000000001,
+          "reward_components": {
+            "progress": 14.444672430942967,
+            "step_penalty": -3.149999999999997,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 41,
+          "seed": 2000041,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 155,
+          "total_reward": 119.32476786939034,
+          "final_goal_distance": 0.1971471153375084,
+          "path_length": 2.9766082850284867,
+          "min_clearance": 0.2542010972693264,
+          "time_to_goal": 31.0,
+          "reward_components": {
+            "progress": 27.074767869390342,
+            "step_penalty": -7.7499999999999805,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 42,
+          "seed": 2000042,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 123,
+          "total_reward": 113.42498060088431,
+          "final_goal_distance": 0.192811840845284,
+          "path_length": 2.3768066943995665,
+          "min_clearance": 0.03621030256236245,
+          "time_to_goal": 24.6,
+          "reward_components": {
+            "progress": 19.5749806008843,
+            "step_penalty": -6.149999999999986,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 43,
+          "seed": 2000043,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 54,
+          "total_reward": -94.59853416103938,
+          "final_goal_distance": 0.9512178895198985,
+          "path_length": 0.9117471246421338,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 8.10146583896061,
+            "step_penalty": -2.6999999999999984,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        },
+        {
+          "scenario_id": 44,
+          "seed": 2000044,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 100,
+          "total_reward": 109.78820439137348,
+          "final_goal_distance": 0.19291013171929097,
+          "path_length": 1.671102471649647,
+          "min_clearance": 0.44013716660311597,
+          "time_to_goal": 20.0,
+          "reward_components": {
+            "progress": 14.78820439137347,
+            "step_penalty": -4.99999999999999,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 45,
+          "seed": 2000045,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 76,
+          "total_reward": 111.25064785507867,
+          "final_goal_distance": 0.18996622917532716,
+          "path_length": 1.6397600571066133,
+          "min_clearance": 0.20490104547118382,
+          "time_to_goal": 15.200000000000001,
+          "reward_components": {
+            "progress": 15.050647855078667,
+            "step_penalty": -3.7999999999999945,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 46,
+          "seed": 2000046,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 152,
+          "total_reward": 113.68716606689371,
+          "final_goal_distance": 0.19308461420827616,
+          "path_length": 2.3770157448761173,
+          "min_clearance": 0.1543999569985437,
+          "time_to_goal": 30.400000000000002,
+          "reward_components": {
+            "progress": 21.287166066893718,
+            "step_penalty": -7.599999999999981,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 47,
+          "seed": 2000047,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 182,
+          "total_reward": 106.47613900092571,
+          "final_goal_distance": 0.19482997845576971,
+          "path_length": 3.2467396600730707,
+          "min_clearance": 0.07477503152656041,
+          "time_to_goal": 36.4,
+          "reward_components": {
+            "progress": 15.576139000925707,
+            "step_penalty": -9.099999999999994,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 48,
+          "seed": 2000048,
+          "success": true,
+          "collision": false,
+          "timeout": false,
+          "steps": 62,
+          "total_reward": 110.38835202753638,
+          "final_goal_distance": 0.184064858539065,
+          "path_length": 1.3585096989199519,
+          "min_clearance": 0.6678334776619814,
+          "time_to_goal": 12.4,
+          "reward_components": {
+            "progress": 13.488352027536394,
+            "step_penalty": -3.099999999999997,
+            "goal": 100.0,
+            "collision": 0.0
+          }
+        },
+        {
+          "scenario_id": 49,
+          "seed": 2000049,
+          "success": false,
+          "collision": true,
+          "timeout": false,
+          "steps": 108,
+          "total_reward": -91.1044784379227,
+          "final_goal_distance": 0.9302035442557662,
+          "path_length": 1.5091765291616317,
+          "min_clearance": 0.0,
+          "time_to_goal": Infinity,
+          "reward_components": {
+            "progress": 14.29552156207731,
+            "step_penalty": -5.399999999999989,
+            "goal": 0.0,
+            "collision": -100.0
+          }
+        }
+      ]
+    }
+  },
+  "pairwise_statistical_comparisons": {
+    "P1_vs_P2": {
+      "contingency": {
+        "both_success": 45,
+        "P1_only": 2,
+        "P2_only": 3,
+        "neither": 0,
+        "n_discordant": 5
+      },
+      "mcnemar_exact_p": 1.0,
+      "mcnemar_significant_raw": false,
+      "mcnemar_significant_bonferroni": false,
+      "N_both_successful": 45,
+      "wilcoxon_p_values": {
+        "reward": 0.0,
+        "steps": 0.0,
+        "path_length": 0.9022,
+        "min_clearance": 0.0884
+      },
+      "mean_deltas_on_N_both": {
+        "delta_reward": 0.76,
+        "delta_steps": -14.24,
+        "delta_path_m": -0.058,
+        "delta_clearance_m": -0.019
+      }
+    },
+    "P1_vs_P3": {
+      "contingency": {
+        "both_success": 46,
+        "P1_only": 1,
+        "P3_only": 3,
+        "neither": 0,
+        "n_discordant": 4
+      },
+      "mcnemar_exact_p": 0.625,
+      "mcnemar_significant_raw": "False",
+      "mcnemar_significant_bonferroni": "False",
+      "N_both_successful": 46,
+      "wilcoxon_p_values": {
+        "reward": 0.0678,
+        "steps": 0.0618,
+        "path_length": 0.0138,
+        "min_clearance": 0.6729
+      },
+      "mean_deltas_on_N_both": {
+        "delta_reward": 0.14,
+        "delta_steps": -2.74,
+        "delta_path_m": -0.131,
+        "delta_clearance_m": 0.006
+      }
+    },
+    "P1_vs_P4": {
+      "contingency": {
+        "both_success": 46,
+        "P1_only": 1,
+        "P4_only": 3,
+        "neither": 0,
+        "n_discordant": 4
+      },
+      "mcnemar_exact_p": 0.625,
+      "mcnemar_significant_raw": "False",
+      "mcnemar_significant_bonferroni": "False",
+      "N_both_successful": 46,
+      "wilcoxon_p_values": {
+        "reward": 0.0152,
+        "steps": 0.0152,
+        "path_length": 0.0,
+        "min_clearance": 0.5882
+      },
+      "mean_deltas_on_N_both": {
+        "delta_reward": 0.22,
+        "delta_steps": -4.39,
+        "delta_path_m": -0.187,
+        "delta_clearance_m": 0.01
+      }
+    },
+    "P2_vs_P3": {
+      "contingency": {
+        "both_success": 47,
+        "P2_only": 1,
+        "P3_only": 2,
+        "neither": 0,
+        "n_discordant": 3
+      },
+      "mcnemar_exact_p": 1.0,
+      "mcnemar_significant_raw": false,
+      "mcnemar_significant_bonferroni": false,
+      "N_both_successful": 47,
+      "wilcoxon_p_values": {
+        "reward": 0.0002,
+        "steps": 0.0005,
+        "path_length": 0.0008,
+        "min_clearance": 0.1859
+      },
+      "mean_deltas_on_N_both": {
+        "delta_reward": -0.61,
+        "delta_steps": 11.32,
+        "delta_path_m": -0.091,
+        "delta_clearance_m": 0.027
+      }
+    },
+    "P2_vs_P4": {
+      "contingency": {
+        "both_success": 47,
+        "P2_only": 1,
+        "P4_only": 2,
+        "neither": 0,
+        "n_discordant": 3
+      },
+      "mcnemar_exact_p": 1.0,
+      "mcnemar_significant_raw": false,
+      "mcnemar_significant_bonferroni": false,
+      "N_both_successful": 47,
+      "wilcoxon_p_values": {
+        "reward": 0.0041,
+        "steps": 0.0067,
+        "path_length": 0.0,
+        "min_clearance": 0.1381
+      },
+      "mean_deltas_on_N_both": {
+        "delta_reward": -0.44,
+        "delta_steps": 7.94,
+        "delta_path_m": -0.158,
+        "delta_clearance_m": 0.031
+      }
+    },
+    "P3_vs_P4": {
+      "contingency": {
+        "both_success": 48,
+        "P3_only": 1,
+        "P4_only": 1,
+        "neither": 0,
+        "n_discordant": 2
+      },
+      "mcnemar_exact_p": 1.0,
+      "mcnemar_significant_raw": false,
+      "mcnemar_significant_bonferroni": false,
+      "N_both_successful": 48,
+      "wilcoxon_p_values": {
+        "reward": 0.3673,
+        "steps": 0.3514,
+        "path_length": 0.0003,
+        "min_clearance": 0.3204
+      },
+      "mean_deltas_on_N_both": {
+        "delta_reward": 0.21,
+        "delta_steps": -4.33,
+        "delta_path_m": -0.084,
+        "delta_clearance_m": 0.008
+      }
+    }
+  }
+}
