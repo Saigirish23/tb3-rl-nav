@@ -58,14 +58,11 @@ def run_demo(
     output_dir: str = "",
 ) -> Dict[str, Any]:
     # Determine model and vecnorm paths
-    if policy.upper() == "P4":
-        model_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_model.zip"
-        vecnorm_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_vecnormalize.pkl"
-    elif policy.upper() == "P1":
-        model_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_model.zip"
-        vecnorm_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_vecnormalize.pkl"
-    else:
-        raise ValueError(f"Unknown policy: {policy}. Must be P1 or P4.")
+    pol_key = policy.lower()
+    if pol_key not in ("p1", "p2", "p3", "p4"):
+        raise ValueError(f"Unknown policy: {policy}. Must be P1, P2, P3, or P4.")
+    model_path = REPO_ROOT / "runs" / f"main_{pol_key}_s0" / "final_model.zip"
+    vecnorm_path = REPO_ROOT / "runs" / f"main_{pol_key}_s0" / "final_vecnormalize.pkl"
 
     if not model_path.exists():
         raise FileNotFoundError(f"Model file not found: {model_path}")
@@ -194,7 +191,7 @@ def run_demo(
 
 def main():
     parser = argparse.ArgumentParser(description="TurtleBot3 PPO Simulation Demo Runner")
-    parser.add_argument("--policy", type=str, default="P4", choices=["P4", "P1"], help="Policy to run (P4 or P1)")
+    parser.add_argument("--policy", type=str, default="P4", choices=["P1", "P2", "P3", "P4"], help="Policy to run (P1, P2, P3, or P4)")
     parser.add_argument("--port", type=int, default=DEFAULT_PORT, help="Gazebo port (default 11345)")
     parser.add_argument("--domain-id", type=int, default=DEFAULT_DOMAIN_ID, help="ROS Domain ID (default 30)")
     parser.add_argument("--connect-existing", action="store_true", help="Connect to existing Gazebo instance instead of launching new one")

@@ -274,7 +274,7 @@ def setup_gazebo_obstacles(layout_name: str, port: int = 11345, domain_id: int =
 
 def main():
     parser = argparse.ArgumentParser(description="Interactive Waypoint Navigation for TurtleBot3 PPO Policy")
-    parser.add_argument("--policy", choices=["P4", "P1"], default="P4", help="PPO Policy model to use (P4=Robust, P1=Nominal)")
+    parser.add_argument("--policy", choices=["P1", "P2", "P3", "P4"], default="P4", help="PPO Policy model to use (P1=Nominal, P2=Sensor, P3=Dynamics, P4=Combined)")
     parser.add_argument("--model-path", type=str, default=None, help="Explicit path to SB3 PPO model .zip (overrides --policy)")
     parser.add_argument("--vecnorm-path", type=str, default=None, help="Explicit path to VecNormalize .pkl")
     parser.add_argument("--obstacles", choices=["center_pillar", "slalom", "hallway_pinch", "none"], default="center_pillar",
@@ -288,12 +288,10 @@ def main():
     if args.model_path:
         model_path = Path(args.model_path)
         vecnorm_path = Path(args.vecnorm_path) if args.vecnorm_path else None
-    elif args.policy == "P4":
-        model_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_model.zip"
-        vecnorm_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_vecnormalize.pkl"
     else:
-        model_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_model.zip"
-        vecnorm_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_vecnormalize.pkl"
+        pol_dir = f"main_{args.policy.lower()}_s0"
+        model_path = REPO_ROOT / "runs" / pol_dir / "final_model.zip"
+        vecnorm_path = REPO_ROOT / "runs" / pol_dir / "final_vecnormalize.pkl"
 
     active_obstacles = []
     robot_start = None

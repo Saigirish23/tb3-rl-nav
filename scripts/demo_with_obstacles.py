@@ -127,19 +127,16 @@ def run_obstacle_demo():
     parser.add_argument("--layout", choices=["center_pillar", "slalom", "hallway_pinch", "test_scenario"], default="center_pillar",
                         help="Pre-configured obstacle layout")
     parser.add_argument("--scenario-id", type=int, default=0, help="Scenario index if using test_scenario (0-49)")
-    parser.add_argument("--policy", choices=["P4", "P1"], default="P4", help="Policy to deploy (P4=Randomized, P1=Nominal)")
+    parser.add_argument("--policy", choices=["P1", "P2", "P3", "P4"], default="P4", help="Policy to deploy (P1=Nominal, P2=Sensor, P3=Dynamics, P4=Combined)")
     parser.add_argument("--port", type=int, default=11345, help="Gazebo port")
     parser.add_argument("--domain-id", type=int, default=30, help="ROS Domain ID")
     parser.add_argument("--reset-robot", action="store_true", default=True, help="Teleport robot to layout starting pose")
     args = parser.parse_args()
 
     # Load Model
-    if args.policy == "P4":
-        model_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_model.zip"
-        vecnorm_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_vecnormalize.pkl"
-    else:
-        model_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_model.zip"
-        vecnorm_path = REPO_ROOT / "runs" / "main_p1_s0" / "final_vecnormalize.pkl"
+    pol_dir = f"main_{args.policy.lower()}_s0"
+    model_path = REPO_ROOT / "runs" / pol_dir / "final_model.zip"
+    vecnorm_path = REPO_ROOT / "runs" / pol_dir / "final_vecnormalize.pkl"
 
     # Select Layout
     if args.layout == "test_scenario":
