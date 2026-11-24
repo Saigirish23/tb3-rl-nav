@@ -275,6 +275,8 @@ def setup_gazebo_obstacles(layout_name: str, port: int = 11345, domain_id: int =
 def main():
     parser = argparse.ArgumentParser(description="Interactive Waypoint Navigation for TurtleBot3 PPO Policy")
     parser.add_argument("--policy", choices=["P4", "P1"], default="P4", help="PPO Policy model to use (P4=Robust, P1=Nominal)")
+    parser.add_argument("--model-path", type=str, default=None, help="Explicit path to SB3 PPO model .zip (overrides --policy)")
+    parser.add_argument("--vecnorm-path", type=str, default=None, help="Explicit path to VecNormalize .pkl")
     parser.add_argument("--obstacles", choices=["center_pillar", "slalom", "hallway_pinch", "none"], default="center_pillar",
                         help="Obstacle layout to position in Gazebo")
     parser.add_argument("--arena-limit", type=float, default=1.85, help="Maximum safe coordinate value (default 1.85 m)")
@@ -283,7 +285,10 @@ def main():
     args = parser.parse_args()
 
     # Model paths
-    if args.policy == "P4":
+    if args.model_path:
+        model_path = Path(args.model_path)
+        vecnorm_path = Path(args.vecnorm_path) if args.vecnorm_path else None
+    elif args.policy == "P4":
         model_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_model.zip"
         vecnorm_path = REPO_ROOT / "runs" / "main_p4_s0" / "final_vecnormalize.pkl"
     else:
