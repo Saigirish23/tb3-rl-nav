@@ -124,7 +124,7 @@ def teleport_entities_in_gazebo(robot_pose: List[float], active_obstacles: List[
 
 def run_obstacle_demo():
     parser = argparse.ArgumentParser(description="Demonstrate TurtleBot3 PPO Policy with Visual Obstacles in Gazebo")
-    parser.add_argument("--layout", choices=["center_pillar", "slalom", "hallway_pinch", "test_scenario"], default="center_pillar",
+    parser.add_argument("--layout", "--preset", dest="layout", choices=["center_pillar", "slalom", "hallway_pinch", "test_scenario"], default="center_pillar",
                         help="Pre-configured obstacle layout")
     parser.add_argument("--scenario-id", type=int, default=0, help="Scenario index if using test_scenario (0-49)")
     parser.add_argument("--policy", choices=["P1", "P2", "P3", "P4"], default="P4", help="Policy to deploy (P1=Nominal, P2=Sensor, P3=Dynamics, P4=Combined)")
