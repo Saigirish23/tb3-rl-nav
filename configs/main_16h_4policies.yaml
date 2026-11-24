@@ -1,0 +1,56 @@
+algorithm: PPO
+policy: MlpPolicy
+policy_kwargs:
+  net_arch:
+    pi:
+    - 128
+    - 128
+    vf:
+    - 128
+    - 128
+  activation_fn: tanh
+  log_std_init: -0.5
+learning_rate: 0.0003
+n_steps: 512
+batch_size: 128
+n_epochs: 10
+gamma: 0.99
+gae_lambda: 0.95
+clip_range: 0.2
+ent_coef: 0.0
+vf_coef: 0.5
+max_grad_norm: 0.5
+device: cpu
+torch_threads: 1
+normalize_observations: false
+normalize_rewards: true
+total_timesteps: 60000
+checkpoint_interval: 10000
+eval_interval: 30000
+eval_episodes: 5
+seeds:
+- 0
+- 1
+- 2
+policies:
+  P1:
+    name: Nominal
+    sensor_randomization: false
+    dynamics_randomization: false
+  P2:
+    name: Sensor
+    sensor_randomization: true
+    dynamics_randomization: false
+  P3:
+    name: Dynamics
+    sensor_randomization: false
+    dynamics_randomization: true
+  P4:
+    name: Combined
+    sensor_randomization: true
+    dynamics_randomization: true
+tensorboard_log: ./runs/tensorboard
+log_interval: 10
+verbose: 1
+watchdog_timeout_sec: 2.0
+n_workers: 1

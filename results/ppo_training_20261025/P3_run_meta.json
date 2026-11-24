@@ -1,0 +1,76 @@
+{
+  "policy_name": "P3",
+  "seed": 0,
+  "n_workers": 1,
+  "git_hash": "5294e6bbb411",
+  "config_hash": "d3be998b3a951ab7",
+  "start_time": "2026-10-25T08:48:31.479122",
+  "config": {
+    "algorithm": "PPO",
+    "batch_size": 128,
+    "checkpoint_interval": 10000,
+    "clip_range": 0.2,
+    "device": "cpu",
+    "ent_coef": 0.0,
+    "eval_episodes": 5,
+    "eval_interval": 30000,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "learning_rate": 0.0003,
+    "log_interval": 10,
+    "max_grad_norm": 0.5,
+    "n_epochs": 10,
+    "n_steps": 512,
+    "n_workers": 1,
+    "normalize_observations": false,
+    "normalize_rewards": true,
+    "policies": {
+      "P1": {
+        "dynamics_randomization": false,
+        "name": "Nominal",
+        "sensor_randomization": false
+      },
+      "P2": {
+        "dynamics_randomization": false,
+        "name": "Sensor",
+        "sensor_randomization": true
+      },
+      "P3": {
+        "dynamics_randomization": true,
+        "name": "Dynamics",
+        "sensor_randomization": false
+      },
+      "P4": {
+        "dynamics_randomization": true,
+        "name": "Combined",
+        "sensor_randomization": true
+      }
+    },
+    "policy": "MlpPolicy",
+    "policy_kwargs": {
+      "activation_fn": "tanh",
+      "log_std_init": -0.5,
+      "net_arch": {
+        "pi": [
+          128,
+          128
+        ],
+        "vf": [
+          128,
+          128
+        ]
+      }
+    },
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "tensorboard_log": "./runs/tensorboard",
+    "torch_threads": 1,
+    "total_timesteps": 60000,
+    "verbose": 1,
+    "vf_coef": 0.5,
+    "watchdog_timeout_sec": 2.0
+  }
+}

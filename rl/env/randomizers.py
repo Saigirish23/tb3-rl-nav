@@ -68,6 +68,10 @@ class SensorRandomizer:
     def seed(self, seed: int) -> None:
         self.rng = np.random.default_rng(seed)
 
+    def reset(self) -> None:
+        """Reset internal scan delay buffer for clean episode isolation."""
+        self.scan_delay_buffer.clear()
+
     def sample_episode(self, corner: bool = False, corner_sign: int = 1) -> SensorParams:
         """Sample per-episode sensor parameters.
 
@@ -177,6 +181,12 @@ class DynamicsRandomizer:
     def seed(self, seed: int) -> None:
         self.rng = np.random.default_rng(seed)
 
+    def reset(self) -> None:
+        """Reset internal filter, delay, and velocity states for clean episode isolation."""
+        self.prev_action = np.zeros(2, dtype=np.float32)
+        self.actual_v = 0.0
+        self.actual_omega = 0.0
+
     def sample_episode(self, corner: bool = False, corner_sign: int = 1) -> DynamicsParams:
         """Sample per-episode dynamics parameters."""
         self._is_pinned_corner = corner
@@ -244,7 +254,11 @@ class DynamicsRandomizer:
         target_v *= self.params.v_command_gain
         target_omega *= self.params.omega_command_gain
 
-        # 3. Acceleration limits
+        # 3. Velocity saturation / clipping to physical motor bounds
+        target_v = float(np.clip(target_v, 0.0, 0.15))
+        target_omega = float(np.clip(target_omega, -0.60, 0.60))
+
+        # 4. Acceleration limits
         max_delta_v = self.params.linear_acc_limit * dt
         max_delta_omega = self.params.angular_acc_limit * dt
         dv = np.clip(target_v - self.actual_v, -max_delta_v, max_delta_v)
@@ -252,7 +266,7 @@ class DynamicsRandomizer:
         v_limited = self.actual_v + dv
         omega_limited = self.actual_omega + dw
 
-        # 4. First-order actuator lag: dv/dt = (target - v) / tau
+        # 5. First-order actuator lag: dv/dt = (target - v) / tau
         tau = self.params.actuator_lag_tau
         if tau > 1e-4:
             alpha = dt / (tau + dt)
@@ -261,6 +275,10 @@ class DynamicsRandomizer:
         else:
             self.actual_v = v_limited
             self.actual_omega = omega_limited
+
+        # Final numerical bound clamp
+        self.actual_v = float(np.clip(self.actual_v, 0.0, 0.15))
+        self.actual_omega = float(np.clip(self.actual_omega, -0.60, 0.60))
 
         return float(self.actual_v), float(self.actual_omega)
 
@@ -284,6 +302,11 @@ class CombinedRandomizer:
     def seed(self, seed: int) -> None:
         self.sensor_rand.seed(seed)
         self.dynamics_rand.seed(seed + 1)
+
+    def reset(self) -> None:
+        """Reset internal states for both sensor and dynamics randomizers."""
+        self.sensor_rand.reset()
+        self.dynamics_rand.reset()
 
     def sample_episode(self, corner: bool = False, corner_sign: int = 1) -> Dict[str, Any]:
         """Sample joint parameters enforcing: sensor latency + control delay <= 0.40s."""

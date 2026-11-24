@@ -1,0 +1,132 @@
+{
+  "target_steps": 1000,
+  "completed_steps": 1000,
+  "episodes": 30,
+  "nan_count": 0,
+  "crashes": 0,
+  "n_workers": 4,
+  "memory_samples": [
+    {
+      "step": 50,
+      "gzserver_rss_mb": 1269.12890625,
+      "py_rss_mb": 61.44921875,
+      "timestamp": 1792754437.3427424
+    },
+    {
+      "step": 100,
+      "gzserver_rss_mb": 1269.12890625,
+      "py_rss_mb": 61.40234375,
+      "timestamp": 1792754437.3503883
+    },
+    {
+      "step": 150,
+      "gzserver_rss_mb": 1269.12890625,
+      "py_rss_mb": 61.39453125,
+      "timestamp": 1792754437.5142813
+    },
+    {
+      "step": 200,
+      "gzserver_rss_mb": 1269.12890625,
+      "py_rss_mb": 61.51171875,
+      "timestamp": 1792754437.551598
+    },
+    {
+      "step": 250,
+      "gzserver_rss_mb": 1269.23828125,
+      "py_rss_mb": 61.484375,
+      "timestamp": 1792754447.5195646
+    },
+    {
+      "step": 300,
+      "gzserver_rss_mb": 1269.23828125,
+      "py_rss_mb": 61.54296875,
+      "timestamp": 1792754447.5554025
+    },
+    {
+      "step": 350,
+      "gzserver_rss_mb": 1269.23828125,
+      "py_rss_mb": 61.59765625,
+      "timestamp": 1792754447.5603933
+    },
+    {
+      "step": 400,
+      "gzserver_rss_mb": 1269.23828125,
+      "py_rss_mb": 61.5,
+      "timestamp": 1792754447.562746
+    },
+    {
+      "step": 450,
+      "gzserver_rss_mb": 1269.35546875,
+      "py_rss_mb": 61.52734375,
+      "timestamp": 1792754457.5259497
+    },
+    {
+      "step": 500,
+      "gzserver_rss_mb": 1269.35546875,
+      "py_rss_mb": 61.63671875,
+      "timestamp": 1792754457.569479
+    },
+    {
+      "step": 550,
+      "gzserver_rss_mb": 1269.35546875,
+      "py_rss_mb": 61.54296875,
+      "timestamp": 1792754457.570435
+    },
+    {
+      "step": 600,
+      "gzserver_rss_mb": 1269.35546875,
+      "py_rss_mb": 61.58984375,
+      "timestamp": 1792754457.7672858
+    },
+    {
+      "step": 650,
+      "gzserver_rss_mb": 1269.48828125,
+      "py_rss_mb": 61.55078125,
+      "timestamp": 1792754467.5349872
+    },
+    {
+      "step": 700,
+      "gzserver_rss_mb": 1269.49609375,
+      "py_rss_mb": 61.625,
+      "timestamp": 1792754467.7773082
+    },
+    {
+      "step": 750,
+      "gzserver_rss_mb": 1269.49609375,
+      "py_rss_mb": 61.66796875,
+      "timestamp": 1792754467.7792318
+    },
+    {
+      "step": 800,
+      "gzserver_rss_mb": 1269.49609375,
+      "py_rss_mb": 61.58203125,
+      "timestamp": 1792754467.9875836
+    },
+    {
+      "step": 850,
+      "gzserver_rss_mb": 1269.6015625,
+      "py_rss_mb": 61.56640625,
+      "timestamp": 1792754477.7541244
+    },
+    {
+      "step": 900,
+      "gzserver_rss_mb": 1269.640625,
+      "py_rss_mb": 61.63671875,
+      "timestamp": 1792754477.994013
+    },
+    {
+      "step": 950,
+      "gzserver_rss_mb": 1269.66015625,
+      "py_rss_mb": 61.6875,
+      "timestamp": 1792754478.0058014
+    },
+    {
+      "step": 1000,
+      "gzserver_rss_mb": 1269.66796875,
+      "py_rss_mb": 61.59375,
+      "timestamp": 1792754478.012354
+    }
+  ],
+  "start_time": 1792754415.9977612,
+  "elapsed_sec": 206.89519487900543
+}

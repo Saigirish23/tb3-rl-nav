@@ -29,6 +29,50 @@ class ObstacleSpec:
     y: float = 0.0
     active: bool = True
 
+    def distance_to_point(self, px: float, py: float) -> float:
+        """Calculate signed distance from point to obstacle boundary (positive outside)."""
+        if self.kind == 'cylinder':
+            r = self.size[0]
+            return math.hypot(px - self.x, py - self.y) - r
+        else:
+            w, h = self.size
+            dx = max(0.0, abs(px - self.x) - 0.5 * w)
+            dy = max(0.0, abs(py - self.y) - 0.5 * h)
+            if dx == 0.0 and dy == 0.0:
+                return -min(0.5 * w - abs(px - self.x), 0.5 * h - abs(py - self.y))
+            return math.hypot(dx, dy)
+
+    def check_overlap(self, other: 'ObstacleSpec', margin: float = 0.0) -> bool:
+        """Check footprint-aware overlap between this obstacle and other given safety margin."""
+        if self.kind == 'box' and other.kind == 'box':
+            w1, h1 = self.size
+            w2, h2 = other.size
+            overlap_x = abs(self.x - other.x) < (0.5 * (w1 + w2) + margin)
+            overlap_y = abs(self.y - other.y) < (0.5 * (h1 + h2) + margin)
+            return overlap_x and overlap_y
+        elif self.kind == 'cylinder' and other.kind == 'cylinder':
+            r1 = self.size[0]
+            r2 = other.size[0]
+            return math.hypot(self.x - other.x, self.y - other.y) < (r1 + r2 + margin)
+        else:
+            box = self if self.kind == 'box' else other
+            cyl = other if self.kind == 'box' else self
+            w, h = box.size
+            r = cyl.size[0]
+            dx = max(0.0, abs(cyl.x - box.x) - 0.5 * w)
+            dy = max(0.0, abs(cyl.y - box.y) - 0.5 * h)
+            return (dx * dx + dy * dy) < ((r + margin) * (r + margin))
+
+
+# Default static warehouse obstacles matching arena_4x4.world (5x5m arena)
+DEFAULT_STATIC_WAREHOUSE_OBSTACLES: List[ObstacleSpec] = [
+    ObstacleSpec('box', 'warehouse_rack_1', (0.40, 1.50), x=-1.15, y=0.65, active=True),
+    ObstacleSpec('box', 'warehouse_rack_2', (0.40, 1.50), x=1.15, y=-0.65, active=True),
+    ObstacleSpec('box', 'warehouse_shelf_north', (1.40, 0.30), x=0.00, y=2.25, active=True),
+    ObstacleSpec('box', 'pallet_stack', (0.50, 0.50), x=-1.95, y=1.95, active=True),
+    ObstacleSpec('cylinder', 'storage_container', (0.22,), x=1.95, y=-1.95, active=True),
+]
+
 
 @dataclass
 class ScenarioSpec:
@@ -61,7 +105,7 @@ class ScenarioSpec:
         return cls.from_dict(json.loads(s))
 
 
-# The default obstacle pool matching arena_4x4.world and tb3_navigation_env.py
+# The default obstacle pool matching arena_4x4.world and tb3_navigation_env.py (12 obstacles)
 DEFAULT_OBSTACLE_POOL = [
     ('box', 'obstacle_box_1', (0.30, 0.30)),
     ('box', 'obstacle_box_2', (0.25, 0.25)),
@@ -71,6 +115,10 @@ DEFAULT_OBSTACLE_POOL = [
     ('cylinder', 'obstacle_cyl_2', (0.12,)),
     ('cylinder', 'obstacle_cyl_3', (0.18,)),
     ('cylinder', 'obstacle_cyl_4', (0.15,)),
+    ('box', 'obstacle_box_5', (0.28, 0.28)),
+    ('box', 'obstacle_box_6', (0.32, 0.32)),
+    ('cylinder', 'obstacle_cyl_5', (0.14,)),
+    ('cylinder', 'obstacle_cyl_6', (0.16,)),
 ]
 
 
@@ -96,13 +144,14 @@ def generate_scenario(
     seed: int,
     scenario_id: int = 0,
     arena_size: float = 4.0,
-    robot_radius: float = 0.105,
+    robot_radius: float = 0.113,
     min_start_goal_dist: float = 1.5,
     max_start_goal_dist: float = 3.5,
     min_obstacles: int = 4,
     max_obstacles: int = 8,
     wall_clearance: float = 0.40,
     obstacle_pool: Optional[List[Tuple[str, str, Tuple[float, ...]]]] = None,
+    static_obstacles: Optional[List[ObstacleSpec]] = None,
 ) -> ScenarioSpec:
     """Generate a single deterministic scenario from a seed.
 
@@ -117,6 +166,7 @@ def generate_scenario(
         max_obstacles: Maximum number of active obstacles.
         wall_clearance: Minimum clearance from walls for robot/goal placement (m).
         obstacle_pool: List of (kind, name, size) tuples.
+        static_obstacles: List of static ObstacleSpec to avoid in expanded arena.
 
     Returns:
         ScenarioSpec with all placement details.
@@ -124,29 +174,60 @@ def generate_scenario(
     if obstacle_pool is None:
         obstacle_pool = DEFAULT_OBSTACLE_POOL
 
+    if static_obstacles is None and arena_size >= 4.5:
+        static_obstacles = DEFAULT_STATIC_WAREHOUSE_OBSTACLES
+    elif static_obstacles is None:
+        static_obstacles = []
+
     rng = np.random.default_rng(seed)
     arena_half = arena_size / 2.0
 
     # 1. Sample robot start pose
-    spawn_bound = arena_half - wall_clearance - robot_radius
-    robot_x = float(rng.uniform(-spawn_bound, spawn_bound))
-    robot_y = float(rng.uniform(-spawn_bound, spawn_bound))
+    if arena_size >= 4.5:
+        spawn_bound = arena_half - 0.05 - (robot_radius + 0.20)
+        for _ in range(500):
+            rx = float(rng.uniform(-spawn_bound, spawn_bound))
+            ry = float(rng.uniform(-spawn_bound, spawn_bound))
+            if all(s.distance_to_point(rx, ry) >= (robot_radius + 0.20) for s in static_obstacles if s.active):
+                robot_x, robot_y = rx, ry
+                break
+        else:
+            robot_x, robot_y = 0.0, -1.2
+    else:
+        spawn_bound = arena_half - wall_clearance - robot_radius
+        robot_x = float(rng.uniform(-spawn_bound, spawn_bound))
+        robot_y = float(rng.uniform(-spawn_bound, spawn_bound))
+
     robot_theta = float(rng.uniform(-np.pi, np.pi))
 
     # 2. Sample goal with distance constraint
     goal_x, goal_y = 0.0, 0.0
-    for _ in range(500):
-        dist = float(rng.uniform(min_start_goal_dist, max_start_goal_dist))
-        angle = float(rng.uniform(-np.pi, np.pi))
-        gx = robot_x + dist * math.cos(angle)
-        gy = robot_y + dist * math.sin(angle)
-        if abs(gx) <= (arena_half - wall_clearance) and abs(gy) <= (arena_half - wall_clearance):
-            goal_x, goal_y = gx, gy
-            break
+    if arena_size >= 4.5:
+        goal_bound = arena_half - 0.05 - (robot_radius + 0.20)
+        for _ in range(500):
+            dist = float(rng.uniform(min_start_goal_dist, max_start_goal_dist))
+            angle = float(rng.uniform(-np.pi, np.pi))
+            gx = robot_x + dist * math.cos(angle)
+            gy = robot_y + dist * math.sin(angle)
+            if abs(gx) <= goal_bound and abs(gy) <= goal_bound:
+                if all(s.distance_to_point(gx, gy) >= (robot_radius + 0.20) for s in static_obstacles if s.active):
+                    goal_x, goal_y = gx, gy
+                    break
+        else:
+            goal_x = float(np.clip(-robot_x, -goal_bound, goal_bound))
+            goal_y = float(np.clip(-robot_y, -goal_bound, goal_bound))
     else:
-        # Fallback: opposite corner direction
-        goal_x = float(np.clip(-robot_x, -(arena_half - wall_clearance), arena_half - wall_clearance))
-        goal_y = float(np.clip(-robot_y, -(arena_half - wall_clearance), arena_half - wall_clearance))
+        for _ in range(500):
+            dist = float(rng.uniform(min_start_goal_dist, max_start_goal_dist))
+            angle = float(rng.uniform(-np.pi, np.pi))
+            gx = robot_x + dist * math.cos(angle)
+            gy = robot_y + dist * math.sin(angle)
+            if abs(gx) <= (arena_half - wall_clearance) and abs(gy) <= (arena_half - wall_clearance):
+                goal_x, goal_y = gx, gy
+                break
+        else:
+            goal_x = float(np.clip(-robot_x, -(arena_half - wall_clearance), arena_half - wall_clearance))
+            goal_y = float(np.clip(-robot_y, -(arena_half - wall_clearance), arena_half - wall_clearance))
 
     start_goal_distance = math.hypot(goal_x - robot_x, goal_y - robot_y)
 
@@ -162,25 +243,37 @@ def generate_scenario(
 
         placed = False
         for _ in range(200):
-            obs_bound = arena_half - 0.15 - obs_r
-            ox = float(rng.uniform(-obs_bound, obs_bound))
-            oy = float(rng.uniform(-obs_bound, obs_bound))
+            if arena_size >= 4.5:
+                obs_bound = arena_half - 0.05 - obs_r - 0.05
+                ox = float(rng.uniform(-obs_bound, obs_bound))
+                oy = float(rng.uniform(-obs_bound, obs_bound))
+                cand = ObstacleSpec(kind=kind, name=name, size=size, x=ox, y=oy, active=True)
 
-            # Clearance from robot start
-            if math.hypot(ox - robot_x, oy - robot_y) < (0.40 + robot_radius + obs_r):
-                continue
-            # Clearance from goal
-            if math.hypot(ox - goal_x, oy - goal_y) < (0.40 + obs_r):
-                continue
-            # Clearance from other placed obstacles
-            overlap = False
-            for p in placed_obstacles:
-                p_r = _obs_bounding_radius(p.kind, p.size)
-                if math.hypot(ox - p.x, oy - p.y) < (obs_r + p_r + 0.10):
-                    overlap = True
-                    break
-            if overlap:
-                continue
+                if cand.distance_to_point(robot_x, robot_y) < (robot_radius + 0.20):
+                    continue
+                if cand.distance_to_point(goal_x, goal_y) < (robot_radius + 0.20):
+                    continue
+                if any(cand.check_overlap(s, margin=0.10) for s in static_obstacles if s.active):
+                    continue
+                if any(cand.check_overlap(p, margin=0.10) for p in placed_obstacles if p.active):
+                    continue
+            else:
+                obs_bound = arena_half - 0.15 - obs_r
+                ox = float(rng.uniform(-obs_bound, obs_bound))
+                oy = float(rng.uniform(-obs_bound, obs_bound))
+
+                if math.hypot(ox - robot_x, oy - robot_y) < (0.40 + robot_radius + obs_r):
+                    continue
+                if math.hypot(ox - goal_x, oy - goal_y) < (0.40 + obs_r):
+                    continue
+                overlap = False
+                for p in placed_obstacles:
+                    p_r = _obs_bounding_radius(p.kind, p.size)
+                    if math.hypot(ox - p.x, oy - p.y) < (obs_r + p_r + 0.10):
+                        overlap = True
+                        break
+                if overlap:
+                    continue
 
             placed_obstacles.append(ObstacleSpec(
                 kind=kind, name=name, size=size,
@@ -190,7 +283,6 @@ def generate_scenario(
             break
 
         if not placed:
-            # Park outside arena
             placed_obstacles.append(ObstacleSpec(
                 kind=kind, name=name, size=size,
                 x=20.0, y=20.0, active=False

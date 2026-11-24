@@ -353,3 +353,38 @@ All environment setup, dependency installations, and workspace builds are record
 5. **Gate G2 Status**:
    - **INCOMPLETE — P1 ON HOLD**: All 10 technical G2 checks passed (Checks 1–7, 9–10 passed; Check 8 passed on kinematic). Simulation Backend Decision (Option A: Gazebo vs Option B: Kinematic+SITL), Siddhi's independent reward/playback review, and formal co-owner signoff remain required before Gate G2 is formally closed and P1 training can commence.
 
+
+---
+
+## Stage 11: Deploy-Side ROS 2 Package (`tb3_rl_navigation`), Safety Layer & Pure NumPy Policy Export
+* **Date**: 2026-11-12
+* **Objective**: Create the production deploy-side ROS 2 Humble package `ros2_ws/src/tb3_rl_navigation` free of simulation dependencies, implement the independent safety filter, create pure NumPy policy engine and exporter for embedded Raspberry Pi execution, and verify full numerical parity.
+
+### Actions Executed
+1. **Created Deployment Package (`ros2_ws/src/tb3_rl_navigation`)**:
+   - `package.xml`: Configured `ament_python` package declaring only deployment dependencies (`rclpy`, `sensor_msgs`, `geometry_msgs`, `nav_msgs`, `std_msgs`) with zero Gazebo or Gymnasium dependencies.
+   - `setup.py`, `setup.cfg`, `resource/tb3_rl_navigation`: Standard ament python packaging with console script entry point `deploy_node = tb3_rl_navigation.deploy_node:main`.
+2. **Standardized Shared Observation Module (`tb3_rl_navigation/observation.py`)**:
+   - Packaged pure NumPy 43-dim state preprocessor and estimated pose tracker.
+   - Verified zero ROS imports (`test_zero_ros_imports` passed).
+3. **Implemented Standalone Safety Layer (`tb3_rl_navigation/safety.py`)**:
+   - Independent safety filter adhering to spec Sections 2 & 10:
+     - Velocity limits: forward-only bias $v \in [0.0, 0.15]\,\text{m/s}$, $\omega \in [-0.60, 0.60]\,\text{rad/s}$.
+     - Stale-scan watchdog: 0.40s timeout ($\sim 2$ scan periods at 5 Hz) triggers immediate zero twist.
+     - Collision emergency stop: raw LiDAR range $< 0.16\,\text{m}$ triggers immediate zero twist.
+     - Deadman / teleoperation override: allows supervisor takeover.
+     - Telemetry logging: tracks and categorizes all safety interventions.
+4. **Lightweight Pure NumPy Policy Inference Engine (`tb3_rl_navigation/policy_model.py`)**:
+   - Pure NumPy implementation of 2x128 tanh MLP actor network.
+   - Runs in $\sim 51.8\,\mu\text{s}$ per step on CPU without PyTorch or SB3 runtime dependencies.
+5. **Production ROS 2 Deployment Node (`tb3_rl_navigation/deploy_node.py`)**:
+   - Subscribes to `/scan` (SensorData QoS), `/odom`, `/goal_pose`.
+   - Scan-synchronous execution loop: 1 action per scan with zero-order hold.
+   - Publishes safe `/cmd_vel` and JSON telemetry to `/rl_nav/status`.
+6. **Policy Exporter & Parity Verification (`deploy/export_policy.py`)**:
+   - Exported `runs/main_p1_s0/final_model.zip` $\to$ `deploy/p1_policy.npz` (85 KB). Max error vs SB3: $2.38 \times 10^{-7}$.
+   - Exported `runs/main_p4_s0/final_model.zip` $\to$ `deploy/p4_policy.npz` (85 KB). Max error vs SB3: $2.38 \times 10^{-7}$.
+7. **Workspace Build & Test Suite**:
+   - Executed `colcon build --packages-select tb3_rl_navigation --symlink-install` (built in 1.25s, 0 errors).
+   - Executed unit tests (`tests/test_safety.py`, `tests/test_policy_export.py`): 10/10 passed.
+   - Full repository test suite (`pytest`): **43 passed, 0 failed in 25.5s**.
